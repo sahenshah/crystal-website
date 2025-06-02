@@ -207,7 +207,7 @@ main section {
     object-fit: cover;
   }
   .stats-content {
-    gap: 0.8rem;
+    gap: 1.5rem;
     font-size: 0.85rem;
     flex-direction: row; /* Keep stats in a single row */
   }

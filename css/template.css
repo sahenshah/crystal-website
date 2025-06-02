@@ -30,7 +30,7 @@ body {
 header {
   background: #fff;
   color: #1F2937;
-  padding: 0.5rem 1rem;
+  padding: 0.1rem 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -100,7 +100,7 @@ header {
   top: 0;
   background: #1F2433;
   z-index: 100;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid; 
   box-shadow: 0 2px 8px rgba(31,41,55,0.03);
   width: 100%;
   max-width: 100%;
@@ -111,7 +111,7 @@ header {
   gap: 2rem;
   list-style: none;
   margin: 0;
-  padding: 0.75rem 2rem;
+  padding: 0.75rem 1.5rem;
   justify-content: center;
 }
 
@@ -194,6 +194,18 @@ footer {
   margin-right: 0.1em; /* reduced margin */
 }
 
+.footer-contacts a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-contacts a:hover,
+.footer-contacts a:focus {
+  color: #FB8100;
+  text-decoration: underline;
+}
+
 /* Responsive Styles */
 img {
   max-width: 100%;
@@ -202,12 +214,25 @@ img {
 }
 
 @media (max-width: 900px) {
-  header, .products-pane ul, main {
+  .products-pane ul, main {
     padding: 1rem;
   }
   .products-pane ul {
     gap: 1rem;
     padding: 0.75rem 1rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .footer-contacts {
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    justify-content: center;
+  }
+  .footer-contacts span {
+    font-size: 0.85rem;
+    min-width: 140px;
+    justify-content: flex-start;
   }
 }
 
