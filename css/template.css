@@ -223,19 +223,6 @@ img {
   }
 }
 
-@media (max-width: 700px) {
-  .footer-contacts {
-    flex-wrap: wrap;
-    gap: 1.2rem;
-    justify-content: center;
-  }
-  .footer-contacts span {
-    font-size: 0.85rem;
-    min-width: 140px;
-    justify-content: flex-start;
-  }
-}
-
 @media (max-width: 600px) {
   header {
     flex-direction: row;
