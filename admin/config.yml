@@ -8,8 +8,6 @@ public_folder: "/images/uploads"
 collections:
   - name: "products"
     label: "Products"
-    label_singular: "Product"
-    description: "Manage your product listings"
     files:
       - file: "products.json"
         label: "Products List"
