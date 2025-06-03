@@ -1,0 +1,14 @@
+{
+  "products": [
+    {
+      "name": "Product 1",
+      "image": "/images/uploads/product1.jpg",
+      "description": "Description for product 1."
+    },
+    {
+      "name": "Product 2",
+      "image": "/images/uploads/product2.jpg",
+      "description": "Description for product 2."
+    }
+  ]
+}
