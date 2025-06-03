@@ -9,7 +9,6 @@ main section {
 main {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
 .main-flex {
@@ -365,4 +364,25 @@ main {
   .visit-content iframe {
     height: 40px;
   }
+}
+
+/* Add this at the end of your CSS file or after your responsive styles */
+.visit-image-row {
+  margin-bottom: 0 !important; /* Remove any bottom margin */
+  padding-bottom: 0 !important; /* Remove any bottom padding */
+}
+
+/* Remove extra margin from cards if present */
+.visit-section,
+.about-img-text-section,
+.about-image-section {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* If your main-flex or main has extra space, remove it */
+.main-flex,
+main {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
