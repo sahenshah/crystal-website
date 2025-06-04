@@ -471,7 +471,6 @@ input, select, textarea, button {
   gap: 0.7rem;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-top: 1.2rem;
 }
 
 /* Add Product button styling */
@@ -487,7 +486,6 @@ input, select, textarea, button {
   box-shadow: 0 2px 8px rgba(251,129,0,0.10);
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-  margin: 1.2em 0 1.5em 0;
   display: inline-block;
 }
 
@@ -519,6 +517,18 @@ h1, .main-heading {
   text-decoration: none;
   border-bottom: none;
   color: inherit;
+}
+
+.products-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.products-section {
+  width: 100%;
+  display: block;
 }
 
 /* Responsive adjustments for product cards */

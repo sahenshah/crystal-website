@@ -36,7 +36,7 @@ main {
 }
 
 .product-detail-card p {
-  margin: 0.3em 0;
+  margin: 0.3em 0.3em;
   color: #333;
   font-style: italic;
 }
