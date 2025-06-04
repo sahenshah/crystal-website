@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products - Crystal Industries Ltd.</title>
+  <link rel="stylesheet" href="css/template.css" />
+  <link rel="stylesheet" href="css/products.css" />
+  <link rel="icon" type="image/png" href="images/crystal-logo.png" />
+</head>
+
+<body>
+  <header>
+    <a href="index.html" class="logo-link">
+      <img src="images/crystal-logo.png" alt="Crystal Logo" class="logo-img" />
+    </a>
+    <nav>
+      <ul class="main-nav">
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li>
+          <a href="basket.html" class="basket-link">
+            <img src="images/basket-icon.png" alt="Basket" class="basket-icon" />
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <nav class="products-pane">
+    <ul>
+      <li><a href="products.html">Products</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section>
+      <h2>All Products</h2>
+      <button id="add-product-btn">Add Product</button>
+      <!-- Popup Modal for Product Form -->
+      <div id="product-modal">
+        <div class="modal-content">
+          <button id="close-modal-btn" class="close-modal-btn">&times;</button>
+          <form id="product-form">
+            <label>
+              Name:
+              <input type="text" id="product-name" required>
+            </label><br>
+            <label>
+              Brand:
+              <select id="product-brand" required>
+                <option value="">Select Brand</option>
+                <option value="Oxford">Oxford</option>
+                <option value="Kifaru">Kifaru</option>
+                <option value="Crystal">Crystal</option>
+                <option value="Royal">Royal</option>
+              </select>
+            </label><br>
+            <label>
+              Finish:
+              <select id="product-finish" required>
+                <option value="">Select Finish</option>
+                <option value="Regular">Regular</option>
+                <option value="Emery">Emery</option>
+                <option value="Polished">Polished</option>
+              </select>
+            </label><br>
+            <label>
+              Image:
+              <input type="file" id="product-image" accept="image/png, image/jpeg" required hidden>
+              <button type="button" id="image-upload-btn">Choose Image</button>
+              <span id="image-file-name"></span>
+            </label><br>
+            <label>
+              Description:
+              <textarea id="product-description" required></textarea>
+            </label><br>
+            <div id="sizes-section">
+              <label><b>Sizes</b></label>
+              <div class="size-input-row">
+                <input type="text" id="product-size" placeholder="Size" />
+                <input type="text" id="product-packing" placeholder="Packing (Per Carton)" />
+              </div>
+              <div class="packing-and-add">
+                <div id="packing-dots" class="packing-dots"></div>
+                <button type="button" id="add-size-btn" aria-label="Add Size">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#FB8100" stroke-width="3" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </button>
+              </div>
+              <div id="sizes-list"></div>
+            </div>
+            <br>
+            <button type="submit">Create Product</button>
+          </form>
+        </div>
+      </div>
+      <div id="products-list"></div>
+    </section>
+  </main>
+
+</body>
+<footer>
+  <div class="footer-title">
+    Get in Touch
+  </div>
+  <div class="footer-contacts">
+    <span>
+      <img src="images/contact-phone-icon.png" alt="Phone" class="footer-icon" />
+      +254 722 243333 /
+      +254 733 243333
+    </span>
+    <span>
+      <img src="images/contact-mail-icon.png" alt="Mail" class="footer-icon" />info@crystalindustries.co.ke
+    </span>
+    <span>
+      <img src="images/contact-location-icon.png" alt="Location" class="footer-icon" />
+      <a href="https://maps.app.goo.gl/cgiFDz4ia5P1Pks68" target="_blank" rel="noopener">
+        Magana Rd, Kikuyu
+      </a>
+    </span>
+  </div>
+
+</footer>
+<script src="js/products.js"></script>
+
+</html>
