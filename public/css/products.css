@@ -386,7 +386,6 @@ input, select, textarea, button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f6f7fb;
   border-radius: 14px 14px 0 0;
   min-height: 0;
   padding: 0.5em 0.3em 0.2em 0.3em;
@@ -405,15 +404,15 @@ input, select, textarea, button {
 }
 
 .product-card-content {
-  flex: 1 1 50%;
   display: flex;
   flex-direction: column;
+  align-items: center;      /* Center horizontally */
   justify-content: flex-start;
-  align-items: center;
   padding: 0.5em 0.5em 0.7em 0.5em;
   background: #fff;
   border-radius: 0 0 14px 14px;
   min-height: 0;
+  text-align: center;       /* Center text for all children */
 }
 
 .product-card h3 {
@@ -423,7 +422,7 @@ input, select, textarea, button {
   font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 1.2;
-  text-align: center;
+  text-align: center;       /* Center the header text */
   text-transform: capitalize;
   font-family: 'Segoe UI', 'Inter', 'Roboto', Arial, sans-serif;
   text-shadow: 0 2px 8px rgba(251,129,0,0.07);
@@ -432,6 +431,9 @@ input, select, textarea, button {
   word-break: break-word;
   overflow-wrap: break-word;
   max-width: 100%;
+  width: 100%;              /* Ensure it takes full width for centering */
+  display: flex;
+  justify-content: center;  /* Center content inside h3 */
 }
 
 .delete-product-btn {
@@ -479,14 +481,13 @@ input, select, textarea, button {
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 0.7em 1.7em;
-  font-size: 1.08rem;
+  padding: 0.5em 0.5em;
+  font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   box-shadow: 0 2px 8px rgba(251,129,0,0.10);
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-  display: inline-block;
 }
 
 #add-product-btn:hover,
@@ -607,4 +608,40 @@ h1, .main-heading {
     border-radius: 4px;
     margin-top: 0.2em;
   }
+}
+/* filepath: /home/sahen/crystal-website/public/css/products.css */
+.admin-only {
+  display: none;
+}
+.admin-visible .admin-only {
+  display: inline-block;
+}
+
+/* Admin Login button as an image */
+#admin-login-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 1em;
+  cursor: pointer;
+  outline: none;
+  vertical-align: middle;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#admin-login-btn img {
+  width: 28px;
+  height: 28px;
+  display: block;
+  object-fit: contain;
+  transition: filter 0.18s;
+}
+
+#admin-login-btn:hover img,
+#admin-login-btn:focus img {
+  filter: brightness(1.2) drop-shadow(0 2px 8px #fb810033);
 }
