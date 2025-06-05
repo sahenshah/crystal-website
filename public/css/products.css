@@ -568,6 +568,44 @@ h1, .main-heading {
   display: block;
 }
 
+/* filepath: /home/sahen/crystal-website/public/css/products.css */
+.admin-only {
+  display: none;
+}
+.admin-visible .admin-only {
+  display: inline-block;
+}
+
+/* Admin Login button as an image */
+#admin-login-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 1em;
+  margin-right: 1em;
+  cursor: pointer;
+  outline: none;
+  vertical-align: middle;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#admin-login-btn img {
+  width: 28px;
+  height: 28px;
+  display: block;
+  object-fit: contain;
+  transition: filter 0.18s;
+}
+
+#admin-login-btn:hover img,
+#admin-login-btn:focus img {
+  filter: brightness(1.2) drop-shadow(0 2px 8px #fb810033);
+}
+
 /* Responsive adjustments for product cards */
 @media (max-width: 900px) {
   #products-list {
@@ -644,40 +682,12 @@ h1, .main-heading {
     border-radius: 4px;
     margin-top: 0.2em;
   }
-}
-/* filepath: /home/sahen/crystal-website/public/css/products.css */
-.admin-only {
-  display: none;
-}
-.admin-visible .admin-only {
-  display: inline-block;
-}
-
-/* Admin Login button as an image */
-#admin-login-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  margin-left: 1em;
-  cursor: pointer;
-  outline: none;
-  vertical-align: middle;
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#admin-login-btn img {
-  width: 28px;
-  height: 28px;
-  display: block;
-  object-fit: contain;
-  transition: filter 0.18s;
-}
-
-#admin-login-btn:hover img,
-#admin-login-btn:focus img {
-  filter: brightness(1.2) drop-shadow(0 2px 8px #fb810033);
+  #admin-login-btn {
+    width: 28px;
+    height: 28px;
+  }
+  #admin-login-btn img {
+    width: 28px;
+    height: 28px;
+  }
 }
