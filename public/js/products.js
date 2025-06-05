@@ -30,7 +30,7 @@ function toTitleCase(str) {
         .replace(/\b\w/g, c => c.toUpperCase());
 }
 
-// fetch products from the backend and render them
+// **Render product cards**  fetch products from the backend and render them
 function renderProducts() {
     fetch('http://localhost:3000/api/products')
         .then(res => res.json())
@@ -269,6 +269,8 @@ document.getElementById('add-size-btn').onclick = function () {
 const imageInput = document.getElementById('product-image');
 const imageUploadBtn = document.getElementById('image-upload-btn');
 const imageFileName = document.getElementById('image-file-name');
+// Add this line if you don't already have an image preview element:
+const imagePreview = document.getElementById('product-image-preview');
 
 if (imageUploadBtn && imageInput && imageFileName) {
   imageUploadBtn.onclick = function(e) {
@@ -279,8 +281,22 @@ if (imageUploadBtn && imageInput && imageFileName) {
   imageInput.onchange = function() {
     if (imageInput.files && imageInput.files[0]) {
       imageFileName.textContent = imageInput.files[0].name;
+
+      // Show preview of the new image
+      if (imagePreview) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          imagePreview.src = e.target.result;
+          imagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(imageInput.files[0]);
+      }
     } else {
       imageFileName.textContent = '';
+      if (imagePreview) {
+        imagePreview.src = '';
+        imagePreview.style.display = 'none';
+      }
     }
   };
 }

@@ -35,16 +35,82 @@
   </nav>
 
   <main>
+      <div class="products-detail-header">
+        <button id="admin-login-btn">
+          <img src="images/admin-login.png" alt="Admin Login" />
+        </button>
+        <button id="edit-product-btn" class="admin-only">Edit Product</button>
+      </div>
+      <!-- Popup Modal for Product Form -->
+      <div id="edit-product-modal" class="modal">
+        <div class="modal-content">
+          <button id="close-edit-modal-btn" class="close-modal-btn">&times;</button>
+          <form id="edit-product-form">
+            <label>
+              Name:
+              <input type="text" id="edit-product-name" required>
+            </label><br>
+            <label>
+              Brand:
+              <select id="edit-product-brand" required>
+                <option value="">Select Brand</option>
+                <option value="Oxford">Oxford</option>
+                <option value="Kifaru">Kifaru</option>
+                <option value="Crystal">Crystal</option>
+                <option value="Royal">Royal</option>
+              </select>
+            </label><br>
+            <label>
+              Finish:
+              <select id="edit-product-finish" required>
+                <option value="">Select Finish</option>
+                <option value="Regular">Regular</option>
+                <option value="Emery">Emery</option>
+                <option value="Polished">Polished</option>
+              </select>
+            </label><br>
+            <label>
+              Image:
+              <input type="file" id="edit-product-image" accept="image/png, image/jpeg" hidden>
+              <button type="button" id="edit-image-upload-btn">Choose Image</button>
+              <span id="edit-image-file-name"></span>
+            </label>
+            <div id="edit-image-preview-container">
+              <img id="edit-image-preview" src="" alt="Product Image" style="max-width:120px;max-height:120px;display:none;">
+            </div>
+            <label>
+              Description:
+              <textarea id="edit-product-description" required></textarea>
+            </label><br>
+            <div id="edit-sizes-section">
+              <label><b>Sizes</b></label>
+              <div class="size-input-row">
+                <input type="text" id="edit-product-size" placeholder="Size" />
+                <input type="text" id="edit-product-packing" placeholder="Packing (Per Carton)" />
+              </div>
+              <div class="packing-and-add">
+                <div id="edit-packing-dots" class="packing-dots"></div>
+                <button type="button" id="edit-add-size-btn" aria-label="Add Size">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#FB8100" stroke-width="3" stroke-linecap="round"
+                    stroke-linejoin="round" style="width:1.5em;height:1.5em;">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </button>
+              </div>
+              <div id="edit-sizes-list"></div>
+            </div>
+            <br>
+            <button type="submit">Save Changes</button>
+          </form>
+        </div>
+      </div>
+      
     <section id="product-detail">
       <!-- Product details will be loaded here -->
     </section>
   </main>
 
-</body>
-<footer>
-  <div class="footer-title">
-    Get in Touch
-  </div>
   <div class="footer-contacts">
     <span>
       <img src="images/contact-phone-icon.png" alt="Phone" class="footer-icon" />

@@ -192,6 +192,42 @@ input, select, textarea, button {
   border: 2px solid #FB8100;
   opacity: 1;
 }
+/* Add this for custom tooltips on dots */
+.dot[data-value="1"]::after { content: "MEDIUM LIGHT"; }
+.dot[data-value="2"]::after { content: "MEDIUM"; }
+.dot[data-value="3"]::after { content: "MEDIUM HEAVY"; }
+.dot[data-value="4"]::after { content: "HEAVY"; }
+.dot[data-value="5"]::after { content: "EXTRA HEAVY"; }
+.dot[data-value="6"]::after { content: "EXTRA EXTRA HEAVY"; }
+.dot[data-value="r1"]::after { content: "HEAVY"; }
+.dot[data-value="r2"]::after { content: "EXTRA HEAVY (POLISHED)"; }
+.dot[data-value="r3"]::after { content: "EXTRA HEAVY (EMERY)"; }
+.dot[data-value="r4"]::after { content: "EXTRA EXTRA HEAVY"; }
+
+.dot {
+  position: relative;
+}
+
+.dot:hover::after {
+  position: absolute;
+  left: 50%;
+  top: 120%;
+  transform: translateX(-50%);
+  background: #222;
+  color: #fff;
+  padding: 0.18em 0.7em;
+  border-radius: 5px;
+  font-size: 0.92em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 1;
+  z-index: 10;
+}
+
+.dot:not(:hover)::after {
+  content: none;
+}
+
 
 #add-size-btn {
   background: #fff;

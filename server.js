@@ -68,4 +68,19 @@ app.delete('/api/products/:id', (req, res) => {
   });
 });
 
+// Update a product by ID
+app.patch('/api/products/:id', (req, res) => {
+  const { name, brand, finish, description, image, sizes } = req.body;
+  db.run(
+    'UPDATE products SET name = ?, brand = ?, finish = ?, description = ?, image = ?, sizes = ? WHERE id = ?',
+    [name, brand, finish, description, image, JSON.stringify(sizes || []), req.params.id],
+    function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      if (this.changes === 0) return res.status(404).json({ error: 'Product not found' });
+      res.json({ success: true });
+    }
+  );
+});
+
+// Serve the frontend
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

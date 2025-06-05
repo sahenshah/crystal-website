@@ -1,7 +1,7 @@
 main {
   background: #f7f8fa;
   min-height: 100vh;
-  padding: 2em 0;
+  padding: 0 0;
 }
 /* Product Detail Card */
 .product-detail-card {
@@ -212,6 +212,445 @@ main {
   border-bottom-right-radius: 8px;
 }
 
+/* Align the edit button to the left at the top of the main content */
+#edit-product-btn {
+  display: inline-block;
+  margin: 0;
+  align-self: flex-start;
+  background: #FB8100;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4em 1em;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+#edit-product-btn:hover,
+#edit-product-btn:focus {
+  background: #ff9900;
+}
+
+#edit-product-modal.active {
+  display: flex;
+}
+.close-modal-btn {
+  position: absolute;
+  top: 0.7em;
+  right: 1em;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.18s;
+  z-index: 10;
+}
+.close-modal-btn:hover,
+.close-modal-btn:focus {
+  color: #FB8100;
+}
+
+/* Modal styles */
+#edit-product-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.4);
+  align-items: center;
+  justify-content: center;
+}
+
+#edit-product-modal.active {
+  display: flex;
+}
+
+#edit-product-modal .modal-content {
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  max-width: 750px;
+  width: 95%;
+  margin: auto;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+  transition: box-shadow 0.2s;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+#edit-product-modal .close-modal-btn {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+  z-index: 10;
+}
+#edit-product-modal .close-modal-btn:hover {
+  color: #FB8100;
+}
+
+/* Form styles for edit modal */
+#edit-product-form label {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-weight: 500;
+  color: #1F2433;
+  letter-spacing: 0.01em;
+}
+#edit-product-form input[type="text"],
+#edit-product-form textarea,
+#edit-product-form select {
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.7rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #fafbfc;
+  transition: border 0.2s;
+  box-sizing: border-box;
+}
+#edit-product-form input[type="text"]:focus,
+#edit-product-form textarea:focus,
+#edit-product-form select:focus {
+  border: 1.5px solid #FB8100;
+  outline: none;
+  background: #fff;
+}
+#edit-product-form textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+#edit-product-form button[type="submit"] {
+  background: #FB8100;
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 0.7rem;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+#edit-product-form button[type="submit"]:hover {
+  background: #ff9900;
+  box-shadow: 0 4px 16px rgba(251,129,0,0.13);
+}
+
+/* Remove styling for header, products pane, and footer */
+/* .header, #products-list, .footer, footer, .product-card, etc. are not styled here */
+
+/* Table styles */
+.sizes-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.97rem;
+}
+.sizes-table th, .sizes-table td {
+  border: 1px solid #e5e7eb;
+  padding: 0.4rem 0.6rem;
+  text-align: center;
+}
+.sizes-table th {
+  background: #f3f3f3;
+  color: #FB8100;
+  font-weight: 600;
+}
+.sizes-table td {
+  background: #fafbfc;
+}
+
+/* Size input row styling */
+.size-input-row {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  margin-bottom: 0.7rem;
+}
+.size-input-row select,
+.size-input-row input[type="text"] {
+  padding: 0.4rem 0.7rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fafbfc;
+}
+.size-input-row input[type="text"] {
+  width: 140px;
+}
+.size-input-row select#product-size {
+  width: 110px;
+  min-width: 90px;
+  max-width: 130px;
+}
+.size-input-row select#product-packing {
+  width: 220px;
+  min-width: 180px;
+  max-width: 260px;
+}
+
+/* Packing dots and add button */
+.packing-and-add {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 0.7rem;
+}
+.packing-dots {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: border 0.2s, opacity 0.2s;
+  margin-right: 0.1rem;
+}
+.dot1 { background: #0094bc; }
+.dot2 { background: #bc902c; }
+.dot3 { background: #03b14f; }
+.dot4 { background: #e92022; }
+.dot5 { background: #221e1f; }
+.dot6 { background: #972e8c; }
+.dotr1 { background: #e92022; }
+.dotr2 { background: #0094bc; }
+.dotr3 { background: #221e1f; }
+.dotr4 { background: #03b14f; }
+.dot.selected {
+  border: 2px solid #FB8100;
+  opacity: 1;
+}
+
+#add-size-btn {
+  background: #fff;
+  color: #FB8100;
+  border: 2px solid #FB8100;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.10);
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border 0.2s,
+    box-shadow 0.2s,
+    transform 0.1s;
+  outline: none;
+}
+#add-size-btn svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+#add-size-btn:hover,
+#add-size-btn:focus {
+  background: #FB8100;
+  color: #fff;
+  border: 2px solid #FB8100;
+  box-shadow: 0 4px 16px rgba(251,129,0,0.18);
+  transform: scale(1.12);
+}
+#add-size-btn:hover svg,
+#add-size-btn:focus svg {
+  stroke: #fff;
+}
+
+/* Add this below your #add-size-btn styles */
+#edit-add-size-btn {
+  background: #fff;
+  color: #FB8100;
+  border: 2px solid #FB8100;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.10);
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border 0.2s,
+    box-shadow 0.2s,
+    transform 0.1s;
+  outline: none;
+}
+#edit-add-size-btn svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+#edit-add-size-btn:hover,
+#edit-add-size-btn:focus {
+  background: #FB8100;
+  color: #fff;
+  border: 2px solid #FB8100;
+  box-shadow: 0 4px 16px rgba(251,129,0,0.18);
+  transform: scale(1.12);
+}
+#edit-add-size-btn:hover svg,
+#edit-add-size-btn:focus svg {
+  stroke: #fff;
+}
+
+/* --- Edit Sizes List Styling (for edit modal) --- */
+#edit-sizes-list {
+  margin-bottom: 1.2em;
+  background: #fafbfc;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 12px rgba(31,36,51,0.06);
+  border: 1px solid #ececec;
+  border-top: none;
+  overflow: hidden;
+}
+
+/* Header for edit sizes list */
+#edit-sizes-list + .size-row-header,
+.size-row-header {
+  display: grid;
+  grid-template-columns: 2fr 3fr 3fr 40px;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5em 1em;
+  font-weight: 700;
+  color: #FB8100;
+  background: #f3f3f3;
+  border-radius: 8px 8px 0 0;
+  font-size: 0.92em;
+  border-bottom: 1px solid #ececec;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.04);
+}
+
+/* Each size row in the edit modal */
+#edit-sizes-list .size-row {
+  display: grid;
+  grid-template-columns: 2fr 3fr 3fr 40px;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6em 1em;
+  background: #fff;
+  border-bottom: 1px solid #ececec;
+  font-size: 1em;
+  transition: background 0.18s, box-shadow 0.18s;
+}
+#edit-sizes-list .size-row:last-child {
+  border-bottom: none;
+}
+#edit-sizes-list .size-row:hover {
+  background: #f9f6f2;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.06);
+}
+
+#edit-sizes-list .size-row span,
+#edit-sizes-list .size-row-header span {
+  min-width: 0;
+  display: block;
+  color: #222;
+  word-break: break-word;
+}
+
+#edit-sizes-list .size-row-size {
+  font-weight: 600;
+  color: #222;
+  letter-spacing: 0.02em;
+}
+#edit-sizes-list .size-row-packing {
+  color: #222;
+  font-weight: 500;
+}
+#edit-sizes-list .size-row-dots {
+  display: inline-flex;
+  gap: 0.18em;
+  align-items: center;
+  color: inherit;
+  font-weight: 500;
+  min-width: 80px;
+  padding: 0.1em 0;
+  vertical-align: middle;
+  height: auto;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+#edit-sizes-list .size-row-dots .dot {
+  width: 15px;
+  height: 15px;
+  border-width: 1.5px;
+  margin: 0 1px;
+  opacity: 1;
+  box-shadow: none;
+  vertical-align: middle;
+  display: inline-block;
+  position: relative;
+  top: 0;
+}
+#edit-sizes-list .remove-size-row {
+  background: none;
+  border: none;
+  color: #c00;
+  font-size: 1.3em;
+  cursor: pointer;
+  margin-left: 0.7em;
+  border-radius: 50%;
+  width: 1.7em;
+  height: 1.7em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+#edit-sizes-list .remove-size-row:hover {
+  background: #ffeaea;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(220,0,0,0.10);
+}
+
+/* Responsive for edit sizes list */
+@media (max-width: 600px) {
+  #edit-sizes-list .size-row,
+  #edit-sizes-list + .size-row-header,
+  .size-row-header {
+    grid-template-columns: 1.5fr 2fr 2fr 32px;
+    font-size: 0.85em;
+    padding: 0.4em 0.5em;
+    gap: 0.5rem;
+  }
+  #edit-sizes-list .size-row-dots .dot {
+    width: 11px;
+    height: 11px;
+  }
+}
+
 @media (max-width: 900px) {
   .product-detail-card {
     flex-direction: column;
@@ -247,4 +686,59 @@ main {
     font-size: 0.6rem;
   }
 
+}
+
+/* Image upload button */
+#edit-image-upload-btn {
+  background: #FB8100;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.45em 1.1em;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 0.2em;
+  transition: background 0.2s;
+}
+
+#edit-image-upload-btn:hover,
+#edit-image-upload-btn:focus {
+  background: #ff9900;
+}
+
+/*ADMIN*/
+.admin-only {
+  display: none !important;
+}
+body.admin-visible .admin-only {
+  display: inline-block !important; /* or block/flex as needed */
+}
+
+#admin-login-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 1em;
+  cursor: pointer;
+  outline: none;
+  vertical-align: middle;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#admin-login-btn img {
+  width: 28px;
+  height: 28px;
+  display: block;
+  object-fit: contain;
+  transition: filter 0.18s;
+}
+
+#admin-login-btn:hover img,
+#admin-login-btn:focus img {
+  filter: brightness(1.2) drop-shadow(0 2px 8px #fb810033)
 }
