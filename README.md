@@ -1,10 +1,11 @@
 # Crystal Industries Website
 
-This is the official website for Crystal Industries Ltd., built with Node.js, Express, and modern HTML/CSS/JS. It features a product catalog, product detail pages, a contact form with email integration, and company information.
+This is the official website for Crystal Industries Ltd., built with Node.js, Express, and modern HTML/CSS/JS. It features a product catalog, product detail pages, a contact form with email integration, company information, and product filtering.
 
 ## Features
 
 - **Product Catalog:** Browse products with images, details, and filtering.
+- **Product Filtering:** Filter products by brand and finish using dropdown controls.
 - **Product Detail Pages:** View detailed information and sizes for each product.
 - **Contact Form:** Visitors can send messages directly to the company email.
 - **Admin Panel:** (If enabled) Edit and manage products.
