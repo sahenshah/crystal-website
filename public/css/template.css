@@ -28,8 +28,8 @@ body {
 
 /* Header */
 header {
-  background: #fff;
-  color: #1F2937;
+  background: #1F2937;
+  color: #f0f0f0;
   padding: 0.1rem 0.5rem;
   display: flex;
   align-items: center;
@@ -48,6 +48,15 @@ header {
   transition: filter 0.18s, transform 0.18s;
 }
 
+/* Logo hover effect */
+.logo-link:hover .logo-img,
+.logo-link:focus .logo-img {
+  filter: brightness(1.15) drop-shadow(0 2px 8px rgba(251,129,0,0.13));
+  transform: scale(1.06) rotate(-2deg);
+  transition: filter 0.18s, transform 0.18s;
+  outline: none;
+}
+
 .main-nav {
   display: flex;
   gap: 1rem; /* Reduced gap between nav items */
@@ -63,7 +72,7 @@ header {
 }
 
 .main-nav li a {
-  color: #1F2937;
+  color: #ffffff;
   text-decoration: none;
   font-weight: 500; /* Not bold */
   font-size: 1rem;
@@ -75,72 +84,59 @@ header {
   height: 100%;
 }
 
-.main-nav li a:hover,
-.products-pane a:hover {
+.main-nav li a:hover {
   background: #f0f0f0;
-  color: #0074d9;
+  color: #1F2937;
 }
 
-.basket-link {
+/* styling Products button in nav */
+.main-nav li a[href="products.html"] {
+  color: #FB8100;
+  background: transparent;
+  font-weight: 600;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.main-nav li a[href="products.html"]:hover,
+.main-nav li a[href="products.html"]:focus {
+  color: #d96c00;
+  border-bottom: 2px solid #d96c00;
+}
+
+/* styling Get a Quote button in nav */
+/* Add this instead: */
+.main-nav li a.quote-btn {
+  background: #FB8100;
+  color: #fff;
+  border-radius: 5px;
+  padding: 0.5rem 1.1rem;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.07);
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+
+.main-nav li a.quote-btn:hover,
+.main-nav li a.quote-btn:focus {
+  background: #d96c00;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(251,129,0,0.13);
+  text-decoration: none;
+}
+
+/* .basket-link {
   display: flex;
   align-items: center;
-}
+} */
 
-.basket-icon {
-  height: 40px;   /* 24px * 1.25 = 30px */
+/* /* .basket-icon {
+  height: 40px;   // 24px * 1.25 = 30px 
   width: auto;
   display: inline-block;
   vertical-align: middle;
-  padding-right: 0.5rem; /* Add space to the right */
-  padding-left: 0.5rem;  /* Add space to the left */
-}
-
-/* Products Pane */
-.products-pane {
-  position: sticky;
-  top: 0;
-  background: #1F2433;
-  z-index: 100;
-  border-bottom: 1px solid; 
-  box-shadow: 0 2px 8px rgba(31,41,55,0.03);
-  width: 100%;
-  max-width: 100%;
-}
-
-.products-pane ul {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-  margin: 0;
-  padding: 0.75rem 1.5rem;
-  justify-content: center;
-}
-
-/* Improved styling for the Products button in the products pane */
-.products-pane a {
-  color: #fff;
-  background: linear-gradient(90deg, #FB8100 0%, #ff9900 100%);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1.18rem;
-  padding: 0.38rem 1.1rem;
-  border-radius: 9px;
-  box-shadow: 0 2px 12px rgba(251, 129, 0, 0.10);
-  border: none;
-  letter-spacing: 0.01em;
-  transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.13s;
-  outline: none;
-  position: relative;
-}
-
-.products-pane a:hover,
-.products-pane a:focus {
-  background: linear-gradient(90deg, #ff9900 0%, #FB8100 100%);
-  color: #fff;
-  box-shadow: 0 4px 18px rgba(251, 129, 0, 0.16);
-  transform: translateY(-2px) scale(1.04);
-  text-decoration: none;
-}
+  padding-right: 0.5rem; // Add space to the right 
+  padding-left: 0.5rem;  // Add space to the left 
+} */
 
 /* Main */
 main {
@@ -221,15 +217,6 @@ footer {
   text-decoration: underline;
 }
 
-/* Logo hover effect */
-.logo-link:hover .logo-img,
-.logo-link:focus .logo-img {
-  filter: brightness(1.15) drop-shadow(0 2px 8px rgba(251,129,0,0.13));
-  transform: scale(1.06) rotate(-2deg);
-  transition: filter 0.18s, transform 0.18s;
-  outline: none;
-}
-
 /* Responsive Styles */
 img {
   max-width: 100%;
@@ -249,13 +236,6 @@ a:focus img.footer-icon {
 }
 
 @media (max-width: 900px) {
-  .products-pane ul, main {
-    padding: 1rem;
-  }
-  .products-pane ul {
-    gap: 1rem;
-    padding: 0.75rem 1rem;
-  }
   .footer-contacts {
     gap: 1.2rem;
     row-gap: 1em;
@@ -287,15 +267,6 @@ a:focus img.footer-icon {
   .main-nav li a {
     font-size: 0.75rem;
     padding: 0.2rem 0.4rem;
-  }
-  .products-pane ul {
-    gap: 0.5rem;
-    padding: 8px 0;
-  }
-  .products-pane a {
-    font-size: 0.85rem;         /* Reduced text size */
-    padding: 0.35rem 0.7rem;    /* Smaller buttons */
-    border-radius: 6px;         /* Slightly less rounded on small screens */
   }
   footer{
     font-size: 0.7rem;         /* Smaller footer text */
