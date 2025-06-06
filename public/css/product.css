@@ -61,7 +61,7 @@ main {
 .product-detail-card-sizes-table {
   width: 100%;
   max-width: 420px;
-  margin: 1.2em auto 0.5em auto;
+  margin: 1.2em auto 2em auto;
   border-collapse: collapse;
   background: #fafbfc;
   border-radius: 8px;
