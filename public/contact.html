@@ -15,6 +15,9 @@
     <a href="index.html" class="logo-link">
       <img src="images/crystal-logo.png" alt="Crystal Logo" class="logo-img" />
     </a> 
+    <button class="hamburger" aria-label="Open menu" aria-expanded="false">
+      &#9776;
+    </button>
     <nav>
       <ul class="main-nav">
         <li><a href="products.html">Products</a></li>
@@ -121,6 +124,14 @@
     </div>
   </footer>
   <script src="js/contact.js"></script>
+  <script>
+    const hamburger = document.querySelector('.hamburger');
+    const nav = document.querySelector('.main-nav');
+    hamburger.addEventListener('click', function () {
+      nav.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', nav.classList.contains('open'));
+    });
+  </script>
 </body>
 
 </html>

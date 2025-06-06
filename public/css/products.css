@@ -1,4 +1,7 @@
-/* Remove all styling from header, products pane, and footer as these are controlled by template.css */
+main {
+  background: #ffffff;
+  padding-top: 0.5em;
+}
 
 /* Base font and background */
 input, select, textarea, button {

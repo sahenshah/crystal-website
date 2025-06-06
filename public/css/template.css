@@ -137,7 +137,53 @@ header {
   padding-right: 0.5rem; // Add space to the right 
   padding-left: 0.5rem;  // Add space to the left 
 } */
-
+/* Hide hamburger by default, show on small screens */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #FB8100;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: 0.5rem;
+  z-index: 1001;
+  position: relative
+}
+@media (max-width: 700px) {
+  .main-nav {
+    display: none;
+    position: absolute;
+    top: 60px; /* adjust based on header height */
+    right: 0;
+    background: #1F2937;
+    flex-direction: column;
+    margin-top: 0.4em;
+    margin-right: 0.4em;
+    width: 40vw;
+    max-width: 320px;
+    box-shadow: 0 4px 16px rgba(31,41,55,0.13);
+    padding: 1.2em 0.5em;
+    border-radius: 0 0 10px 10px;
+    z-index: 1000;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(31,41,55,0.18);
+    border: 1px solid #2222;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .main-nav.open {
+    display: flex;
+  }
+  .hamburger {
+    display: block;
+  }
+  header {
+    position: relative;
+  }
+  .main-nav li a.quote-btn {
+    padding: 0.3rem 0.5rem;
+  }
+}
 /* Main */
 main {
   flex: 1 0 auto;
