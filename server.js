@@ -2,10 +2,11 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const path = require('path');
+const nodemailer = require('nodemailer');
 const app = express();
 
 app.use(cors());
-app.use(express.json({ limit: '10mb' })); // For base64 images and sizes
+app.use(express.json({ limit: '15mb' })); // For base64 images and sizes
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
 
 // Initialize SQLite database
@@ -80,6 +81,27 @@ app.patch('/api/products/:id', (req, res) => {
       res.json({ success: true });
     }
   );
+});
+
+// Contact form endpoint
+app.post('/api/contact', async (req, res) => {
+  const { name, email, message } = req.body;
+  // Configure your transporter (use real credentials in production)
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'crystal.industries.website@gmail.com',
+      pass: 'zhurkjembtwfcfig'
+    }
+  });
+  await transporter.sendMail({
+    from: '"Crystal Website Contact" <crystal.industries.website@gmail.com>',
+    to: 'sahenshah95@gmail.com',
+    replyTo: email,
+    subject: `Contact Form: ${name}`,
+    text: `From: ${name} <${email}>\n\n${message}`
+  });
+  res.json({ success: true });
 });
 
 // Serve the frontend

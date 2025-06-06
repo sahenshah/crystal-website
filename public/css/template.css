@@ -173,8 +173,12 @@ footer {
   display: flex;
   gap: 2.5rem;
   justify-content: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
+  row-gap: 1.2em; /* Add vertical gap for wrapping */
+  column-gap: 2.5rem; /* Horizontal gap */
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 .footer-contacts span {
@@ -184,7 +188,8 @@ footer {
   font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.01em;
-  gap: 0.2em; /* reduced spacing between icon and text */
+  gap: 0.4em; /* Slightly more space between icon and text */
+  padding: 0.2em 0.5em;
 }
 
 .footer-icon {
@@ -221,8 +226,16 @@ img {
     gap: 1rem;
     padding: 0.75rem 1rem;
   }
+  .footer-contacts {
+    gap: 1.2rem;
+    row-gap: 1em;
+    column-gap: 1.2rem;
+    padding: 0.5em 0;
+  }
   .footer-contacts span {
-    font-size: 0.7rem !important;
+    font-size: 0.9rem !important;
+    gap: 0.3em;
+    padding: 0.15em 0.3em;
   }
 }
 
@@ -258,17 +271,22 @@ img {
     font-size: 0.7rem;         /* Smaller footer text */
   }
   .footer-contacts {
-    gap: 1rem;
     flex-wrap: wrap;
+    flex-direction: column;
+    gap: 0.7em;
+    row-gap: 0.7em;
+    column-gap: 0;
+    align-items: center; 
+    padding: 0.5em 0;
   }
   .footer-contacts span {
-    font-size: 0.7rem !important;
+    font-size: 0.8rem !important;
+    gap: 0.25em;
+    padding: 0.1em 0.2em;
   }
   .footer-title {
     font-size: 0.85rem !important;
-  }
-  .footer-title {
-    font-size: 0.85rem;            /* Smaller Get in Touch */
+    margin-bottom: 0.5em;
   }
   main {
     padding: 1rem 0.5rem;
@@ -290,15 +308,18 @@ img {
   }
   .footer-contacts {
     flex-direction: column;
-    gap: 8px;
-    align-items: center;
-    font-size: 0.7rem !important;
+    gap: 0.5em;
+    row-gap: 0.5em;
+    align-items: center; 
+    padding: 0.3em 0;
   }
   .footer-contacts span {
-    font-size: 0.6rem !important;
+    font-size: 0.7rem !important;
+    padding: 0.05em 0.1em;
   }
   .footer-title {
     font-size: 0.7rem !important;
+    margin-bottom: 0.3em;
   }
 }
 

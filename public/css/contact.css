@@ -1,0 +1,222 @@
+/* Two-column layout for contact page */
+.contact-container {
+  display: flex;
+  gap: 2.5rem;
+  max-width: 100%;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(31,36,51,0.07);
+  padding: 2em 2em;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.contact-card {
+  flex: 1 1 220px;
+  min-width: 220px;
+  max-width: 320px;
+  border-right: 1px solid #eee;
+  padding-right: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.contact-form {
+  flex: 2 1 300px;
+  min-width: 240px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  padding-left: 2em;
+}
+.contact-info p {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  margin: 1em 0 0.5em 0;
+}
+
+.contact-info img.footer-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.contact-info span,
+.contact-info a {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 1em;
+  color: #222;
+}
+.contact-form button {
+  background: linear-gradient(90deg, #FB8100 0%, #ff9900 100%);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 0.7em 1.5em;
+  font-size: 1.08em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5em;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.13);
+  transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+  letter-spacing: 0.01em;
+}
+
+.contact-form button:hover,
+.contact-form button:focus {
+  background: linear-gradient(90deg, #ff9900 0%, #FB8100 100%);
+  box-shadow: 0 4px 16px rgba(251,129,0,0.18);
+  transform: scale(1.04);
+  outline: none;
+}
+
+.contact-form label {
+  margin-bottom: 0.1em;
+  font-weight: 500;
+  color: #444;
+}
+
+.contact-form input,
+.contact-form textarea {
+  margin-bottom: 0.5em; /* Reduce space below each input */
+  border: 1.5px solid #e0e0e0;
+  border-radius: 7px;
+  padding: 0.55em;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+  background: #f9f9fb;
+  transition: border 0.18s;
+}
+
+/* Reduce gap between label and input */
+.contact-form {
+  gap: 0.2em;
+}
+
+/* Add to your contact.css */
+.contact-info .whatsapp-row {
+  display: flex;
+  align-items: center;
+  margin-left: 2.2em; /* Indent more than other icons (matches icon+gap) */
+  margin-top: -0.5em;  /* Pull it closer to the numbers above */
+  margin-bottom: 0.5em;
+  gap: 0.5em;
+}
+
+.contact-info .whatsapp-available {
+  font-size: 0.8em;
+  color: #555;
+  margin-left: 0;
+  vertical-align: middle;
+}
+
+.contact-card h2 {
+  margin-top: 0;
+  color: #1F2433;
+  font-size: 2.5em;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 8px rgba(251,129,0,0.07);
+}
+
+.contact-card h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  color: #1F2433;
+  font-size: 1.4em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 4px rgba(31,36,51,0.05);
+}
+h3 {
+  color: #1F2433;
+  font-size: 1.4em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 4px rgba(31,36,51,0.05);
+}
+
+.contact-info,
+.contact-info p,
+.contact-info span,
+.contact-info a,
+.contact-info .whatsapp-available {
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  /* You can swap in your preferred modern sans-serif font here */
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  /* Optional: slightly softer color for secondary info */
+}
+
+.contact-info a {
+  color: #FB8100;
+  text-decoration: none;
+  transition: text-decoration 0.18s;
+}
+.contact-info a:hover {
+  text-decoration: underline;
+}
+
+.contact-info .whatsapp-row .footer-icon {
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 900px) {
+    .contact-card {
+        font-size: 0.85em;
+    }
+    .contact-form {
+        min-width: none;
+        font-size: 0.95em;
+    }
+}
+@media (max-width: 700px) {
+  .contact-container {
+    flex-direction: column;
+    padding: 1em 0.5em;
+    gap: 1.5rem;
+    align-items: center;
+}
+  .contact-card {
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding-right: 0;
+    padding-bottom: 1em;
+    max-width: 100%;
+  }
+  .contact-form {
+    padding-left: 0;
+  }
+}
+
+/* Add at the end of your file */
+#contact-popup {
+  position: fixed;
+  left: 50%;
+  top: 10%;
+  transform: translateX(-50%) scale(0.95);
+  background: #fff;
+  color: #1F2433;
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(31,36,51,0.13);
+  padding: 1.2em 2.2em;
+  font-size: 1.1em;
+  font-weight: 500;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  border: 2px solid #FB8100;
+  text-align: center;
+}
+#contact-popup.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) scale(1);
+}
