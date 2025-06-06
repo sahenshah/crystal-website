@@ -137,6 +137,8 @@ main {
   font-size: 1.4em;
   font-weight: 500;
   letter-spacing: 0.01em;
+  text-align: center;
+  width: 100%; 
 }
 h3 {
   color: #1F2433;
@@ -171,6 +173,33 @@ h3 {
   height: 18px;
 }
 
+/* Center the social media icons in the contact card */
+.contact-info .social-icons-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2em;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+
+.contact-info .social-icons-row a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animate social media icons on hover */
+.contact-info .social-icons-row a img.footer-icon {
+  transition: transform 0.18s cubic-bezier(0.4, 0.2, 0.2, 1), filter 0.18s;
+}
+
+.contact-info .social-icons-row a:hover img.footer-icon,
+.contact-info .social-icons-row a:focus img.footer-icon {
+  transform: scale(1.18);
+  filter: brightness(1.15) drop-shadow(0 2px 8px #fb810033);
+}
+
 @media (max-width: 900px) {
     .contact-card {
         font-size: 0.85em;
@@ -199,7 +228,6 @@ h3 {
   }
 }
 
-/* Add at the end of your file */
 #contact-popup {
   position: fixed;
   left: 50%;

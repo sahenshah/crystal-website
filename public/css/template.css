@@ -237,6 +237,17 @@ img {
   display: block;
 }
 
+/* Animate social media icons on hover */
+.contact-info .social-icons-row a img.footer-icon {
+  transition: transform 0.18s cubic-bezier(0.4, 0.2, 0.2, 1), filter 0.18s;
+}
+
+a:hover img.footer-icon,
+a:focus img.footer-icon {
+  transform: scale(1.18);
+  filter: brightness(1.15) drop-shadow(0 2px 8px #fb810033);
+}
+
 @media (max-width: 900px) {
   .products-pane ul, main {
     padding: 1rem;
