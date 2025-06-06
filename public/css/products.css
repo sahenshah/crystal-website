@@ -713,3 +713,58 @@ h1, .main-heading {
   transform: translateY(-3px) scale(1.025);
   outline: none;
 }
+
+/* Product Filters Styling */
+#product-filters {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+  margin: 1.5em 0 1em 0;
+  padding: 0.7em 1.2em;
+}
+
+#product-filters select {
+  font-family: 'Segoe UI', 'Inter', 'Roboto', Arial, sans-serif;
+  font-size: 1.05rem;
+  color: #676869;
+  background: #fff;
+  border: 1.5px solid #747373;
+  border-radius: 7px;
+  padding: 0.38em 1.2em 0.38em 0.8em;
+  margin: 0;
+  outline: none;
+  transition: border 0.18s, box-shadow 0.18s;
+  box-shadow: 0 1px 4px rgba(251,129,0,0.04);
+  appearance: none;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+#product-filters select:focus,
+#product-filters select:hover {
+  border-color: #ff9900;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.10);
+}
+
+@media (max-width: 700px) {
+  .products-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+  #product-filters {
+    width: 100%;
+    margin-top: 0.7em;
+    margin-bottom: 0.7em;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.7rem;
+    padding: 0.7em 0.5em;
+    margin: 0;
+  }
+  #product-filters select {
+    width: 100%;
+    min-width: 0;
+    font-size: 1rem;
+  }
+}

@@ -7,6 +7,9 @@ const sizesList = document.getElementById('sizes-list');
 const brandSelect = document.getElementById('product-brand');
 const packingDotsContainer = document.getElementById('packing-dots');
 let selectedPacking = [];
+const brandFilter = document.getElementById('brand-filter');
+const finishFilter = document.getElementById('finish-filter');
+
 
 addBtn.onclick = () => {
     modal.classList.add('active');
@@ -32,10 +35,20 @@ function toTitleCase(str) {
 
 // **Render product cards**  fetch products from the backend and render them
 function renderProducts() {
+    const brandValue = document.getElementById('brand-filter')?.value || '';
+    const finishValue = document.getElementById('finish-filter')?.value || '';
+
     fetch('http://localhost:3000/api/products')
         .then(res => res.json())
         .then(products => {
-            productsList.innerHTML = products.map(p => `
+            // Filter products based on selected filters
+            const filtered = products.filter(p => {
+                const brandMatch = !brandValue || p.brand === brandValue;
+                const finishMatch = !finishValue || p.finish === finishValue;
+                return brandMatch && finishMatch;
+            });
+
+            productsList.innerHTML = filtered.map(p => `
                 <div class="product-card">
                   <div class="product-card-img-container">
                     <a class="product-card-link" href="product.html?id=${p.id}">
@@ -79,6 +92,10 @@ function renderProducts() {
             });
         });
 }
+
+// Listen for filter changes and re-render products
+brandFilter.addEventListener('change', renderProducts);
+finishFilter.addEventListener('change', renderProducts);
 
 // Load products on page load
 renderProducts();
