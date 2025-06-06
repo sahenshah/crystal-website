@@ -65,6 +65,18 @@ function renderProducts() {
                     }
                 };
             });
+
+            document.querySelectorAll('.product-card').forEach(card => {
+              const link = card.querySelector('.product-card-link');
+              if (link) {
+                card.style.cursor = 'pointer';
+                card.onclick = function(e) {
+                  // Prevent double navigation if a button is clicked
+                  if (e.target.closest('.delete-product-btn')) return;
+                  window.location.href = link.getAttribute('href');
+                };
+              }
+            });
         });
 }
 
