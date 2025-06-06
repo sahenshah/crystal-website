@@ -753,7 +753,6 @@ body.admin-visible .admin-only {
   border-radius: 50%;
   display: inline-block;
   border: 2.5px solid #fff;
-  box-shadow: 0 1px 4px rgba(31,36,51,0.10);
   margin-right: 0.18em;
   margin-left: 0;
   vertical-align: middle;
