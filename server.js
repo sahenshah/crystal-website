@@ -19,7 +19,7 @@ db.run(`CREATE TABLE IF NOT EXISTS products (
   brand TEXT,
   finish TEXT,
   description TEXT,
-  image TEXT,
+  images TEXT,  --Store up to 3 images as JSON array
   sizes TEXT -- Store sizes (with gauge/dots) as JSON string
 )`);
 
@@ -27,10 +27,10 @@ db.run(`CREATE TABLE IF NOT EXISTS products (
 app.get('/api/products', (req, res) => {
   db.all('SELECT * FROM products', [], (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
-    // Parse sizes JSON before sending to frontend
     const products = rows.map(row => ({
       ...row,
-      sizes: row.sizes ? JSON.parse(row.sizes) : []
+      sizes: row.sizes ? JSON.parse(row.sizes) : [],
+      images: row.images ? JSON.parse(row.images) : [], // Parse images array
     }));
     res.json(products);
   });
@@ -43,17 +43,18 @@ app.get('/api/products/:id', (req, res) => {
     if (!row) return res.status(404).json({ error: 'Product not found' });
     res.json({
       ...row,
-      sizes: row.sizes ? JSON.parse(row.sizes) : []
+      sizes: row.sizes ? JSON.parse(row.sizes) : [],
+      images: row.images ? JSON.parse(row.images) : [],
     });
   });
 });
 
 // Add a new product
 app.post('/api/products', (req, res) => {
-  const { name, brand, finish, description, image, sizes } = req.body;
+  const { name, brand, finish, description, images, sizes } = req.body;
   db.run(
-    'INSERT INTO products (name, brand, finish, description, image, sizes) VALUES (?, ?, ?, ?, ?, ?)',
-    [name, brand, finish, description, image, JSON.stringify(sizes || [])],
+    'INSERT INTO products (name, brand, finish, description, images, sizes) VALUES (?, ?, ?, ?, ?, ?)',
+    [name, brand, finish, description, JSON.stringify(images || []), JSON.stringify(sizes || [])],
     function (err) {
       if (err) return res.status(500).json({ error: err.message });
       res.json({ id: this.lastID });
@@ -71,10 +72,10 @@ app.delete('/api/products/:id', (req, res) => {
 
 // Update a product by ID
 app.patch('/api/products/:id', (req, res) => {
-  const { name, brand, finish, description, image, sizes } = req.body;
+  const { name, brand, finish, description, images, sizes } = req.body;
   db.run(
-    'UPDATE products SET name = ?, brand = ?, finish = ?, description = ?, image = ?, sizes = ? WHERE id = ?',
-    [name, brand, finish, description, image, JSON.stringify(sizes || []), req.params.id],
+    'UPDATE products SET name = ?, brand = ?, finish = ?, description = ?, images = ?, sizes = ? WHERE id = ?',
+    [name, brand, finish, description, JSON.stringify(images || []), JSON.stringify(sizes || []), req.params.id],
     function(err) {
       if (err) return res.status(500).json({ error: err.message });
       if (this.changes === 0) return res.status(404).json({ error: 'Product not found' });

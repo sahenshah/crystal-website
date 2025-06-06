@@ -46,9 +46,21 @@ function renderProduct(product) {
       </table>`
     : '<p>No sizes available.</p>';
 
+  const images = Array.isArray(product.images) && product.images.length > 0
+    ? product.images
+    : [product.image || 'images/crystal-logo.png'];
+
   container.innerHTML = `
     <div class="product-card product-detail-card">
-      <img src="${product.image || 'images/crystal-logo.png'}" alt="${product.name}">
+      <div id="carousel">
+        <button id="carousel-left">&#xFFE9;</button>
+        <div class="carousel-image-wrapper">
+          ${images.map((img, i) =>
+            `<img src="${img}" class="carousel-img${i === 0 ? ' active' : ''}" data-index="${i}" alt="${product.name}">`
+          ).join('')}
+        </div>
+        <button id="carousel-right">&#xFFEB;</button>
+      </div>
       <div class="product-detail-info">
         <h2>${product.name}</h2>
         <div class="brand-finish">
@@ -63,6 +75,23 @@ function renderProduct(product) {
       </div>
     </div>
   `;
+
+  // Carousel JS
+  const imgs = container.querySelectorAll('.carousel-img');
+  let current = 0;
+  function showImage(idx) {
+    imgs.forEach((img, i) => {
+      if (i === idx) img.classList.add('active');
+      else img.classList.remove('active');
+    });
+    current = idx;
+  }
+  container.querySelector('#carousel-left').onclick = () => {
+    showImage((current - 1 + imgs.length) % imgs.length);
+  };
+  container.querySelector('#carousel-right').onclick = () => {
+    showImage((current + 1) % imgs.length);
+  };
 }
 
 // Modal for editing product
@@ -239,34 +268,148 @@ function openEditProductModal(product) {
   // --- Handle image upload functionality ---
   const imageInput = document.getElementById('edit-product-image');
   const imageUploadBtn = document.getElementById('edit-image-upload-btn');
-  const imagePreview = document.getElementById('edit-image-preview');
+  const imagePreviewContainer = document.getElementById('edit-image-preview-container');
+  const imageFileName = document.getElementById('edit-image-file-name');
 
-  if (imageUploadBtn && imageInput) {
+  // Helper to render image previews
+  function renderImagePreviews(imagesArr) {
+    imagePreviewContainer.innerHTML = '';
+    imagesArr.forEach((imgSrc, idx) => {
+      const img = document.createElement('img');
+      img.src = imgSrc;
+      img.draggable = true;
+      img.dataset.index = idx;
+      img.style.maxWidth = '120px';
+      img.style.maxHeight = '120px';
+      img.style.display = 'block';
+      img.style.borderRadius = '8px';
+      img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+      img.style.marginRight = '0.5em';
+      if (idx === 0) {
+        img.style.outline = '3px solid #FB8100';
+        img.style.outlineOffset = '2px';
+      }
+      imagePreviewContainer.appendChild(img);
+    });
+
+    let dragSrcIdx = null;
+
+    imagePreviewContainer.querySelectorAll('img').forEach(img => {
+      // Desktop drag-and-drop
+      img.addEventListener('dragstart', function(e) {
+        dragSrcIdx = Number(this.dataset.index);
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', dragSrcIdx);
+        this.classList.add('dragging');
+      });
+      img.addEventListener('dragend', function() {
+        this.classList.remove('dragging');
+      });
+      img.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        this.style.outline = '3px dashed #FB8100';
+      });
+      img.addEventListener('dragleave', function() {
+        if (Number(this.dataset.index) !== 0) {
+          this.style.outline = '';
+        }
+      });
+      img.addEventListener('drop', function(e) {
+        e.preventDefault();
+        const dropIdx = Number(this.dataset.index);
+        if (dragSrcIdx === null || dragSrcIdx === dropIdx) return;
+        product.images = product.images || [];
+        const moved = product.images.splice(dragSrcIdx, 1)[0];
+        product.images.splice(dropIdx, 0, moved);
+        renderImagePreviews(product.images);
+      });
+
+      // Touch support (long press to drag)
+      let touchStartY = 0;
+      let touchStartX = 0;
+      let touchMoved = false;
+      let touchHoldTimeout = null;
+
+      img.addEventListener('touchstart', function(e) {
+        touchMoved = false;
+        touchStartY = e.touches[0].clientY;
+        touchStartX = e.touches[0].clientX;
+        dragSrcIdx = Number(this.dataset.index);
+
+        // Long press to start drag (hold for 300ms)
+        touchHoldTimeout = setTimeout(() => {
+          this.classList.add('dragging');
+        }, 300);
+      });
+
+      img.addEventListener('touchmove', function(e) {
+        if (!touchHoldTimeout) return;
+        const moveY = e.touches[0].clientY;
+        const moveX = e.touches[0].clientX;
+        if (Math.abs(moveY - touchStartY) > 10 || Math.abs(moveX - touchStartX) > 10) {
+          clearTimeout(touchHoldTimeout);
+          touchHoldTimeout = null;
+          this.classList.remove('dragging');
+        }
+        touchMoved = true;
+      });
+
+      img.addEventListener('touchend', function(e) {
+        clearTimeout(touchHoldTimeout);
+        touchHoldTimeout = null;
+        this.classList.remove('dragging');
+        if (!touchMoved) return;
+
+        // Find the image under the touch point
+        const touch = e.changedTouches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (target && target.tagName === 'IMG' && target.parentNode === imagePreviewContainer) {
+          const dropIdx = Number(target.dataset.index);
+          if (dragSrcIdx !== null && dragSrcIdx !== dropIdx) {
+            product.images = product.images || [];
+            const moved = product.images.splice(dragSrcIdx, 1)[0];
+            product.images.splice(dropIdx, 0, moved);
+            renderImagePreviews(product.images);
+          }
+        }
+        dragSrcIdx = null;
+      });
+    });
+  }
+
+  // Show current product images on modal open
+  product.images = Array.isArray(product.images) ? product.images : [];
+  renderImagePreviews(product.images);
+
+  if (imageUploadBtn && imageInput && imagePreviewContainer && imageFileName) {
     imageUploadBtn.onclick = function(e) {
       e.preventDefault();
       imageInput.click();
     };
 
     imageInput.onchange = function() {
-      if (imageInput.files && imageInput.files[0]) {
-        // Show preview of the new image
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          imagePreview.src = e.target.result;
-          imagePreview.style.display = 'block';
-        };
-        reader.readAsDataURL(imageInput.files[0]);
+      imageFileName.textContent = '';
+      if (imageInput.files && imageInput.files.length > 0) {
+        imageFileName.textContent = Array.from(imageInput.files).map(f => f.name).join(', ');
+        // Read all files as base64 and update product.images
+        const files = Array.from(imageInput.files).slice(0, 3);
+        const readers = files.map(file => {
+          return new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = e => resolve(e.target.result);
+            reader.readAsDataURL(file);
+          });
+        });
+        Promise.all(readers).then(imagesArr => {
+          product.images = imagesArr;
+          renderImagePreviews(product.images);
+        });
       } else {
-        imagePreview.src = product.image || 'images/crystal-logo.png';
-        imagePreview.style.display = product.image ? 'block' : 'none';
+        // If no new images, show existing images
+        renderImagePreviews(product.images || []);
       }
     };
-  }
-
-  // Show current product image (no filename)
-  if (imagePreview) {
-    imagePreview.src = product.image || 'images/crystal-logo.png';
-    imagePreview.style.display = 'block';
   }
 
   document.getElementById('close-edit-modal-btn').onclick = function() {
@@ -286,48 +429,28 @@ function openEditProductModal(product) {
       return { size, packing, gauge };
     });
 
-    const imageInput = document.getElementById('edit-product-image');
-    if (imageInput.files && imageInput.files[0]) {
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const updatedProduct = {
-          name: document.getElementById('edit-product-name').value,
-          brand: document.getElementById('edit-product-brand').value,
-          finish: document.getElementById('edit-product-finish').value,
-          description: document.getElementById('edit-product-description').value,
-          sizes,
-          image: event.target.result // base64 string
-        };
-        sendPatch(updatedProduct);
-      };
-      reader.readAsDataURL(imageInput.files[0]);
-    } else {
-      const updatedProduct = {
-        name: document.getElementById('edit-product-name').value,
-        brand: document.getElementById('edit-product-brand').value,
-        finish: document.getElementById('edit-product-finish').value,
-        description: document.getElementById('edit-product-description').value,
-        sizes
-        // no image field, keep existing image
-      };
-      sendPatch(updatedProduct);
-    }
+    const updatedProduct = {
+      name: document.getElementById('edit-product-name').value,
+      brand: document.getElementById('edit-product-brand').value,
+      finish: document.getElementById('edit-product-finish').value,
+      description: document.getElementById('edit-product-description').value,
+      sizes,
+      images: Array.isArray(product.images) ? product.images : []
+    };
 
-    function sendPatch(updatedProduct) {
-      fetch(`/api/products/${product.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedProduct)
-      })
-      .then(res => {
-        if (res.ok) {
-          modal.classList.remove('active');
-          location.reload();
-        } else {
-          alert('Failed to update product.');
-        }
-      });
-    }
+    fetch(`/api/products/${product.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedProduct)
+    })
+    .then(res => {
+      if (res.ok) {
+        modal.classList.remove('active');
+        window.location.href = window.location.pathname + '?id=' + product.id;
+      } else {
+        alert('Failed to update product.');
+      }
+    });
   };
 }
 
@@ -353,6 +476,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.target === modal) modal.classList.remove('active');
     };
   }
+
 });
 
 const productId = getProductIdFromUrl();

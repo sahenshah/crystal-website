@@ -83,13 +83,14 @@
               </select>
             </label><br>
             <label>
-              Image:
-              <input type="file" id="product-image" accept="image/png, image/jpeg" required hidden>
-              <button type="button" id="image-upload-btn">Choose Image</button>
+              Images:
+              <input type="file" id="product-image" accept="image/png, image/jpeg" multiple hidden>
+              <button type="button" id="image-upload-btn">Choose Images</button>
               <span id="image-file-name"></span>
             </label>
-            <img id="product-image-preview" src="" alt="Image Preview"
-              style="max-width:120px;max-height:120px;display:none;">
+            <div id="product-image-preview-container" style="display: flex; gap: 0.5em; flex-wrap: wrap;">
+              <!-- Multiple image previews will be inserted here -->
+            </div>
             <br>
             <label>
               Description:

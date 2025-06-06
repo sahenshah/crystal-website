@@ -48,11 +48,21 @@ function renderProducts() {
                 return brandMatch && finishMatch;
             });
 
-            productsList.innerHTML = filtered.map(p => `
+            productsList.innerHTML = filtered.map(p => {
+              // Use the first image from the images array, or a fallback if not present
+              let imgSrc = '';
+              if (Array.isArray(p.images) && p.images.length > 0 && p.images[0]) {
+                imgSrc = p.images[0];
+              } else if (p.image) {
+                imgSrc = p.image;
+              } else {
+                imgSrc = 'images/crystal-logo.png'; // fallback image
+              }
+              return `
                 <div class="product-card">
                   <div class="product-card-img-container">
                     <a class="product-card-link" href="product.html?id=${p.id}">
-                      <img src="${p.image}" alt="${toTitleCase(p.name)}">
+                      <img src="${imgSrc}" alt="${toTitleCase(p.name)}">
                     </a>
                   </div>
                   <div class="product-card-content">
@@ -62,7 +72,8 @@ function renderProducts() {
                     <button class="delete-product-btn admin-only" data-id="${p.id}" type="button">Delete</button>
                   </div>
                 </div>
-            `).join('');
+              `;
+            }).join('');
 
             // Attach delete handlers
             document.querySelectorAll('.delete-product-btn').forEach(btn => {
@@ -116,47 +127,53 @@ form.onsubmit = function (e) {
         return;
     }
 
-    // Collect sizes with gauge (dots) for each size row (gauge can be empty)
-    const sizes = Array.from(sizesRows).map(row => {
-        const size = row.querySelector('.size-row-size')?.textContent || '';
-        const packing = row.querySelector('.size-row-packing')?.textContent || '';
-        const gaugeDots = Array.from(row.querySelectorAll('.size-row-dots .dot'))
-            .map(dot => dot.getAttribute('data-value'));
-        return { size, packing, gauge: gaugeDots };
-    });
+  // Collect sizes with gauge (dots) for each size row (gauge can be empty)
+  const sizes = Array.from(sizesRows).map(row => {
+    const size = row.querySelector('.size-row-size')?.textContent || '';
+    const packing = row.querySelector('.size-row-packing')?.textContent || '';
+    const gaugeDots = Array.from(row.querySelectorAll('.size-row-dots .dot'))
+      .map(dot => dot.getAttribute('data-value'));
+    return { size, packing, gauge: gaugeDots };
+  });
 
-    // Image is optional
-    if (imageInput.files && imageInput.files[0]) {
+  // Handle multiple images (up to 3)
+  if (imageInput.files && imageInput.files.length > 0) {
+    const files = Array.from(imageInput.files).slice(0, 3);
+    const readers = files.map(file => {
+      return new Promise(resolve => {
         const reader = new FileReader();
-        reader.onload = function(event) {
-            const image = event.target.result; // base64 string
-            fetch('http://localhost:3000/api/products', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, brand, finish, description, image, sizes })
-            })
-            .then(res => res.json())
-            .then(() => {
-                renderProducts();
-                form.reset();
-                modal.classList.remove('active');
-            });
-        };
-        reader.readAsDataURL(imageInput.files[0]);
-    } else {
-        // No image provided
-        fetch('http://localhost:3000/api/products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, brand, finish, description, image: '', sizes })
-        })
+        reader.onload = e => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      });
+    });
+    Promise.all(readers).then(imagesArr => {
+      fetch('http://localhost:3000/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, brand, finish, description, images: imagesArr, sizes })
+      })
         .then(res => res.json())
         .then(() => {
-            renderProducts();
-            form.reset();
-            modal.classList.remove('active');
+          renderProducts();
+          form.reset();
+          modal.classList.remove('active');
         });
-    }
+    });
+  } else {
+    // No images provided
+    fetch('http://localhost:3000/api/products', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, brand, finish, description, images: [], sizes })
+    })
+      .then(res => res.json())
+      .then(() => {
+        renderProducts();
+        form.reset();
+        modal.classList.remove('active');
+      });
+  }
+
 };
 
 function renderPackingDots(brand) {
@@ -294,41 +311,40 @@ document.getElementById('add-size-btn').onclick = function () {
   dots.forEach(dot => dot.classList.remove('selected'));
 };
 
-// Handle image upload functionality
+// Handle image upload functionality for multiple images
 const imageInput = document.getElementById('product-image');
 const imageUploadBtn = document.getElementById('image-upload-btn');
 const imageFileName = document.getElementById('image-file-name');
-// Add this line if you don't already have an image preview element:
-const imagePreview = document.getElementById('product-image-preview');
+const imagePreviewContainer = document.getElementById('product-image-preview-container');
 
-if (imageUploadBtn && imageInput && imageFileName) {
+if (imageUploadBtn && imageInput && imageFileName && imagePreviewContainer) {
   imageUploadBtn.onclick = function(e) {
     e.preventDefault();
     imageInput.click();
   };
 
   imageInput.onchange = function() {
-    if (imageInput.files && imageInput.files[0]) {
-      imageFileName.textContent = imageInput.files[0].name;
-
-      // Show preview of the new image
-      if (imagePreview) {
+    imageFileName.textContent = '';
+    imagePreviewContainer.innerHTML = '';
+    if (imageInput.files && imageInput.files.length > 0) {
+      imageFileName.textContent = Array.from(imageInput.files).map(f => f.name).join(', ');
+      Array.from(imageInput.files).forEach(file => {
         const reader = new FileReader();
         reader.onload = function(e) {
-          imagePreview.src = e.target.result;
-          imagePreview.style.display = 'block';
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.maxWidth = '120px';
+          img.style.maxHeight = '120px';
+          img.style.display = 'block';
+          img.style.borderRadius = '8px';
+          img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+          img.style.marginRight = '0.5em';
+          imagePreviewContainer.appendChild(img);
         };
-        reader.readAsDataURL(imageInput.files[0]);
-      }
-    } else {
-      imageFileName.textContent = '';
-      if (imagePreview) {
-        imagePreview.src = '';
-        imagePreview.style.display = 'none';
-      }
+        reader.readAsDataURL(file);
+      });
     }
   };
 }
-
 // edit privileges for admin users
 function _0x2664(_0x52b94d,_0x3086ee){const _0x379e77=_0x379e();return _0x2664=function(_0x266459,_0x2de575){_0x266459=_0x266459-0xfb;let _0x1c7ac3=_0x379e77[_0x266459];return _0x1c7ac3;},_0x2664(_0x52b94d,_0x3086ee);}function _0x379e(){const _0x3e840b=['2TckpDi','118963erijLm','32ZUClss','style','30WrrvZk','none','87274ijNOpN','onclick','153304hGqRpf','6McJkjz','410PEofLP','body','add','getElementById','display','1218AzfNUu','YWRtaW4xMjM=','62550FhPpzO','Incorrect\x20password.','493402FTflVm','33dgyYse','267595JIpAhe','admin-visible','513780yrZFzd'];_0x379e=function(){return _0x3e840b;};return _0x379e();}const _0x235548=_0x2664;(function(_0x596646,_0x4cd93b){const _0x3e1e20=_0x2664,_0x53c2bf=_0x596646();while(!![]){try{const _0x435442=parseInt(_0x3e1e20(0x108))/0x1*(parseInt(_0x3e1e20(0x102))/0x2)+-parseInt(_0x3e1e20(0x10b))/0x3*(parseInt(_0x3e1e20(0x10a))/0x4)+parseInt(_0x3e1e20(0xff))/0x5*(parseInt(_0x3e1e20(0x106))/0x6)+parseInt(_0x3e1e20(0xfd))/0x7*(parseInt(_0x3e1e20(0x104))/0x8)+-parseInt(_0x3e1e20(0xfb))/0x9*(-parseInt(_0x3e1e20(0x10c))/0xa)+-parseInt(_0x3e1e20(0xfe))/0xb*(-parseInt(_0x3e1e20(0x101))/0xc)+-parseInt(_0x3e1e20(0x103))/0xd*(parseInt(_0x3e1e20(0x111))/0xe);if(_0x435442===_0x4cd93b)break;else _0x53c2bf['push'](_0x53c2bf['shift']());}catch(_0x141ca8){_0x53c2bf['push'](_0x53c2bf['shift']());}}}(_0x379e,0x2b50b),document[_0x235548(0x10f)]('admin-login-btn')[_0x235548(0x109)]=function(){const _0x3729cc=_0x235548,_0x1cd9f6=prompt('Enter\x20admin\x20password:'),_0x27b2f4=atob(_0x3729cc(0x112));_0x1cd9f6===_0x27b2f4?(document[_0x3729cc(0x10d)]['classList'][_0x3729cc(0x10e)](_0x3729cc(0x100)),this[_0x3729cc(0x105)][_0x3729cc(0x110)]=_0x3729cc(0x107)):alert(_0x3729cc(0xfc));});

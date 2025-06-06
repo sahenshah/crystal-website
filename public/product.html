@@ -65,15 +65,17 @@
             </select>
           </label><br>
           <label>
-            Image:
-            <input type="file" id="edit-product-image" accept="image/png, image/jpeg" hidden>
-            <button type="button" id="edit-image-upload-btn">Choose Image</button>
+            Images:
+            <input type="file" id="edit-product-image" accept="image/png, image/jpeg" multiple hidden>
+            <button type="button" id="edit-image-upload-btn">Choose Images</button>
             <span id="edit-image-file-name"></span>
           </label>
-          <div id="edit-image-preview-container">
-            <img id="edit-image-preview" src="" alt="Product Image"
-              style="max-width:120px;max-height:120px;display:none;">
+          <div id="edit-image-preview-container" style="display: flex; gap: 0.5em; flex-wrap: wrap;">
+            <!-- Multiple image previews will be inserted here -->
           </div>
+          <small style="display:block; color:#888; margin-top:2px; margin-bottom:8px;">
+            (drag images to reorder)
+          </small>
           <label>
             Description:
             <textarea id="edit-product-description" required></textarea>
