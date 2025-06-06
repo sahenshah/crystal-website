@@ -44,9 +44,22 @@ This is the official website for Crystal Industries Ltd., built with Node.js, Ex
     The site will be available at [http://localhost:3000](http://localhost:3000).
 
 ## Project Structure
-crystal-website/ ├── public/ │ ├── css/ │ ├── images/ │ ├── js/ │ ├── index.html │ ├── contact.html │ ├── about.html │ ├── products.html │ └── product.html ├── server.js ├── package.json └── README.md
 
-
+```
+/crystal-website/
+    ├── public/
+    │   ├── css/
+    │   ├── images/
+    │   ├── js/
+    │   ├── index.html
+    │   ├── contact.html
+    │   ├── about.html
+    │   ├── products.html
+    │   └── product.html
+    ├── server.js
+    ├── package.json
+    └── README.md
+```
 Customization
 Products: Update the database or use the admin panel (if enabled) to add/edit products.
 Branding: Replace images and update colors in CSS to match your brand.
