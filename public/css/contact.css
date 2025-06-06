@@ -1,3 +1,6 @@
+main {
+  padding: 0;
+}
 /* Two-column layout for contact page */
 .contact-container {
   display: flex;
@@ -9,6 +12,9 @@
   padding: 2em 2em;
   flex-wrap: wrap;
   justify-content: center;
+  min-height: 70vh; /* Adjust as needed for your header/footer */
+  box-sizing: border-box;
+  align-items: center;
 }
 .contact-card {
   flex: 1 1 220px;
