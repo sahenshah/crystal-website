@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const { Pool } = require('pg');
+
 const app = express();
 
 app.use(cors());
@@ -10,22 +11,12 @@ app.use(express.json({ limit: '15mb' })); // For base64 images and sizes
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
 
 // PostgreSQL pool configuration
-const pool = new Pool(
-  process.env.DATABASE_URL
-    ? {
-        connectionString: process.env.DATABASE_URL,
-        ssl: process.env.NODE_ENV === 'production'
-          ? { rejectUnauthorized: false }
-          : false,
-      }
-    : {
-        user: 'crystal',
-        host: 'localhost',
-        database: 'products',
-        password: 'crystal',
-        port: 5432,
-      }
-);
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production'
+    ? { rejectUnauthorized: false }
+    : false,
+});
 
 // Ensure products table exists
 async function ensureProductsTable() {
