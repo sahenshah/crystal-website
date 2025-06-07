@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/template.css" />
   <link rel="stylesheet" href="css/index.css" />
   <link rel="icon" type="image/png" href="images/crystal-logo.png" />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -29,8 +30,18 @@
   </header>
 
   <main>
-    <section>
-      <img src="images/home-page-image.png" alt="Home Page" class="home-page-image">
+    <section class="hero-section">
+      <img id="hero-image" src="images/home-page-image-narrow.png" alt="Home Page" class="home-page-image">
+      <div class="hero-overlay-text" id="hero-overlay-text">
+        Quality Aluminum Cookware<br>
+        for East Africa
+        <div class="hero-overlay-subtext">
+          Durable. Affordable. Trusted by 5000+ customers.
+        </div>
+      </div>
+      <button class="hero-down-arrow" id="scroll-down-arrow" aria-label="Scroll down">
+        &#x25BC; 
+      </button>
     </section>
     <section class="stats-pane">
       <div class="stats-content">
@@ -40,6 +51,7 @@
             <strong>25+</strong>
             <span>Service Points</span>
           </div>
+          <div class="stats-tooltip">We have over 25 service points across the region for your convenience.</div>
         </div>
         <div class="stats-item">
           <img src="images/home-page-distributors-icon.png" alt="Distributors" class="stats-icon" />
@@ -47,12 +59,16 @@
             <strong>50+</strong>
             <span>Distributors</span>
           </div>
+          <div class="stats-tooltip">Our cookware is supplied by more than 50 trusted
+             distributors throughout the region, making it easily accessible near you.</div>
         </div>
         <div class="stats-item">
           <img src="images/home-page-retailers-icon.png" alt="Retailers" class="stats-icon" />
           <div class="stats-text">
             <strong>500+</strong>
             <span>Retailers</span>
+          <div class="stats-tooltip">You can find our products in over 500 retail outlets,
+            from local markets to major kitchenware stores.</div>
           </div>
         </div>
         <div class="stats-item">
@@ -61,10 +77,17 @@
             <strong>5000+</strong>
             <span>Happy Clients</span>
           </div>
+          <div class="stats-tooltip">Over 5,000 customers, including caterers, chefs, and households,
+             trust our aluminum cookware every day.</div>
         </div>
       </div>
     </section>
-    <section class="testimonials-section">
+    <section class="testimonials-title-section">
+      <div class="testimonial-title">
+        What Our Customers Say :
+      </div>
+    </section>
+    <section class="testimonials-text-section">
       <p id="testimonial-text" class="testimonial-text">
         "I’ve been using these aluminum cooking pots for months, and they are fantastic! The heat distribution is even,
         making cooking so much easier. Plus, they are lightweight yet super durable. I highly recommend them to anyone
@@ -88,6 +111,18 @@
         }, 600); // Match the CSS transition duration
       }, 8000);
     </script>
+    <section class="home-page-nav-section">
+      <div class="home-page-nav-header">
+         <h3>Ready to cook with confidence?<br></h3> 
+      </div>
+      <div class="home-page-nav-content">
+         <p>Browse our range of the finest quality aluminium cookware products or contact us for a quote</p> 
+      </div>
+        <div class="home-page-nav-buttons">
+    <a href="products.html" class="nav-action-btn">Browse Products</a>
+    <a href="contact.html" class="nav-action-btn secondary">Contact Us</a>
+  </div>
+    </section>
   </main>
   <footer>
     <div class="footer-title">
@@ -128,6 +163,47 @@
     hamburger.addEventListener('click', function () {
       nav.classList.toggle('open');
       hamburger.setAttribute('aria-expanded', nav.classList.contains('open'));
+    });
+
+    // Hero image carousel with smooth fade transition
+    const heroImages = [
+      "images/home-page-image-narrow.png",
+      "images/home-page-image.png"
+    ];
+    let heroIndex = 0;
+    const heroImg = document.getElementById('hero-image');
+    const heroOverlayText = document.getElementById('hero-overlay-text');
+
+    // Ensure CSS transition is set
+    heroImg.style.transition = "opacity 0.7s";
+
+    // Start with full opacity
+    heroImg.style.opacity = 1;
+
+    setInterval(() => {
+      // Fade out
+      heroImg.style.opacity = 0;
+      setTimeout(() => {
+        // Change image after fade out
+        heroIndex = (heroIndex + 1) % heroImages.length;
+        heroImg.src = heroImages[heroIndex];
+        // Show overlay text only on the first image
+        if (heroIndex === 0) {
+          heroOverlayText.style.display = '';
+        } else {
+          heroOverlayText.style.display = 'none';
+        }
+        // Fade in
+        heroImg.style.opacity = 1;
+      }, 700); // Match the transition duration
+    }, 5000);
+
+    // Scroll to footer when hero down arrow is clicked
+    document.getElementById('scroll-down-arrow').addEventListener('click', function () {
+      const footer = document.querySelector('footer');
+      if (footer) {
+        footer.scrollIntoView({ behavior: 'smooth' });
+      }
     });
   </script>
 </body>

@@ -35,6 +35,7 @@ header {
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 2px 8px rgba(31,41,55,0.04);
+  height: 10vh;
 }
 
 .logo-link {
