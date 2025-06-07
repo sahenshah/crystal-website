@@ -1,87 +1,107 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const { Pool } = require('pg');
 const app = express();
 
 app.use(cors());
 app.use(express.json({ limit: '15mb' })); // For base64 images and sizes
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
 
-// Initialize SQLite database
-const db = new sqlite3.Database('./products.db');
+// PostgreSQL pool configuration
+const pool = new Pool({
+  user: 'crystal',
+  host: 'localhost',
+  database: 'products',
+  password: 'crystal',
+  port: 5432,
+});
 
-// Create products table if it doesn't exist
-db.run(`CREATE TABLE IF NOT EXISTS products (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT,
-  brand TEXT,
-  finish TEXT,
-  description TEXT,
-  images TEXT,  --Store up to 3 images as JSON array
-  sizes TEXT -- Store sizes (with gauge/dots) as JSON string
-)`);
+// Ensure products table exists
+async function ensureProductsTable() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS products (
+      id SERIAL PRIMARY KEY,
+      name TEXT,
+      brand TEXT,
+      finish TEXT,
+      description TEXT,
+      images TEXT,
+      sizes TEXT
+    )
+  `);
+}
+ensureProductsTable().catch(console.error);
 
 // Get all products
-app.get('/api/products', (req, res) => {
-  db.all('SELECT * FROM products', [], (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
-    const products = rows.map(row => ({
+app.get('/api/products', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM products');
+    const products = result.rows.map(row => ({
       ...row,
       sizes: row.sizes ? JSON.parse(row.sizes) : [],
       images: row.images ? JSON.parse(row.images) : [], // Parse images array
     }));
     res.json(products);
-  });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Get a single product by ID
-app.get('/api/products/:id', (req, res) => {
-  db.get('SELECT * FROM products WHERE id = ?', [req.params.id], (err, row) => {
-    if (err) return res.status(500).json({ error: err.message });
+app.get('/api/products/:id', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM products WHERE id = $1', [req.params.id]);
+    const row = result.rows[0];
     if (!row) return res.status(404).json({ error: 'Product not found' });
     res.json({
       ...row,
       sizes: row.sizes ? JSON.parse(row.sizes) : [],
       images: row.images ? JSON.parse(row.images) : [],
     });
-  });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Add a new product
-app.post('/api/products', (req, res) => {
+app.post('/api/products', async (req, res) => {
   const { name, brand, finish, description, images, sizes } = req.body;
-  db.run(
-    'INSERT INTO products (name, brand, finish, description, images, sizes) VALUES (?, ?, ?, ?, ?, ?)',
-    [name, brand, finish, description, JSON.stringify(images || []), JSON.stringify(sizes || [])],
-    function (err) {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ id: this.lastID });
-    }
-  );
+  try {
+    const result = await pool.query(
+      'INSERT INTO products (name, brand, finish, description, images, sizes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+      [name, brand, finish, description, JSON.stringify(images || []), JSON.stringify(sizes || [])]
+    );
+    res.json({ id: result.rows[0].id });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Delete a product by ID
-app.delete('/api/products/:id', (req, res) => {
-  db.run('DELETE FROM products WHERE id = ?', [req.params.id], function(err) {
-    if (err) return res.status(500).json({ error: err.message });
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM products WHERE id = $1', [req.params.id]);
     res.json({ success: true });
-  });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Update a product by ID
-app.patch('/api/products/:id', (req, res) => {
+app.patch('/api/products/:id', async (req, res) => {
   const { name, brand, finish, description, images, sizes } = req.body;
-  db.run(
-    'UPDATE products SET name = ?, brand = ?, finish = ?, description = ?, images = ?, sizes = ? WHERE id = ?',
-    [name, brand, finish, description, JSON.stringify(images || []), JSON.stringify(sizes || []), req.params.id],
-    function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      if (this.changes === 0) return res.status(404).json({ error: 'Product not found' });
-      res.json({ success: true });
-    }
-  );
+  try {
+    const result = await pool.query(
+      'UPDATE products SET name = $1, brand = $2, finish = $3, description = $4, images = $5, sizes = $6 WHERE id = $7',
+      [name, brand, finish, description, JSON.stringify(images || []), JSON.stringify(sizes || []), req.params.id]
+    );
+    if (result.rowCount === 0) return res.status(404).json({ error: 'Product not found' });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Contact form endpoint
