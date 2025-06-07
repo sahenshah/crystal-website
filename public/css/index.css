@@ -25,7 +25,12 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   color: #000000;
-  font-size: clamp(2rem, 6vw, 5rem);
+  font-size: clamp(1.5rem, 5vw, 2.7rem);
+  margin: 0 auto;
+  text-align: center;
+  line-height: 1.1;
+  white-space: normal;
+  overflow-wrap: break-word;
   font-weight: 600;
   text-align: center;
   width: 100%;
@@ -44,7 +49,7 @@ main {
   font-family: 'Inter', 'Roboto', Arial, sans-serif;
   letter-spacing: 0.01em;
   text-shadow: 0 1px 6px rgba(31,41,55,0.08);
-  margin-top: 2.7rem;
+  margin-top: 5rem;
 }
 
 .hero-down-arrow {
