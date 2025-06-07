@@ -10,6 +10,11 @@ let selectedPacking = [];
 const brandFilter = document.getElementById('brand-filter');
 const finishFilter = document.getElementById('finish-filter');
 
+// Dynamically set API base URL for local and production
+const API_BASE_URL =
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://localhost:3000"
+    : ""; // Empty string means same origin as the frontend (works on Render)
 
 addBtn.onclick = () => {
     modal.classList.add('active');
@@ -38,7 +43,7 @@ function renderProducts() {
     const brandValue = document.getElementById('brand-filter')?.value || '';
     const finishValue = document.getElementById('finish-filter')?.value || '';
 
-    fetch('http://localhost:3000/api/products')
+    fetch(API_BASE_URL + '/api/products')
         .then(res => res.json())
         .then(products => {
             // Filter products based on selected filters
@@ -147,7 +152,7 @@ form.onsubmit = function (e) {
       });
     });
     Promise.all(readers).then(imagesArr => {
-      fetch('http://localhost:3000/api/products', {
+      fetch(API_BASE_URL + '/api/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, brand, finish, description, images: imagesArr, sizes })
@@ -161,7 +166,7 @@ form.onsubmit = function (e) {
     });
   } else {
     // No images provided
-    fetch('http://localhost:3000/api/products', {
+    fetch(API_BASE_URL + '/api/products', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, brand, finish, description, images: [], sizes })
