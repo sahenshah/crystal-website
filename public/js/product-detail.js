@@ -275,6 +275,11 @@ function openEditProductModal(product) {
   function renderImagePreviews(imagesArr) {
     imagePreviewContainer.innerHTML = '';
     imagesArr.forEach((imgSrc, idx) => {
+      const wrapper = document.createElement('div');
+      wrapper.style.position = 'relative';
+      wrapper.style.display = 'inline-block';
+      wrapper.style.marginRight = '0.5em';
+
       const img = document.createElement('img');
       img.src = imgSrc;
       img.draggable = true;
@@ -284,12 +289,35 @@ function openEditProductModal(product) {
       img.style.display = 'block';
       img.style.borderRadius = '8px';
       img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
-      img.style.marginRight = '0.5em';
       if (idx === 0) {
         img.style.outline = '3px solid #FB8100';
         img.style.outlineOffset = '2px';
       }
-      imagePreviewContainer.appendChild(img);
+
+      // Delete button
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '×';
+      delBtn.title = 'Delete image';
+      delBtn.style.position = 'absolute';
+      delBtn.style.top = '2px';
+      delBtn.style.right = '2px';
+      delBtn.style.background = 'rgba(0,0,0,0.6)';
+      delBtn.style.color = '#fff';
+      delBtn.style.border = 'none';
+      delBtn.style.borderRadius = '50%';
+      delBtn.style.width = '22px';
+      delBtn.style.height = '22px';
+      delBtn.style.cursor = 'pointer';
+      delBtn.style.fontSize = '1.1em';
+      delBtn.onclick = function(e) {
+        e.stopPropagation();
+        product.images.splice(idx, 1);
+        renderImagePreviews(product.images);
+      };
+
+      wrapper.appendChild(img);
+      wrapper.appendChild(delBtn);
+      imagePreviewContainer.appendChild(wrapper);
     });
 
     let dragSrcIdx = null;
@@ -392,8 +420,8 @@ function openEditProductModal(product) {
       imageFileName.textContent = '';
       if (imageInput.files && imageInput.files.length > 0) {
         imageFileName.textContent = Array.from(imageInput.files).map(f => f.name).join(', ');
-        // Read all files as base64 and update product.images
-        const files = Array.from(imageInput.files).slice(0, 3);
+        // Read all files as base64 and append to product.images (up to 3 total)
+        const files = Array.from(imageInput.files);
         const readers = files.map(file => {
           return new Promise(resolve => {
             const reader = new FileReader();
@@ -402,11 +430,12 @@ function openEditProductModal(product) {
           });
         });
         Promise.all(readers).then(imagesArr => {
-          product.images = imagesArr;
+          product.images = Array.isArray(product.images) ? product.images : [];
+          // Append new images, but keep max 3
+          product.images = product.images.concat(imagesArr).slice(0, 3);
           renderImagePreviews(product.images);
         });
       } else {
-        // If no new images, show existing images
         renderImagePreviews(product.images || []);
       }
     };
