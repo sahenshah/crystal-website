@@ -513,6 +513,16 @@ main {
   outline: none;
 }
 
+button:disabled,
+button[disabled] {
+  background: #cccccc !important;
+  color: #888888 !important;
+  border-color: #cccccc !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+}
+
 /* New Add Size Button */
 #edit-add-size-btn {
   background: #ffffff;
