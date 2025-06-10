@@ -1,21 +1,15 @@
+/* Main Layout */
 main {
-  background: #ffffff;
-  padding: 0 0;
+  background: #fff;
+  padding: 0;
 }
-/* Product Detail Card */
 
-.product-detail-card img {
-  width: 50vw;
-  max-width: 450px;
-  min-width: 220px;
-  height: auto;
-  aspect-ratio: 4/3;
-  object-fit: contain;
-  background: #fcfcfc;
-  flex-shrink: 0;
-  margin-left: 1rem;
-  margin-bottom: 0;
-  display: block;
+/* Product Detail Card */
+.product-detail-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 50px;
 }
 
 .product-detail-card h2 {
@@ -48,7 +42,75 @@ main {
   font-size: 1rem;
 }
 
-/* Product Detail Card Sizes Table */
+/* Carousel */
+#carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1em;
+  width: 50%;
+  max-width: 550px;
+  min-width: 320px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.carousel-image-wrapper {
+  width: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: #fafbfc;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(31,36,51,0.13);
+  overflow: hidden;
+}
+#carousel .carousel-img {
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 320px;
+  min-height: 240px;
+  border-radius: 14px;
+  display: none;
+  object-fit: contain;
+  transition: box-shadow 0.18s, border 0.18s;
+  margin: 0 auto;
+}
+#carousel .carousel-img.active {
+  display: block;
+}
+#carousel button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  font-size: 2rem;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #88888896;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  padding: 0;
+  color: #888;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s, color 0.18s, border 0.18s, box-shadow 0.18s, transform 0.12s;
+  outline: none;
+}
+#carousel button#carousel-left { left: -16px; }
+#carousel button#carousel-right { right: -16px; }
+#carousel button:hover {
+  background: #fb820071;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(251,129,0,0.13);
+  transform: scale(1.08) translateY(-50%);
+}
+
+/* Sizes Table */
 .product-detail-card-sizes-table {
   width: 100%;
   max-width: 420px;
@@ -56,8 +118,8 @@ main {
   border-collapse: collapse;
   background: #fafbfc;
   border-radius: 8px;
-  overflow: visible;
   font-size: 0.75rem;
+  overflow: visible;
 }
 
 .product-detail-card-sizes-table th,
@@ -77,17 +139,76 @@ main {
   border-bottom: none;
 }
 
-/* Example dot styles for gauge column */
-/* filepath: /home/sahen/crystal-website/public/css/product.css */
-.dot {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  margin-right: 0.2em;   /* Reduced from 2px to 0.2em for less space */
+.product-detail-card-sizes-table td .dot {
+  margin-right: 0;
   margin-left: 0;
-  vertical-align: middle;
 }
+
+.product-detail-card-sizes-table td.gauge-dot-cell,
+.product-detail-card-sizes-table th.gauge-dot-header,
+.product-detail-card-sizes-table td:nth-child(n+3):nth-child(-n+8),
+.product-detail-card-sizes-table th[colspan="6"] {
+  width: 26px;
+  min-width: 20px;
+  max-width: 32px;
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
+}
+
+/* Gauge Dots */
+.dot,
+#edit-product-modal .dot,
+#edit-packing-dots .dot,
+#edit-sizes-list .dot {
+  display: inline-block;
+  border-radius: 50%;
+  vertical-align: middle;
+  position: relative;
+  transition: border 0.2s, opacity 0.2s;
+}
+
+.dot {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid #fff;
+  margin-right: 0.18em;
+  margin-left: 0;
+  opacity: 1;
+  cursor: default;
+  filter: brightness(1.08) saturate(1.1);
+}
+
+#edit-product-modal .dot,
+#edit-packing-dots .dot {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  opacity: 0.6;
+  margin-right: 0.1rem;
+}
+
+#edit-sizes-list .dot {
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid #ccc;
+  box-shadow: none;
+  margin: 0 1px;
+  opacity: 0.7;
+  cursor: pointer;
+  outline: none;
+}
+
+.dot.selected,
+#edit-product-modal .dot.selected,
+#edit-sizes-list .dot.selected,
+#edit-packing-dots .dot.selected {
+  border: 2px solid #FB8100;
+  opacity: 1;
+}
+
+/* Dot Colors */
 .dot1 { background: #0094bc; }
 .dot2 { background: #bc902c; }
 .dot3 { background: #03b14f; }
@@ -99,54 +220,7 @@ main {
 .dotr3 { background: #221e1f; }
 .dotr4 { background: #03b14f; }
 
-.product-detail-info {
-  flex: 1;
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 0.5em;
-}
-.brand-finish {
-  margin-bottom: 0.5em;
-  color: #444;
-  font-size: 1.05em;
-}
-
-/* Remove padding for gauge dot columns */
-.product-detail-card-sizes-table td .dot {
-  margin-right: 0;
-  margin-left: 0;
-}
-
-.product-detail-card-sizes-table td.gauge-dot-cell {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-/* Make gauge columns narrower */
-.product-detail-card-sizes-table td.gauge-dot-cell,
-.product-detail-card-sizes-table th.gauge-dot-header {
-  width: 26px;
-  min-width: 20px;
-  max-width: 32px;
-  padding-left: 0;
-  padding-right: 0;
-  text-align: center;
-}
-
-/* Optional: If you can't add classes in your HTML/JS, target by nth-child (assuming gauge columns are 3rd to 8th) */
-.product-detail-card-sizes-table td:nth-child(n+3):nth-child(-n+8),
-.product-detail-card-sizes-table th[colspan="6"] {
-  width: 26px;
-  min-width: 20px;
-  max-width: 32px;
-  padding-left: 0;
-  padding-right: 0;
-  text-align: center;
-}
-
-/* Add this for custom tooltips on dots */
+/* Dot Tooltips */
 .dot[data-value="1"]::after { content: "MEDIUM LIGHT"; }
 .dot[data-value="2"]::after { content: "MEDIUM"; }
 .dot[data-value="3"]::after { content: "MEDIUM HEAVY"; }
@@ -157,10 +231,6 @@ main {
 .dot[data-value="r2"]::after { content: "EXTRA HEAVY (POLISHED)"; }
 .dot[data-value="r3"]::after { content: "EXTRA HEAVY (EMERY)"; }
 .dot[data-value="r4"]::after { content: "EXTRA EXTRA HEAVY"; }
-
-.dot {
-  position: relative;
-}
 
 .dot:hover::after {
   position: absolute;
@@ -177,78 +247,31 @@ main {
   opacity: 1;
   z-index: 10;
 }
-
 .dot:not(:hover)::after {
   content: none;
 }
 
-.product-detail-card-sizes-table {
-  border-radius: 8px;
-  background: #fafbfc;
-  /* overflow: visible; (keep this so tooltips are not cut off) */
-}
-
-/* Top left */
-.product-detail-card-sizes-table th:first-child {
-  border-top-left-radius: 8px;
-}
-.product-detail-card-sizes-table td:first-child:first-of-type {
-  border-bottom-left-radius: 8px;
-}
-
-/* Top right */
-.product-detail-card-sizes-table th:last-child {
-  border-top-right-radius: 8px;
-}
-.product-detail-card-sizes-table td:last-child:last-of-type {
-  border-bottom-right-radius: 8px;
-}
-
-/* Align the edit button to the left at the top of the main content */
-#edit-product-btn {
-  background: #FB8100;
-  margin: 0.5em;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 0.5em 0.5em;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  box-shadow: 0 2px 8px rgba(251,129,0,0.10);
-  cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-}
-
-#edit-product-btn:hover,
-#edit-product-btn:focus {
-  background: #ff9900;
-  box-shadow: 0 4px 16px rgba(251,129,0,0.18);
-  transform: translateY(-2px) scale(1.04);
-  outline: none;
-}
-
-#edit-product-modal.active {
+/* Product Detail Info */
+.product-detail-info {
+  flex: 1;
+  align-items: flex-start;
   display: flex;
-}
-.close-modal-btn {
-  position: absolute;
-  top: 0.7em;
-  right: 1em;
-  background: none;
-  border: none;
-  font-size: 2rem;
-  color: #888;
-  cursor: pointer;
-  transition: color 0.18s;
-  z-index: 10;
-}
-.close-modal-btn:hover,
-.close-modal-btn:focus {
-  color: #FB8100;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.5em;
+  max-width: 50%;
+  box-sizing: border-box;
+  margin: 0;
+  padding-left: 50px;
 }
 
-/* Modal styles */
+.brand-finish {
+  margin-bottom: 0.5em;
+  color: #444;
+  font-size: 1.05em;
+}
+
+/* Edit Modal Styles */
 #edit-product-modal {
   display: none;
   position: fixed;
@@ -259,11 +282,9 @@ main {
   align-items: center;
   justify-content: center;
 }
-
 #edit-product-modal.active {
   display: flex;
 }
-
 #edit-product-modal .modal-content {
   background: #fff;
   padding: 2rem 2.5rem;
@@ -273,14 +294,12 @@ main {
   margin: auto;
   position: relative;
   box-shadow: 0 8px 32px rgba(0,0,0,0.16);
-  transition: box-shadow 0.2s;
   max-height: 90vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: stretch;
 }
-
 #edit-product-modal .close-modal-btn {
   position: absolute;
   top: 0.7rem;
@@ -297,7 +316,7 @@ main {
   color: #FB8100;
 }
 
-/* Form styles for edit modal */
+/* Edit Product Form */
 #edit-product-form label {
   display: block;
   margin-bottom: 0.6rem;
@@ -348,177 +367,7 @@ main {
   box-shadow: 0 4px 16px rgba(251,129,0,0.13);
 }
 
-/* Remove styling for header, products pane, and footer */
-/* .header, #products-list, .footer, footer, .product-card, etc. are not styled here */
-
-/* Table styles */
-.sizes-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  font-size: 0.97rem;
-}
-.sizes-table th, .sizes-table td {
-  border: 1px solid #e5e7eb;
-  padding: 0.4rem 0.6rem;
-  text-align: center;
-}
-.sizes-table th {
-  background: #f3f3f3;
-  color: #FB8100;
-  font-weight: 600;
-}
-.sizes-table td {
-  background: #fafbfc;
-}
-
-/* Size input row styling */
-.size-input-row {
-  display: flex;
-  gap: 0.7rem;
-  align-items: center;
-  margin-bottom: 0.7rem;
-}
-.size-input-row select,
-.size-input-row input[type="text"] {
-  padding: 0.4rem 0.7rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #fafbfc;
-}
-.size-input-row input[type="text"] {
-  width: 140px;
-}
-.size-input-row select#product-size {
-  width: 110px;
-  min-width: 90px;
-  max-width: 130px;
-}
-.size-input-row select#product-packing {
-  width: 220px;
-  min-width: 180px;
-  max-width: 260px;
-}
-
-/* Packing dots and add button */
-.packing-and-add {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  margin-bottom: 0.7rem;
-}
-.packing-dots {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-.dot {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: inline-block;
-  border: 2px solid #ccc;
-  cursor: pointer;
-  opacity: 0.6;
-  transition: border 0.2s, opacity 0.2s;
-  margin-right: 0.1rem;
-}
-.dot1 { background: #0094bc; }
-.dot2 { background: #bc902c; }
-.dot3 { background: #03b14f; }
-.dot4 { background: #e92022; }
-.dot5 { background: #221e1f; }
-.dot6 { background: #972e8c; }
-.dotr1 { background: #e92022; }
-.dotr2 { background: #0094bc; }
-.dotr3 { background: #221e1f; }
-.dotr4 { background: #03b14f; }
-.dot.selected {
-  border: 2px solid #FB8100;
-  opacity: 1;
-}
-
-#add-size-btn {
-  background: #fff;
-  color: #FB8100;
-  border: 2px solid #FB8100;
-  cursor: pointer;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  box-shadow: 0 2px 8px rgba(251,129,0,0.10);
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border 0.2s,
-    box-shadow 0.2s,
-    transform 0.1s;
-  outline: none;
-}
-#add-size-btn svg {
-  width: 22px;
-  height: 22px;
-  display: block;
-}
-#add-size-btn:hover,
-#add-size-btn:focus {
-  background: #FB8100;
-  color: #fff;
-  border: 2px solid #FB8100;
-  box-shadow: 0 4px 16px rgba(251,129,0,0.18);
-  transform: scale(1.12);
-}
-#add-size-btn:hover svg,
-#add-size-btn:focus svg {
-  stroke: #fff;
-}
-
-/* Add this below your #add-size-btn styles */
-#edit-add-size-btn {
-  background: #fff;
-  color: #FB8100;
-  border: 2px solid #FB8100;
-  cursor: pointer;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  box-shadow: 0 2px 8px rgba(251,129,0,0.10);
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border 0.2s,
-    box-shadow 0.2s,
-    transform 0.1s;
-  outline: none;
-}
-#edit-add-size-btn svg {
-  width: 22px;
-  height: 22px;
-  display: block;
-}
-#edit-add-size-btn:hover,
-#edit-add-size-btn:focus {
-  background: #FB8100;
-  color: #fff;
-  border: 2px solid #FB8100;
-  box-shadow: 0 4px 16px rgba(251,129,0,0.18);
-  transform: scale(1.12);
-}
-#edit-add-size-btn:hover svg,
-#edit-add-size-btn:focus svg {
-  stroke: #fff;
-}
-
-/* --- Edit Sizes List Styling (for edit modal) --- */
+/* Edit Sizes List */
 #edit-sizes-list {
   margin-bottom: 1.2em;
   background: #fafbfc;
@@ -528,9 +377,6 @@ main {
   border-top: none;
   overflow: hidden;
 }
-
-/* Header for edit sizes list */
-#edit-sizes-list + .size-row-header,
 .size-row-header {
   display: grid;
   grid-template-columns: 2fr 3fr 3fr 40px;
@@ -546,8 +392,6 @@ main {
   letter-spacing: 0.01em;
   box-shadow: 0 2px 8px rgba(251,129,0,0.04);
 }
-
-/* Each size row in the edit modal */
 #edit-sizes-list .size-row {
   display: grid;
   grid-template-columns: 2fr 3fr 3fr 40px;
@@ -566,48 +410,25 @@ main {
   background: #f9f6f2;
   box-shadow: 0 2px 8px rgba(251,129,0,0.06);
 }
-
 #edit-sizes-list .size-row span,
 #edit-sizes-list .size-row-header span {
   min-width: 0;
-  display: block;
   color: #222;
   word-break: break-word;
 }
-
 #edit-sizes-list .size-row-size {
-  font-weight: 600;
   color: #222;
   letter-spacing: 0.02em;
-}
-#edit-sizes-list .size-row-packing {
-  color: #222;
-  font-weight: 500;
 }
 #edit-sizes-list .size-row-dots {
   display: inline-flex;
   gap: 0.18em;
   align-items: center;
-  color: inherit;
-  font-weight: 500;
   min-width: 80px;
   padding: 0.1em 0;
-  vertical-align: middle;
   height: auto;
   flex-wrap: nowrap;
   justify-content: flex-start;
-}
-#edit-sizes-list .size-row-dots .dot {
-  width: 15px;
-  height: 15px;
-  border-width: 1.5px;
-  margin: 0 1px;
-  opacity: 1;
-  box-shadow: none;
-  vertical-align: middle;
-  display: inline-block;
-  position: relative;
-  top: 0;
 }
 #edit-sizes-list .remove-size-row {
   background: none;
@@ -630,67 +451,20 @@ main {
   box-shadow: 0 2px 8px rgba(220,0,0,0.10);
 }
 
-
-/* Product detail card layout */
-.product-card.product-detail-card {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 2.5em;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  background: #fff;
-  border-radius: 18px;
-  padding: 2.5em 2em 2em 2em;
-  position: relative;
-  overflow: visible;
-}
-
-.product-detail-info {
-  max-width: 50%;
-  flex: 1 1 0;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 0.5em;
-  margin: 0;
-}
-
-/* Image upload button */
-#edit-image-upload-btn {
-  background: #FB8100;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 0.45em 1.1em;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  margin-left: 0.2em;
-  transition: background 0.2s;
-}
-
-#edit-image-upload-btn:hover,
-#edit-image-upload-btn:focus {
-  background: #ff9900;
-}
-
-/*ADMIN*/
 .admin-only {
-  display: none !important;
+  display: none;
 }
-body.admin-visible .admin-only {
-  display: inline-block !important; /* or block/flex as needed */
+.admin-visible .admin-only {
+  display: inline-block;
 }
 
+/* Admin Login button as an image */
 #admin-login-btn {
   background: none;
   border: none;
   padding: 0;
   margin-left: 1em;
+  margin-right: 1em;
   cursor: pointer;
   outline: none;
   vertical-align: middle;
@@ -711,167 +485,65 @@ body.admin-visible .admin-only {
 
 #admin-login-btn:hover img,
 #admin-login-btn:focus img {
-  filter: brightness(1.2) drop-shadow(0 2px 8px #fb810033)
+  filter: brightness(1.2) drop-shadow(0 2px 8px #fb810033);
 }
 
-/* Product Detail Page Gauge Dots */
-.dot {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  display: inline-block;
-  border: 2.5px solid #fff;
-  margin-right: 0.18em;
-  margin-left: 0;
-  vertical-align: middle;
-  opacity: 1;
-  transition: box-shadow 0.18s, border 0.18s;
-  outline: none;
-  cursor: default;
-  filter: brightness(1.08) saturate(1.1);
-}
-
-.dot:hover::after {
-  /* Keep tooltip if you want */
-  position: absolute;
-  left: 50%;
-  top: 120%;
-  transform: translateX(-50%);
-  background: #222;
+/* Add Product button styling */
+#edit-product-btn {
+  background: #FB8100;
   color: #fff;
-  padding: 0.18em 0.7em;
-  border-radius: 5px;
-  font-size: 0.92em;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 1;
-  z-index: 10;
-}
-
-.dot:not(:hover)::after {
-  content: none;
-}
-
-/* Edit Product Form Gauge Dots */
-#edit-product-modal .dot,
-#edit-sizes-list .dot,
-#edit-packing-dots .dot {
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  display: inline-block;
-  border: 1.5px solid #ccc;
-  box-shadow: none;
-  margin: 0 1px;
-  opacity: 0.7;
-  vertical-align: middle;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5em 0.5em;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.10);
   cursor: pointer;
-  transition: border 0.2s, opacity 0.2s;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  margin-left: 8px;
+  margin-top: 8px;
+}
+
+#edit-product-btn:hover,
+#edit-product-btn:focus {
+  background: #ff9900;
+  box-shadow: 0 4px 16px rgba(251,129,0,0.18);
+  transform: translateY(-2px) scale(1.04);
   outline: none;
 }
 
-#edit-product-modal .dot.selected,
-#edit-sizes-list .dot.selected,
-#edit-packing-dots .dot.selected {
-  border: 2px solid #FB8100;
-  opacity: 1;
-}
-
-.dragging {
-  outline: 3px dashed #FB8100 !important;
-  outline-offset: 2px;
-  opacity: 0.5;
-}
-
-/* Carousel container */
-#carousel {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1em;
-  width: 100%;
-  max-width: 550px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Carousel image wrapper */
-.carousel-image-wrapper {
-  width: 700px;      /* Increased from 480px */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  background: #fafbfc;
-  border-radius: 14px;
-  box-shadow: 0 4px 24px rgba(31,36,51,0.13);
-  overflow: hidden;
-}
-
-/* Make the carousel images fill the wrapper */
-#carousel .carousel-img {
-  max-width: 100%;
-  max-height: 100%;
-  min-width: 320px;   /* Optional: increase min size */
-  min-height: 240px;
-  border-radius: 14px;
-  display: none;
-  object-fit: contain;
-  transition: box-shadow 0.18s, border 0.18s;
-  margin: 0 auto;
-}
-#carousel .carousel-img.active {
-  display: block;
-}
-
-
-/* Carousel arrow buttons - only half overlap the image */
-#carousel button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-  font-size: 2rem;
-  width: 32px;
-  height: 32px;
-  border: 1px solid #88888896;
-  border-radius: 50%;
+/* New Add Size Button */
+#edit-add-size-btn {
   background: #ffffff;
+  color: #fff;
+  border: 3px solid #ff9900;
+  border-radius: 8px;
+  padding: 0 1.2em;
+  height: 38px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.10);
   cursor: pointer;
-  padding: 0;
-  color: #888;
-  font-weight: 400;
-  display: flex;
+  transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition:
-    background 0.18s,
-    color 0.18s,
-    border 0.18s,
-    box-shadow 0.18s,
-    transform 0.12s;
+  margin-top: 18px;
+  margin-bottom: 10px;
+  margin-left: 0;
+}
+
+#edit-add-size-btn:hover,
+#edit-add-size-btn:focus {
+  background: #ff990073;
+  box-shadow: 0 4px 16px rgba(251,129,0,0.18);
+  transform: translateY(-2px) scale(1.04);
   outline: none;
 }
 
-/* Position the left button so it only half covers the image */
-#carousel button#carousel-left {
-  left: -16px; /* Move half of button width outside the image wrapper */
-}
-
-/* Position the right button so it only half covers the image */
-#carousel button#carousel-right {
-  right: -16px; /* Move half of button width outside the image wrapper */
-}
-
-#carousel button:hover {
-  background: #fb820071;
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(251,129,0,0.13);
-  transform: scale(1.08) translateY(-50%);
-}
-
-/* Responsive: stack vertically on small screens */
+/* Responsive Styles */
 @media (max-width: 1000px) {
   .product-card.product-detail-card {
     flex-direction: column;
@@ -895,15 +567,11 @@ body.admin-visible .admin-only {
   }
   #carousel .carousel-img {
     max-width: 100%; 
-    min-width: 0;      /* Override min-width */
-    min-height: 0;     /* Override min-height */
+    min-width: 0;
+    min-height: 0;
   }
-  #carousel button#carousel-left {
-    left: 8px;   /* Move button inside the image wrapper */
-  }
-  #carousel button#carousel-right {
-    right: 8px;  /* Move button inside the image wrapper */
-  }
+  #carousel button#carousel-left { left: 8px; }
+  #carousel button#carousel-right { right: 8px; }
   .product-detail-card {
     flex-direction: column;
     align-items: center;
@@ -925,9 +593,9 @@ body.admin-visible .admin-only {
     align-items: center;
     text-align: center;
     margin-left: 0;
+    padding-left: 0;
   }
 }
-  /* Responsive for edit sizes list */
 @media (max-width: 600px) {
   #edit-sizes-list .size-row,
   #edit-sizes-list + .size-row-header,
