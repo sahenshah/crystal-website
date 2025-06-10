@@ -448,8 +448,17 @@ function openEditProductModal(product) {
     if (e.target === modal) modal.classList.remove('active');
   };
 
-  document.getElementById('edit-product-form').onsubmit = function(e) {
+  document.getElementById('edit-product-form').onsubmit = function (e) {
     e.preventDefault();
+
+    // Disable the submit button to prevent double/multiple clicks
+    const submitBtn = this.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.textContent = 'Saving...';
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.6';
+      submitBtn.style.pointerEvents = 'none';
+    }
 
     const sizes = Array.from(sizesList.querySelectorAll('.size-row')).map(row => {
       const size = row.querySelector('.size-row-size')?.textContent || '';
