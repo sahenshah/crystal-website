@@ -4,6 +4,15 @@ main {
   padding: 0;
 }
 
+/* Base font and background */
+input, select, textarea, button {
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  color: #222;
+  background: #ffffff;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
 /* Product Detail Card */
 .product-detail-card {
   display: flex;
@@ -159,8 +168,7 @@ main {
 /* Gauge Dots */
 .dot,
 #edit-product-modal .dot,
-#edit-packing-dots .dot,
-#edit-sizes-list .dot {
+#edit-packing-dots .dot {
   display: inline-block;
   border-radius: 50%;
   vertical-align: middle;
@@ -195,7 +203,7 @@ main {
   border: 1.5px solid #ccc;
   box-shadow: none;
   margin: 0 1px;
-  opacity: 0.7;
+  opacity: 1;
   cursor: pointer;
   outline: none;
 }
@@ -545,12 +553,32 @@ button[disabled] {
   margin-left: 0;
 }
 
+#add-size-btn svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
 #edit-add-size-btn:hover,
 #edit-add-size-btn:focus {
-  background: #ff990073;
+  background: #FB8100;
+  color: #fff;
+  border: 2px solid #FB8100;
   box-shadow: 0 4px 16px rgba(251,129,0,0.18);
-  transform: translateY(-2px) scale(1.04);
-  outline: none;
+  transform: scale(1.12);
+}
+
+#edit-add-size-btn:hover svg,
+#edit-add-size-btn:focus svg {
+  stroke: #fff;
+}
+
+.packing-and-add {
+  display: flex;
+  flex-direction: row;   /* Use 'row' to place button next to packing dots */
+  align-items: center;
+  gap: 1.2rem;           /* Adjust spacing as needed */
+  margin-bottom: 0.7rem;
 }
 
 /* Responsive Styles */
