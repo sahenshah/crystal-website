@@ -305,10 +305,16 @@ function openEditProductModal(product) {
       delBtn.style.color = '#fff';
       delBtn.style.border = 'none';
       delBtn.style.borderRadius = '50%';
-      delBtn.style.width = '22px';
-      delBtn.style.height = '22px';
+      delBtn.style.width = '20px';
+      delBtn.style.height = '20px';
       delBtn.style.cursor = 'pointer';
       delBtn.style.fontSize = '1.1em';
+      delBtn.style.display = 'flex';
+      delBtn.style.alignItems = 'center';
+      delBtn.style.justifyContent = 'center';
+      delBtn.style.lineHeight = '1';
+      delBtn.style.padding = '0';
+      delBtn.style.lineHeight = '0.95'; 
       delBtn.onclick = function(e) {
         e.stopPropagation();
         product.images.splice(idx, 1);
