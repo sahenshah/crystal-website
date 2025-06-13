@@ -36,6 +36,8 @@ header {
   justify-content: space-between;
   box-shadow: 0 2px 8px rgba(31,41,55,0.04);
   height: 10vh;
+  min-height: 80px;
+  max-height: 80px
 }
 
 .logo-link {
