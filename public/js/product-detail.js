@@ -52,14 +52,21 @@ function renderProduct(product) {
 
   container.innerHTML = `
     <div class="product-card product-detail-card">
-      <div id="carousel">
-        <button id="carousel-left">&#xFFE9;</button>
-        <div class="carousel-image-wrapper">
+      <div class="product-detail-main">
+        <div class="product-thumbnails">
           ${images.map((img, i) =>
-            `<img src="${img}" class="carousel-img${i === 0 ? ' active' : ''}" data-index="${i}" alt="${product.name}">`
+            `<img src="${img}" class="thumbnail-img${i === 0 ? ' selected' : ''}" data-index="${i}" alt="Thumbnail ${i + 1}">`
           ).join('')}
         </div>
-        <button id="carousel-right">&#xFFEB;</button>
+        <div id="carousel">
+          <div class="carousel-image-wrapper">
+          <button id="carousel-left">&#xFFE9;</button>
+            ${images.map((img, i) =>
+              `<img src="${img}" class="carousel-img${i === 0 ? ' active' : ''}" data-index="${i}" alt="${product.name}">`
+            ).join('')}
+          <button id="carousel-right">&#xFFEB;</button>
+          </div>
+        </div>
       </div>
       <div class="product-detail-info">
         <h2>${product.name}</h2>
@@ -84,6 +91,11 @@ function renderProduct(product) {
       if (i === idx) img.classList.add('active');
       else img.classList.remove('active');
     });
+    // Highlight the selected thumbnail
+    container.querySelectorAll('.thumbnail-img').forEach((thumb, i) => {
+      if (i === idx) thumb.classList.add('selected');
+      else thumb.classList.remove('selected');
+    });
     current = idx;
   }
   container.querySelector('#carousel-left').onclick = () => {
@@ -92,6 +104,11 @@ function renderProduct(product) {
   container.querySelector('#carousel-right').onclick = () => {
     showImage((current + 1) % imgs.length);
   };
+
+  // Thumbnail click handler
+  container.querySelectorAll('.thumbnail-img').forEach((thumb, i) => {
+    thumb.onclick = () => showImage(i);
+  });
 }
 
 // Modal for editing product
