@@ -104,7 +104,7 @@ input, select, textarea, button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fafbfc;
+  background: #ffffff;
   border-radius: 14px;
   box-shadow: 0 4px 24px rgba(31,36,51,0.13);
   overflow: hidden;
