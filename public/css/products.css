@@ -15,7 +15,7 @@ input, select, textarea, button {
 h2 {
   text-align: left;
   margin-left: 0;
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 400;
   left: 0;
   letter-spacing: 0.02em;
@@ -113,9 +113,6 @@ h2 {
   background: #ff9900;
   box-shadow: 0 4px 16px rgba(251,129,0,0.13);
 }
-
-/* Remove styling for header, products pane, and footer */
-/* .header, #products-list, .footer, footer, .product-card, etc. are not styled here */
 
 /* Table styles */
 .sizes-table {
@@ -382,6 +379,8 @@ h2 {
   outline: none;
 }
 
+/*  **end Modal Styles** */
+
 /* Product card styles */
 .product-card {
   background: #fff;
@@ -557,14 +556,15 @@ h1, .main-heading {
 }
 .products-header-left {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   min-width: 180px;
 }
 .admin-actions {
   display: flex;
   gap: 0;
-  margin-top: 0;
+  padding-left: 1em;
+  margin: 0;
 }
 .products-header-center {
   flex: 1 1 0;
@@ -635,93 +635,6 @@ h1, .main-heading {
 #admin-login-btn:focus img {
   filter: brightness(1.2) drop-shadow(0 2px 8px #fb810033);
 }
-
-/* Responsive adjustments for product cards */
-@media (max-width: 900px) {
-  #products-list {
-    justify-content: center;
-    gap: 0.7rem;
-  }
-  .product-card {
-    max-width: 45vw;
-    min-width: 140px;
-    width: 45vw;
-    height: 200px;
-    min-height: 180px;
-    margin: 0.5rem auto;
-    border-radius: 10px;
-  }
-  .product-card-img-container {
-    border-radius: 10px 10px 0 0;
-    padding: 0.3em 0.2em 0.1em 0.2em;
-  }
-  .product-card img {
-    max-width: 100%;
-    max-height: 100px;
-    border-radius: 6px;
-  }
-  .product-card-content {
-    border-radius: 0 0 10px 10px;
-    padding: 0.3em 0.3em 0.5em 0.3em;
-  }
-  .product-card h3 {
-    font-size: 0.91rem;
-  }
-}
-
-@media (max-width: 600px) {
-  #products-list {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-  .product-card {
-    max-width: 48vw;
-    min-width: 120px;
-    width: 48vw;
-    height: 160px;
-    min-height: 140px;
-    margin: 0.3rem 0.1rem;
-    border-radius: 8px;
-  }
-  .product-card-img-container {
-    border-radius: 8px 8px 0 0;
-    padding: 0.2em 0.1em 0.05em 0.1em;
-  }
-  .product-card img {
-    max-width: 90%;
-    max-height: 90px;
-    border-radius: 4px;
-  }
-  .product-card-content {
-    border-radius: 0 0 8px 8px;
-    padding: 0.2em 0.2em 0.3em 0.2em;
-  }
-  .product-card h3 {
-    font-size: 0.85rem;
-  }
-  #add-product-btn {
-    padding: 0.4em 0.7em;
-    font-size: 0.85rem;
-    border-radius: 5px;
-  }
-  .delete-product-btn {
-    padding: 0.18em 0.5em;
-    font-size: 0.78rem;
-    border-radius: 4px;
-    margin-top: 0.2em;
-  }
-  #admin-login-btn {
-    width: 28px;
-    height: 28px;
-  }
-  #admin-login-btn img {
-    width: 28px;
-    height: 28px;
-  }
-}
-
 /* Minimalist hover effect for product card */
 .product-card {
   cursor: pointer;
@@ -741,7 +654,6 @@ h1, .main-heading {
   display: flex;
   gap: 1.2rem;
   align-items: center;
-  margin: 1.5em 0 1em 0;
   padding: 0.7em 1.2em;
   align-self: center;
   justify-content: center;
@@ -771,25 +683,41 @@ h1, .main-heading {
   box-shadow: 0 2px 8px rgba(251,129,0,0.10);
 }
 
-@media (max-width: 700px) {
-  .products-section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.7rem;
-  }
-  #product-filters {
-    width: 100%;
-    margin-top: 0.7em;
-    margin-bottom: 0.7em;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.7rem;
-    padding: 0.7em 0.5em;
-    margin: 0;
+
+/* Responsive adjustments for product cards */
+@media (max-width: 950px) {
+  h2 {
+    font-size: 2.7rem;
   }
   #product-filters select {
-    width: 100%;
-    min-width: 0;
-    font-size: 1rem;
+    font-size: 0.9em;
+    padding: 0.3em 0.7em 0.3em 0.5em;
+    min-width: 90px;
+  }
+  #product-filters {
+    gap: 0.6rem;
+    padding: 0.4em 0.5em;
+  }
+  .download-catalog-btn {
+    font-size: 0.65rem;
+    font-weight: 400;
+  }
+}
+
+@media (max-width: 800px) {
+  
+  .products-section-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+  }
+  .products-header-left {
+    padding-left: 30px;
+  }
+  .products-header-right {
+    padding-bottom: 1.2em;
+  }
+  #products-list {
+    justify-content: center;
   }
 }
