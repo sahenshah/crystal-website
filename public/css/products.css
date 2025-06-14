@@ -725,6 +725,7 @@ h1, .main-heading {
 @media (max-width: 400px) {
   h2 {
     font-size: 2rem;
+    font-weight: 600;
   }
   #product-filters select {
     font-size: 0.8em;
