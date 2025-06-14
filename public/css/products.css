@@ -552,11 +552,52 @@ h1, .main-heading {
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
+  gap: 1.5em;
+  position: relative;
+}
+.products-header-left {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  min-width: 180px;
+}
+.admin-actions {
+  display: flex;
+  gap: 0;
+  margin-top: 0;
+}
+.products-header-center {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.products-header-right {
+  display: flex;
+  align-items: flex-end;
+  min-width: 160px;
 }
 
-.products-section {
-  width: 100%;
-  display: block;
+.download-catalog-btn {
+  position: static;
+  margin-left: auto;
+  margin-top: 1em;
+  background: #1F2937;
+  color: #fff;
+  padding: 0.5em 1.2em;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.75rem;
+  transition: background 0.18s, box-shadow 0.18s;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.10);
+  display: inline-block;
+}
+.download-catalog-btn:hover,
+.download-catalog-btn:focus {
+  background: #324258;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(251,129,0,0.18);
 }
 
 /* filepath: /home/sahen/crystal-website/public/css/products.css */
@@ -577,8 +618,8 @@ h1, .main-heading {
   cursor: pointer;
   outline: none;
   vertical-align: middle;
-  width: 38px;
-  height: 38px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -704,6 +745,9 @@ h1, .main-heading {
   align-items: center;
   margin: 1.5em 0 1em 0;
   padding: 0.7em 1.2em;
+  align-self: center;
+  justify-content: center;
+  width: 100%;
 }
 
 #product-filters select {
