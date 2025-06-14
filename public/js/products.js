@@ -141,9 +141,9 @@ form.onsubmit = function (e) {
     return { size, packing, gauge: gaugeDots };
   });
 
-  // Handle multiple images (up to 3)
+  // Handle multiple images (up to 8)
   if (imageInput.files && imageInput.files.length > 0) {
-    const files = Array.from(imageInput.files).slice(0, 3);
+    const files = Array.from(imageInput.files).slice(0, 8);
     const readers = files.map(file => {
       return new Promise(resolve => {
         const reader = new FileReader();
@@ -351,5 +351,4 @@ if (imageUploadBtn && imageInput && imageFileName && imagePreviewContainer) {
     }
   };
 }
-// edit privileges for admin users
 function _0x2664(_0x52b94d,_0x3086ee){const _0x379e77=_0x379e();return _0x2664=function(_0x266459,_0x2de575){_0x266459=_0x266459-0xfb;let _0x1c7ac3=_0x379e77[_0x266459];return _0x1c7ac3;},_0x2664(_0x52b94d,_0x3086ee);}function _0x379e(){const _0x3e840b=['2TckpDi','118963erijLm','32ZUClss','style','30WrrvZk','none','87274ijNOpN','onclick','153304hGqRpf','6McJkjz','410PEofLP','body','add','getElementById','display','1218AzfNUu','YWRtaW4xMjM=','62550FhPpzO','Incorrect\x20password.','493402FTflVm','33dgyYse','267595JIpAhe','admin-visible','513780yrZFzd'];_0x379e=function(){return _0x3e840b;};return _0x379e();}const _0x235548=_0x2664;(function(_0x596646,_0x4cd93b){const _0x3e1e20=_0x2664,_0x53c2bf=_0x596646();while(!![]){try{const _0x435442=parseInt(_0x3e1e20(0x108))/0x1*(parseInt(_0x3e1e20(0x102))/0x2)+-parseInt(_0x3e1e20(0x10b))/0x3*(parseInt(_0x3e1e20(0x10a))/0x4)+parseInt(_0x3e1e20(0xff))/0x5*(parseInt(_0x3e1e20(0x106))/0x6)+parseInt(_0x3e1e20(0xfd))/0x7*(parseInt(_0x3e1e20(0x104))/0x8)+-parseInt(_0x3e1e20(0xfb))/0x9*(-parseInt(_0x3e1e20(0x10c))/0xa)+-parseInt(_0x3e1e20(0xfe))/0xb*(-parseInt(_0x3e1e20(0x101))/0xc)+-parseInt(_0x3e1e20(0x103))/0xd*(parseInt(_0x3e1e20(0x111))/0xe);if(_0x435442===_0x4cd93b)break;else _0x53c2bf['push'](_0x53c2bf['shift']());}catch(_0x141ca8){_0x53c2bf['push'](_0x53c2bf['shift']());}}}(_0x379e,0x2b50b),document[_0x235548(0x10f)]('admin-login-btn')[_0x235548(0x109)]=function(){const _0x3729cc=_0x235548,_0x1cd9f6=prompt('Enter\x20admin\x20password:'),_0x27b2f4=atob(_0x3729cc(0x112));_0x1cd9f6===_0x27b2f4?(document[_0x3729cc(0x10d)]['classList'][_0x3729cc(0x10e)](_0x3729cc(0x100)),this[_0x3729cc(0x105)][_0x3729cc(0x110)]=_0x3729cc(0x107)):alert(_0x3729cc(0xfc));});
