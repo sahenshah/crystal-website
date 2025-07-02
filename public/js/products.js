@@ -119,6 +119,10 @@ renderProducts();
 // Submit form to add a new product
 form.onsubmit = function (e) {
     e.preventDefault();
+
+    // Get the submit button
+    const submitBtn = form.querySelector('button[type="submit"]') || form.querySelector('input[type="submit"]');
+    
     const name = document.getElementById('product-name').value.trim();
     const brand = document.getElementById('product-brand').value.trim();
     const finish = document.getElementById('product-finish').value.trim();
@@ -132,54 +136,100 @@ form.onsubmit = function (e) {
         return;
     }
 
-  // Collect sizes with gauge (dots) for each size row (gauge can be empty)
-  const sizes = Array.from(sizesRows).map(row => {
-    const size = row.querySelector('.size-row-size')?.textContent || '';
-    const packing = row.querySelector('.size-row-packing')?.textContent || '';
-    const gaugeDots = Array.from(row.querySelectorAll('.size-row-dots .dot'))
-      .map(dot => dot.getAttribute('data-value'));
-    return { size, packing, gauge: gaugeDots };
-  });
+    setButtonLoadingState(submitBtn, true); // Set loading state immediately
 
-  // Handle multiple images (up to 8)
-  if (imageInput.files && imageInput.files.length > 0) {
-    const files = Array.from(imageInput.files).slice(0, 8);
-    const readers = files.map(file => {
-      return new Promise(resolve => {
-        const reader = new FileReader();
-        reader.onload = e => resolve(e.target.result);
-        reader.readAsDataURL(file);
-      });
+    // Collect sizes data
+    const sizes = Array.from(sizesRows).map(row => {
+        const size = row.querySelector('.size-row-size')?.textContent || '';
+        const packing = row.querySelector('.size-row-packing')?.textContent || '';
+        const gaugeDots = Array.from(row.querySelectorAll('.size-row-dots .dot'))
+            .map(dot => dot.getAttribute('data-value'));
+        return { size, packing, gauge: gaugeDots };
     });
-    Promise.all(readers).then(imagesArr => {
-      fetch(API_BASE_URL + '/api/products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, brand, finish, description, images: imagesArr, sizes })
-      })
+
+    // Handle product submission
+    const submitProduct = (imagesArr = []) => {
+        fetch(API_BASE_URL + '/api/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, brand, finish, description, images: imagesArr, sizes })
+        })
         .then(res => res.json())
         .then(() => {
-          renderProducts();
-          form.reset();
-          modal.classList.remove('active');
-        });
-    });
-  } else {
-    // No images provided
-    fetch(API_BASE_URL + '/api/products', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, brand, finish, description, images: [], sizes })
-    })
-      .then(res => res.json())
-      .then(() => {
-        renderProducts();
-        form.reset();
-        modal.classList.remove('active');
-      });
-  }
+            renderProducts();
+            form.reset();
 
+            // Clear image previews and file name
+            if (imagePreviewContainer) imagePreviewContainer.innerHTML = '';
+            if (imageFileName) imageFileName.textContent = '';
+
+            // Remove all size rows and header
+            sizesList.querySelectorAll('.size-row').forEach(row => row.remove());
+            const header = sizesList.querySelector('.size-row-header');
+            if (header) header.remove();
+
+            // Wait 2 seconds, then close modal and reset button
+            setTimeout(() => {
+                modal.classList.remove('active');
+                setButtonLoadingState(submitBtn, false);
+            }, 10000);
+        })
+        .catch(error => {
+            console.error('Error adding product:', error);
+            alert('Failed to add product. Please try again.');
+            setButtonLoadingState(submitBtn, false);
+        });
+    };
+
+    // Process images if any
+    if (imageInput.files && imageInput.files.length > 0) {
+        const files = Array.from(imageInput.files).slice(0, 8);
+        const readers = files.map(file => {
+            return new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.readAsDataURL(file);
+            });
+        });
+        Promise.all(readers).then(submitProduct);
+    } else {
+        submitProduct();
+    }
 };
+
+// Helper function to manage button loading state
+function setButtonLoadingState(button, isLoading) {
+    if (!button) return;
+    
+    if (isLoading) {
+        // Store original content
+        button.dataset.originalText = button.innerHTML;
+        
+        // Set loading state
+        button.disabled = true;
+        button.style.opacity = '0.6';
+        button.style.cursor = 'not-allowed';
+        button.innerHTML = `
+            <span style="display: inline-flex; align-items: center; gap: 0.5em;">
+                <span class="loading-spinner" style="
+                    width: 16px; 
+                    height: 16px; 
+                    border: 2px solid #ffffff40; 
+                    border-top: 2px solid #ffffff;
+                    border-radius: 50%; 
+                    animation: spin 1s linear infinite;
+                "></span>
+                Adding...
+            </span>
+        `;
+    } else {
+        // Reset to original state
+        button.disabled = false;
+        button.style.opacity = '1';
+        button.style.cursor = 'pointer';
+        button.innerHTML = button.dataset.originalText || 'Add Product';
+    }
+}
 
 function renderPackingDots(brand) {
   if (brand === 'Royal') {
