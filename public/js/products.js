@@ -175,10 +175,8 @@ form.onsubmit = function (e) {
         const header = sizesList.querySelector('.size-row-header');
         if (header) header.remove();
 
-        setTimeout(() => {
-            modal.classList.remove('active');
-            setButtonLoadingState(submitBtn, false);
-        }, 2000);
+        modal.classList.remove('active');
+        setButtonLoadingState(submitBtn, false);
     })
     .catch(error => {
         console.error('Error adding product:', error);
