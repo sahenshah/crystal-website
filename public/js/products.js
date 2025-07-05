@@ -9,6 +9,9 @@ const packingDotsContainer = document.getElementById('packing-dots');
 let selectedPacking = [];
 const brandFilter = document.getElementById('brand-filter');
 const finishFilter = document.getElementById('finish-filter');
+const imageInput = document.getElementById('product-image');
+const imageFileName = document.getElementById('image-file-name');
+const imagePreviewContainer = document.getElementById('product-image-preview-container');
 
 // Dynamically set API base URL for local and production
 const API_BASE_URL =
@@ -25,11 +28,12 @@ closeModalBtn.onclick = () => {
     modal.classList.remove('active');
 };
 
-modal.onclick = (e) => {
-    if (e.target === modal) {
-        modal.classList.remove('active');
-    }
-};
+// close modal on outside click 
+// modal.onclick = (e) => {
+//     if (e.target === modal) {
+//         modal.classList.remove('active');
+//     }
+// };
 
 // Utility function to convert any string to Title Case
 function toTitleCase(str) {
@@ -113,9 +117,9 @@ renderProducts();
 form.onsubmit = function (e) {
     e.preventDefault();
 
-    // Get the submit button
     const submitBtn = form.querySelector('button[type="submit"]') || form.querySelector('input[type="submit"]');
-    
+    setButtonLoadingState(submitBtn, true);
+
     const name = document.getElementById('product-name').value.trim();
     const brand = document.getElementById('product-brand').value.trim();
     const finish = document.getElementById('product-finish').value.trim();
@@ -126,10 +130,9 @@ form.onsubmit = function (e) {
     // Only mandatory: name, brand, finish, description, at least 1 size
     if (!name || !brand || !finish || !description || sizesRows.length === 0) {
         alert('Please fill in all required fields and add at least one size.');
+        setButtonLoadingState(submitBtn, false);
         return;
     }
-
-    setButtonLoadingState(submitBtn, true); // Set loading state immediately
 
     // Collect sizes data
     const sizes = Array.from(sizesRows).map(row => {
@@ -140,54 +143,48 @@ form.onsubmit = function (e) {
         return { size, packing, gauge: gaugeDots };
     });
 
-    // Handle product submission
-    const submitProduct = (imagesArr = []) => {
-        fetch(API_BASE_URL + '/api/products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, brand, finish, description, images: imagesArr, sizes })
-        })
-        .then(res => res.json())
-        .then(() => {
-            renderProducts();
-            form.reset();
-
-            // Clear image previews and file name
-            if (imagePreviewContainer) imagePreviewContainer.innerHTML = '';
-            if (imageFileName) imageFileName.textContent = '';
-
-            // Remove all size rows and header
-            sizesList.querySelectorAll('.size-row').forEach(row => row.remove());
-            const header = sizesList.querySelector('.size-row-header');
-            if (header) header.remove();
-
-            // Wait 2 seconds, then close modal and reset button
-            setTimeout(() => {
-                modal.classList.remove('active');
-                setButtonLoadingState(submitBtn, false);
-            }, 10000);
-        })
-        .catch(error => {
-            console.error('Error adding product:', error);
-            alert('Failed to add product. Please try again.');
-            setButtonLoadingState(submitBtn, false);
-        });
-    };
-
-    // Process images if any
+    // Use FormData to send all fields and files
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('brand', brand);
+    formData.append('finish', finish);
+    formData.append('description', description);
+    formData.append('sizes', JSON.stringify(sizes));
+    // Append all selected images
     if (imageInput.files && imageInput.files.length > 0) {
-        const files = Array.from(imageInput.files).slice(0, 8);
-        const readers = files.map(file => {
-            return new Promise(resolve => {
-                const reader = new FileReader();
-                reader.onload = e => resolve(e.target.result);
-                reader.readAsDataURL(file);
-            });
+        Array.from(imageInput.files).forEach(file => {
+            formData.append('images', file);
         });
-        Promise.all(readers).then(submitProduct);
-    } else {
-        submitProduct();
     }
+
+    fetch(API_BASE_URL + '/api/products', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(() => {
+        renderProducts();
+        form.reset();
+
+        // Clear image previews and file name
+        if (imagePreviewContainer) imagePreviewContainer.innerHTML = '';
+        if (imageFileName) imageFileName.textContent = '';
+
+        // Remove all size rows and header
+        sizesList.querySelectorAll('.size-row').forEach(row => row.remove());
+        const header = sizesList.querySelector('.size-row-header');
+        if (header) header.remove();
+
+        setTimeout(() => {
+            modal.classList.remove('active');
+            setButtonLoadingState(submitBtn, false);
+        }, 2000);
+    })
+    .catch(error => {
+        console.error('Error adding product:', error);
+        alert('Failed to add product. Please try again.');
+        setButtonLoadingState(submitBtn, false);
+    });
 };
 
 // Helper function to manage button loading state
@@ -358,39 +355,28 @@ document.getElementById('add-size-btn').onclick = function () {
   dots.forEach(dot => dot.classList.remove('selected'));
 };
 
-// Handle image upload functionality for multiple images
-const imageInput = document.getElementById('product-image');
-const imageUploadBtn = document.getElementById('image-upload-btn');
-const imageFileName = document.getElementById('image-file-name');
-const imagePreviewContainer = document.getElementById('product-image-preview-container');
+// Image preview logic
+imageInput.addEventListener('change', function () {
+  imagePreviewContainer.innerHTML = '';
+  imageFileName.textContent = '';
+  const files = Array.from(imageInput.files);
+  if (files.length === 0) return;
+  imageFileName.textContent = files.map(f => f.name).join(', ');
+  files.forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.style.maxWidth = '80px';
+      img.style.maxHeight = '80px';
+      img.style.borderRadius = '6px';
+      img.style.marginRight = '0.3em';
+      imagePreviewContainer.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+});
 
-if (imageUploadBtn && imageInput && imageFileName && imagePreviewContainer) {
-  imageUploadBtn.onclick = function(e) {
-    e.preventDefault();
-    imageInput.click();
-  };
 
-  imageInput.onchange = function() {
-    imageFileName.textContent = '';
-    imagePreviewContainer.innerHTML = '';
-    if (imageInput.files && imageInput.files.length > 0) {
-      imageFileName.textContent = Array.from(imageInput.files).map(f => f.name).join(', ');
-      Array.from(imageInput.files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          img.style.maxWidth = '120px';
-          img.style.maxHeight = '120px';
-          img.style.display = 'block';
-          img.style.borderRadius = '8px';
-          img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
-          img.style.marginRight = '0.5em';
-          imagePreviewContainer.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-  };
-}
 function _0x2664(_0x52b94d,_0x3086ee){const _0x379e77=_0x379e();return _0x2664=function(_0x266459,_0x2de575){_0x266459=_0x266459-0xfb;let _0x1c7ac3=_0x379e77[_0x266459];return _0x1c7ac3;},_0x2664(_0x52b94d,_0x3086ee);}function _0x379e(){const _0x3e840b=['2TckpDi','118963erijLm','32ZUClss','style','30WrrvZk','none','87274ijNOpN','onclick','153304hGqRpf','6McJkjz','410PEofLP','body','add','getElementById','display','1218AzfNUu','YWRtaW4xMjM=','62550FhPpzO','Incorrect\x20password.','493402FTflVm','33dgyYse','267595JIpAhe','admin-visible','513780yrZFzd'];_0x379e=function(){return _0x3e840b;};return _0x379e();}const _0x235548=_0x2664;(function(_0x596646,_0x4cd93b){const _0x3e1e20=_0x2664,_0x53c2bf=_0x596646();while(!![]){try{const _0x435442=parseInt(_0x3e1e20(0x108))/0x1*(parseInt(_0x3e1e20(0x102))/0x2)+-parseInt(_0x3e1e20(0x10b))/0x3*(parseInt(_0x3e1e20(0x10a))/0x4)+parseInt(_0x3e1e20(0xff))/0x5*(parseInt(_0x3e1e20(0x106))/0x6)+parseInt(_0x3e1e20(0xfd))/0x7*(parseInt(_0x3e1e20(0x104))/0x8)+-parseInt(_0x3e1e20(0xfb))/0x9*(-parseInt(_0x3e1e20(0x10c))/0xa)+-parseInt(_0x3e1e20(0xfe))/0xb*(-parseInt(_0x3e1e20(0x101))/0xc)+-parseInt(_0x3e1e20(0x103))/0xd*(parseInt(_0x3e1e20(0x111))/0xe);if(_0x435442===_0x4cd93b)break;else _0x53c2bf['push'](_0x53c2bf['shift']());}catch(_0x141ca8){_0x53c2bf['push'](_0x53c2bf['shift']());}}}(_0x379e,0x2b50b),document[_0x235548(0x10f)]('admin-login-btn')[_0x235548(0x109)]=function(){const _0x3729cc=_0x235548,_0x1cd9f6=prompt('Enter\x20admin\x20password:'),_0x27b2f4=atob(_0x3729cc(0x112));_0x1cd9f6===_0x27b2f4?(document[_0x3729cc(0x10d)]['classList'][_0x3729cc(0x10e)](_0x3729cc(0x100)),this[_0x3729cc(0x105)][_0x3729cc(0x110)]=_0x3729cc(0x107)):alert(_0x3729cc(0xfc));});

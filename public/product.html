@@ -39,7 +39,7 @@
     <div id="edit-product-modal" class="modal">
       <div class="modal-content">
         <button id="close-edit-modal-btn" class="close-modal-btn">&times;</button>
-        <form id="edit-product-form">
+        <form id="edit-product-form" enctype="multipart/form-data">
           <label>
             <b>Name:</b>
             <input type="text" id="edit-product-name" required>
@@ -65,15 +65,14 @@
           </label><br>
           <label>
             <b>Images:</b>
-            <input type="file" id="edit-product-image" accept="image/png, image/jpeg" multiple hidden>
-            <button type="button" id="edit-image-upload-btn">Add Images</button>
+            <input type="file" id="edit-product-image" name="images" accept="image/png, image/jpeg" multiple>
             <span id="edit-image-file-name"></span>
           </label>
           <div id="edit-image-preview-container" style="display: flex; gap: 0.5em; flex-wrap: wrap;">
             <!-- Multiple image previews will be inserted here -->
           </div>
-          <small style="display:block; color:#888; margin-top:2px; margin-bottom:8px;">
-            (drag images to reorder)
+          <!-- <small style="display:block; color:#888; margin-top:2px; margin-bottom:8px;">
+            (drag images to reorder) -->
           </small>
           <label>
             <b>Description:</b>

@@ -11,6 +11,15 @@ function renderProduct(product) {
     return;
   }
 
+  // --- Fix: Ensure product.sizes is always an array ---
+  if (typeof product.sizes === 'string') {
+    try {
+      product.sizes = JSON.parse(product.sizes);
+    } catch {
+      product.sizes = [];
+    }
+  }
+
   // Helper to render a single dot if present in gauge
   function renderGaugeDot(gaugeArr, dotValue, dotClass) {
     if (!Array.isArray(gaugeArr)) return '';
@@ -115,14 +124,134 @@ function renderProduct(product) {
 let currentProductData = null;
 
 function openEditProductModal(product) {
+  // Defensive: ensure product.sizes is always an array
+  if (typeof product.sizes === 'string') {
+    try {
+      product.sizes = JSON.parse(product.sizes);
+    } catch {
+      product.sizes = [];
+    }
+  }
+
   const modal = document.getElementById('edit-product-modal');
   modal.classList.add('active');
+  // --- Name, Brand, Finish 
   document.getElementById('edit-product-name').value = product.name || '';
   document.getElementById('edit-product-brand').value = product.brand || '';
   document.getElementById('edit-product-finish').value = product.finish || '';
+  
+  // --- Handle image upload ---
+  const imageInput = document.getElementById('edit-product-image');
+  const imagePreviewContainer = document.getElementById('edit-image-preview-container');
+  const imageFileName = document.getElementById('edit-image-file-name');
+
+  // Show preview of current images stored for product
+  imagePreviewContainer.innerHTML = '';
+  if (Array.isArray(product.images)) {
+    product.images.forEach((imgSrc, idx) => {
+      const wrapper = document.createElement('div');
+      wrapper.style.display = 'inline-block';
+      wrapper.style.position = 'relative';
+      wrapper.style.marginRight = '0.5em';
+
+      const img = document.createElement('img');
+      img.src = imgSrc;
+      img.style.maxWidth = '80px';
+      img.style.maxHeight = '80px';
+      img.style.borderRadius = '6px';
+      img.style.display = 'block';
+
+      // --- Add delete button ---
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '×';
+      delBtn.title = 'Delete image';
+      delBtn.style.position = 'absolute';
+      delBtn.style.top = '2px';
+      delBtn.style.right = '2px';
+      delBtn.style.background = 'rgba(0,0,0,0.7)';
+      delBtn.style.color = '#fff';
+      delBtn.style.border = 'none';
+      delBtn.style.borderRadius = '50%';
+      delBtn.style.width = '22px';
+      delBtn.style.height = '22px';
+      delBtn.style.cursor = 'pointer';
+      delBtn.style.display = 'flex';
+      delBtn.style.alignItems = 'center';
+      delBtn.style.justifyContent = 'center';
+      delBtn.style.lineHeight = '1';
+      delBtn.style.fontSize = '1.2em'; // or adjust as needed
+      delBtn.onclick = function(e) {
+        e.stopPropagation();
+        // Remove the image from product.images
+        product.images.splice(idx, 1);
+        // Re-render the previews
+        // (call the same code block again to update the UI)
+        // You may want to extract this preview logic into a function for reuse
+        imagePreviewContainer.innerHTML = '';
+        product.images.forEach((src, i) => {
+          const wrapper = document.createElement('div');
+          wrapper.style.display = 'inline-block';
+          wrapper.style.position = 'relative';
+          wrapper.style.marginRight = '0.5em';
+
+          const img = document.createElement('img');
+          img.src = src;
+          img.style.maxWidth = '80px';
+          img.style.maxHeight = '80px';
+          img.style.borderRadius = '6px';
+          img.style.display = 'block';
+
+          wrapper.appendChild(img);
+          imagePreviewContainer.appendChild(wrapper);
+        });
+        // Or, simpler: just call openEditProductModal(product) to refresh everything
+        openEditProductModal(product);
+      };
+
+      wrapper.appendChild(img);
+      wrapper.appendChild(delBtn);
+      imagePreviewContainer.appendChild(wrapper);
+    });
+  }
+
+  // --- Preview newly selected images ---
+  imageInput.onchange = function () {
+    // Remove previous new file previews (but keep current images)
+    // Remove all elements with class 'new-image-preview'
+    imagePreviewContainer.querySelectorAll('.new-image-preview').forEach(el => el.remove());
+
+    if (imageInput.files && imageInput.files.length > 0) {
+      Array.from(imageInput.files).forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'new-image-preview';
+          wrapper.style.display = 'inline-block';
+          wrapper.style.position = 'relative';
+          wrapper.style.marginRight = '0.5em';
+
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.maxWidth = '80px';
+          img.style.maxHeight = '80px';
+          img.style.borderRadius = '6px';
+          img.style.display = 'block';
+          img.style.opacity = '0.7'; // visually distinguish new images
+
+          wrapper.appendChild(img);
+          imagePreviewContainer.appendChild(wrapper);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+
+  // --- Product Description ---
   document.getElementById('edit-product-description').value = product.description || '';
 
-  // --- Packing dots logic ---
+  // --- Sizes Table ---
   const packingDotsContainer = document.getElementById('edit-packing-dots');
   const brandSelect = document.getElementById('edit-product-brand');
   let selectedPacking = [];
@@ -165,7 +294,7 @@ function openEditProductModal(product) {
     });
   }
 
-  // --- Sizes list logic ---
+  // Sizes list
   const sizesList = document.getElementById('edit-sizes-list');
   sizesList.innerHTML = ''; // Clear previous content
 
@@ -282,194 +411,14 @@ function openEditProductModal(product) {
     renderPackingDots(this.value);
   });
 
-  // --- Handle image upload functionality ---
-  const imageInput = document.getElementById('edit-product-image');
-  const imageUploadBtn = document.getElementById('edit-image-upload-btn');
-  const imagePreviewContainer = document.getElementById('edit-image-preview-container');
-  const imageFileName = document.getElementById('edit-image-file-name');
-
-  // Helper to render image previews
-  function renderImagePreviews(imagesArr) {
-    imagePreviewContainer.innerHTML = '';
-    imagesArr.forEach((imgSrc, idx) => {
-      const wrapper = document.createElement('div');
-      wrapper.style.position = 'relative';
-      wrapper.style.display = 'inline-block';
-      wrapper.style.marginRight = '0.5em';
-
-      const img = document.createElement('img');
-      img.src = imgSrc;
-      img.draggable = true;
-      img.dataset.index = idx;
-      img.style.maxWidth = '120px';
-      img.style.maxHeight = '120px';
-      img.style.display = 'block';
-      img.style.borderRadius = '8px';
-      img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
-      if (idx === 0) {
-        img.style.outline = '3px solid #FB8100';
-        img.style.outlineOffset = '2px';
-      }
-
-      // Delete button
-      const delBtn = document.createElement('button');
-      delBtn.textContent = '×';
-      delBtn.title = 'Delete image';
-      delBtn.style.position = 'absolute';
-      delBtn.style.top = '2px';
-      delBtn.style.right = '2px';
-      delBtn.style.background = 'rgba(0,0,0,0.6)';
-      delBtn.style.color = '#fff';
-      delBtn.style.border = 'none';
-      delBtn.style.borderRadius = '50%';
-      delBtn.style.width = '20px';
-      delBtn.style.height = '20px';
-      delBtn.style.cursor = 'pointer';
-      delBtn.style.fontSize = '1.1em';
-      delBtn.style.display = 'flex';
-      delBtn.style.alignItems = 'center';
-      delBtn.style.justifyContent = 'center';
-      delBtn.style.lineHeight = '1';
-      delBtn.style.padding = '0';
-      delBtn.style.lineHeight = '0.95'; 
-      delBtn.onclick = function(e) {
-        e.stopPropagation();
-        product.images.splice(idx, 1);
-        renderImagePreviews(product.images);
-      };
-
-      wrapper.appendChild(img);
-      wrapper.appendChild(delBtn);
-      imagePreviewContainer.appendChild(wrapper);
-    });
-
-    let dragSrcIdx = null;
-
-    imagePreviewContainer.querySelectorAll('img').forEach(img => {
-      // Desktop drag-and-drop
-      img.addEventListener('dragstart', function(e) {
-        dragSrcIdx = Number(this.dataset.index);
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', dragSrcIdx);
-        this.classList.add('dragging');
-      });
-      img.addEventListener('dragend', function() {
-        this.classList.remove('dragging');
-      });
-      img.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        this.style.outline = '3px dashed #FB8100';
-      });
-      img.addEventListener('dragleave', function() {
-        if (Number(this.dataset.index) !== 0) {
-          this.style.outline = '';
-        }
-      });
-      img.addEventListener('drop', function(e) {
-        e.preventDefault();
-        const dropIdx = Number(this.dataset.index);
-        if (dragSrcIdx === null || dragSrcIdx === dropIdx) return;
-        product.images = product.images || [];
-        const moved = product.images.splice(dragSrcIdx, 1)[0];
-        product.images.splice(dropIdx, 0, moved);
-        renderImagePreviews(product.images);
-      });
-
-      // Touch support (long press to drag)
-      let touchStartY = 0;
-      let touchStartX = 0;
-      let touchMoved = false;
-      let touchHoldTimeout = null;
-
-      img.addEventListener('touchstart', function(e) {
-        touchMoved = false;
-        touchStartY = e.touches[0].clientY;
-        touchStartX = e.touches[0].clientX;
-        dragSrcIdx = Number(this.dataset.index);
-
-        // Long press to start drag (hold for 300ms)
-        touchHoldTimeout = setTimeout(() => {
-          this.classList.add('dragging');
-        }, 300);
-      });
-
-      img.addEventListener('touchmove', function(e) {
-        if (!touchHoldTimeout) return;
-        const moveY = e.touches[0].clientY;
-        const moveX = e.touches[0].clientX;
-        if (Math.abs(moveY - touchStartY) > 10 || Math.abs(moveX - touchStartX) > 10) {
-          clearTimeout(touchHoldTimeout);
-          touchHoldTimeout = null;
-          this.classList.remove('dragging');
-        }
-        touchMoved = true;
-      });
-
-      img.addEventListener('touchend', function(e) {
-        clearTimeout(touchHoldTimeout);
-        touchHoldTimeout = null;
-        this.classList.remove('dragging');
-        if (!touchMoved) return;
-
-        // Find the image under the touch point
-        const touch = e.changedTouches[0];
-        const target = document.elementFromPoint(touch.clientX, touch.clientY);
-        if (target && target.tagName === 'IMG' && target.parentNode === imagePreviewContainer) {
-          const dropIdx = Number(target.dataset.index);
-          if (dragSrcIdx !== null && dragSrcIdx !== dropIdx) {
-            product.images = product.images || [];
-            const moved = product.images.splice(dragSrcIdx, 1)[0];
-            product.images.splice(dropIdx, 0, moved);
-            renderImagePreviews(product.images);
-          }
-        }
-        dragSrcIdx = null;
-      });
-    });
-  }
-
-  // Show current product images on modal open
-  product.images = Array.isArray(product.images) ? product.images : [];
-  renderImagePreviews(product.images);
-
-  if (imageUploadBtn && imageInput && imagePreviewContainer && imageFileName) {
-    imageUploadBtn.onclick = function(e) {
-      e.preventDefault();
-      imageInput.click();
-    };
-
-    imageInput.onchange = function() {
-      imageFileName.textContent = '';
-      if (imageInput.files && imageInput.files.length > 0) {
-        imageFileName.textContent = Array.from(imageInput.files).map(f => f.name).join(', ');
-        // Read all files as base64 and append to product.images (up to 3 total)
-        const files = Array.from(imageInput.files);
-        const readers = files.map(file => {
-          return new Promise(resolve => {
-            const reader = new FileReader();
-            reader.onload = e => resolve(e.target.result);
-            reader.readAsDataURL(file);
-          });
-        });
-        Promise.all(readers).then(imagesArr => {
-          product.images = Array.isArray(product.images) ? product.images : [];
-          // Append new images, but keep max 8
-          product.images = product.images.concat(imagesArr).slice(0, 8);
-          renderImagePreviews(product.images);
-        });
-      } else {
-        renderImagePreviews(product.images || []);
-      }
-    };
-  }
 
   document.getElementById('close-edit-modal-btn').onclick = function() {
     modal.classList.remove('active');
   };
-  modal.onclick = function(e) {
-    if (e.target === modal) modal.classList.remove('active');
-  };
+  // Close modal on outside click
+  // modal.onclick = function(e) {
+  //   if (e.target === modal) modal.classList.remove('active');
+  // };
 
   document.getElementById('edit-product-form').onsubmit = function (e) {
     e.preventDefault();
@@ -490,19 +439,28 @@ function openEditProductModal(product) {
       return { size, packing, gauge };
     });
 
-    const updatedProduct = {
-      name: document.getElementById('edit-product-name').value,
-      brand: document.getElementById('edit-product-brand').value,
-      finish: document.getElementById('edit-product-finish').value,
-      description: document.getElementById('edit-product-description').value,
-      sizes,
-      images: Array.isArray(product.images) ? product.images : []
-    };
+    // Prepare FormData
+    const formData = new FormData();
+    formData.set('name', document.getElementById('edit-product-name').value);
+    formData.set('brand', document.getElementById('edit-product-brand').value);
+    formData.set('finish', document.getElementById('edit-product-finish').value);
+    formData.set('description', document.getElementById('edit-product-description').value);
+    formData.set('sizes', JSON.stringify(sizes));
+
+    // Add kept image URLs (for images not being replaced)
+    formData.set('images', JSON.stringify(Array.isArray(product.images) ? product.images : []));
+
+    // Append new files (if any)
+    const imageInput = document.getElementById('edit-product-image');
+    if (imageInput.files && imageInput.files.length > 0) {
+      Array.from(imageInput.files).forEach(file => {
+        formData.append('images', file);
+      });
+    }
 
     fetch(`/api/products/${product.id}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedProduct)
+      body: formData
     })
     .then(res => {
       if (res.ok) {
@@ -532,11 +490,11 @@ document.addEventListener('DOMContentLoaded', function() {
       modal.classList.remove('active');
     };
   }
-  if (modal) {
-    modal.onclick = function(e) {
-      if (e.target === modal) modal.classList.remove('active');
-    };
-  }
+  // if (modal) {
+  //   modal.onclick = function(e) {
+  //     if (e.target === modal) modal.classList.remove('active');
+  //   };
+  // }
 
 });
 document.querySelectorAll('.admin-only').forEach(el => {
