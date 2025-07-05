@@ -2,12 +2,34 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const admin = require('firebase-admin');
+const fs = require('fs');
+const multer = require('multer');
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '15mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Firebase Admin setup
+const env = process.env.NODE_ENV || 'development';
+
+const serviceAccount = require(
+  env === 'production'
+    ? './firebase-service-account.prod.json'
+    : './firebase-service-account.dev.json'
+);
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: env === 'production'
+    ? process.env.FIREBASE_BUCKET_PROD
+    : process.env.FIREBASE_BUCKET_DEV
+});
+
+const bucket = admin.storage().bucket();
+const upload = multer({ dest: 'uploads/' }); // Temporary local storage
 
 let dbType, db, pool;
 const isProduction = process.env.DATABASE_URL || process.env.ENV === 'production';
@@ -110,23 +132,49 @@ app.get('/api/products/:id', async (req, res) => {
     db.get('SELECT * FROM products WHERE id = ?', [id], (err, row) => {
       if (err) return res.status(500).json({ error: err.message });
       if (!row) return res.status(404).json({ error: 'Product not found' });
-      res.json({
+      let product = {
         ...row,
-        sizes: row.sizes ? JSON.parse(row.sizes) : [],
         images: row.images ? JSON.parse(row.images) : [],
-      });
+      };
+      if (typeof product.sizes === 'string') {
+        try {
+          product.sizes = JSON.parse(product.sizes);
+        } catch {
+          product.sizes = [];
+        }
+      }
+      res.json(product);
     });
   }
 });
 
-// Add a new product
-app.post('/api/products', async (req, res) => {
-  const { name, brand, finish, description, images, sizes } = req.body;
+// Product creation endpoint
+app.post('/api/products', upload.array('images', 8), async (req, res) => {
+  const { name, brand, finish, description, sizes } = req.body;
+  const imageUrls = [];
+
+  // Upload each file to Firebase Storage
+  for (const file of req.files) {
+    const firebaseFile = bucket.file(Date.now() + '-' + file.originalname);
+    await firebaseFile.save(fs.readFileSync(file.path), {
+      metadata: { contentType: file.mimetype }
+    });
+    await firebaseFile.makePublic();
+    imageUrls.push(firebaseFile.publicUrl());
+    fs.unlinkSync(file.path); // Remove temp file
+  }
+
+  let sizesToStore = sizes;
+  if (typeof sizesToStore !== 'string') {
+    sizesToStore = JSON.stringify(sizesToStore);
+  }
+
+  // Save product with imageUrls in DB as before
   if (dbType === 'pg') {
     try {
       const result = await pool.query(
         'INSERT INTO products (name, brand, finish, description, images, sizes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
-        [name, brand, finish, description, JSON.stringify(images || []), JSON.stringify(sizes || [])]
+        [name, brand, finish, description, JSON.stringify(imageUrls), sizesToStore]
       );
       res.json({ id: result.rows[0].id });
     } catch (err) {
@@ -135,7 +183,7 @@ app.post('/api/products', async (req, res) => {
   } else {
     db.run(
       'INSERT INTO products (name, brand, finish, description, images, sizes) VALUES (?, ?, ?, ?, ?, ?)',
-      [name, brand, finish, description, JSON.stringify(images || []), JSON.stringify(sizes || [])],
+      [name, brand, finish, description, JSON.stringify(imageUrls), sizesToStore],
       function (err) {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ id: this.lastID });
@@ -163,14 +211,48 @@ app.delete('/api/products/:id', async (req, res) => {
 });
 
 // Update a product by ID
-app.patch('/api/products/:id', async (req, res) => {
-  const { name, brand, finish, description, images, sizes } = req.body;
+app.patch('/api/products/:id', upload.array('images', 8), async (req, res) => {
+  const { name, brand, finish, description, sizes } = req.body;
   const id = req.params.id;
+  let sizesToStore = sizes;
+  if (typeof sizesToStore !== 'string') {
+    sizesToStore = JSON.stringify(sizesToStore);
+  }
+  // 1. Get kept images from request body
+  let keptImages = [];
+  if (req.body.images) {
+    try {
+      keptImages = Array.isArray(req.body.images)
+        ? req.body.images
+        : JSON.parse(req.body.images);
+    } catch {
+      keptImages = [];
+    }
+  }
+
+  // 2. Upload new images to Firebase Storage
+  const newImageUrls = [];
+  if (req.files && req.files.length > 0) {
+    for (const file of req.files) {
+      const firebaseFile = bucket.file(Date.now() + '-' + file.originalname);
+      await firebaseFile.save(fs.readFileSync(file.path), {
+        metadata: { contentType: file.mimetype }
+      });
+      await firebaseFile.makePublic();
+      newImageUrls.push(firebaseFile.publicUrl());
+      fs.unlinkSync(file.path); // Remove temp file
+    }
+  }
+
+  // 3. Merge kept images and new image URLs
+  const finalImages = [...keptImages, ...newImageUrls];
+
+  // 4. Update the product in the DB
   if (dbType === 'pg') {
     try {
       const result = await pool.query(
         'UPDATE products SET name = $1, brand = $2, finish = $3, description = $4, images = $5, sizes = $6 WHERE id = $7',
-        [name, brand, finish, description, JSON.stringify(images || []), JSON.stringify(sizes || []), id]
+        [name, brand, finish, description, JSON.stringify(finalImages), sizesToStore || [], id]
       );
       if (result.rowCount === 0) return res.status(404).json({ error: 'Product not found' });
       res.json({ success: true });
@@ -180,7 +262,7 @@ app.patch('/api/products/:id', async (req, res) => {
   } else {
     db.run(
       'UPDATE products SET name = ?, brand = ?, finish = ?, description = ?, images = ?, sizes = ? WHERE id = ?',
-      [name, brand, finish, description, JSON.stringify(images || []), JSON.stringify(sizes || []), id],
+      [name, brand, finish, description, JSON.stringify(finalImages), sizesToStore || [], id],
       function (err) {
         if (err) return res.status(500).json({ error: err.message });
         if (this.changes === 0) return res.status(404).json({ error: 'Product not found' });
