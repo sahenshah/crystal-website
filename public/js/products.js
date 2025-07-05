@@ -55,14 +55,7 @@ function renderProducts() {
 
             productsList.innerHTML = filtered.map(p => {
               // Use the first image from the images array, or a fallback if not present
-              let imgSrc = '';
-              if (Array.isArray(p.images) && p.images.length > 0 && p.images[0]) {
-                imgSrc = p.images[0];
-              } else if (p.image) {
-                imgSrc = p.image;
-              } else {
-                imgSrc = 'images/crystal-logo.png'; // fallback image
-              }
+              let imgSrc = p.thumbnail || 'images/crystal-logo.png';
               return `
                 <div class="product-card">
                   <div class="product-card-img-container">
@@ -278,7 +271,6 @@ brandSelect.addEventListener('change', function() {
 renderPackingDots(brandSelect.value);
 
 // Reference to the sizes list container (already defined above as sizesList)
-
 // Add header if not present
 function ensureSizesHeader() {
   if (!document.querySelector('.size-row-header')) {
