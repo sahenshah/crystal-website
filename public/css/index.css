@@ -63,7 +63,8 @@
 .hero-heading {
   font-size: 2.8em;
   margin: 0 0 0.3em 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', 'Helvetica Neue', 'Segoe UI', Roboto, Arial, sans-serif; 
+  /* font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; */
   letter-spacing: 2px;
 }
 
@@ -71,7 +72,8 @@
   font-size: 1.3em;
   margin: 0;
   font-weight: 400gba(31,41,55,0.6); /* Optional: semi-transparent overlay */
-  
+  font-family: 'Inter', 'Helvetica Neue', 'Segoe UI', Roboto, Arial, sans-serif; 
+  /* font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;  */
 }
 
 .featured-product-carousel, 
@@ -165,7 +167,7 @@
 
 .about-us h2 {
   font-size: 2.6em;
-  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-weight: 900;
   letter-spacing: 1px;
   margin-bottom: 0.5em;
@@ -174,7 +176,7 @@
 }
 
 .about-us p {
-  font-family: 'Segoe UI', 'Montserrat', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-size: 1.18em;
   font-weight: 500;
   color: #f3f4f6;
@@ -216,29 +218,25 @@
 }
 
 .about-btn {
-  display: inline-block;
-  margin-top: 1.5em;
-  padding: 0.75em 2.2em;
-  background: linear-gradient(90deg, #2563eb 0%, #1fa2ff 100%);
+  background: #FB8100;
   color: #fff;
+  border-radius: 5px;
+  padding: 0.5rem 1.1rem;
+  letter-spacing: 0.04em; 
+  font-weight: 500;
   border: none;
-  border-radius: 24px;
-  font-size: 1.15em;
-  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.07);
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
   text-decoration: none;
-  box-shadow: 0 4px 16px rgba(31,99,235,0.10);
-  letter-spacing: 0.03em;
-  transition: background 0.2s, color 0.2s, transform 0.15s;
-  cursor: pointer;
-  outline: none;
+  margin-top: 2em;
 }
 
 .about-btn:hover,
 .about-btn:focus {
-  background: linear-gradient(90deg, #1fa2ff 0%, #2563eb 100%);
+  background: #FB8100;
   color: #fff;
   transform: translateY(-2px) scale(1.04);
-  box-shadow: 0 6px 20px rgba(31,99,235,0.18);
+  box-shadow: 0 2px 8px rgba(251,129,0,0.07);
   text-decoration: none;
 }
 
@@ -300,59 +298,58 @@
 }
 
 .main-section-bottom .bottom-text h2 {
-  font-family: 'Segoe UI', 'Montserrat', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   margin-bottom: 0.7em; /* Add space below the heading */
   font-size: 1.8em;
 }
 
 .main-section-bottom .bottom-text p {
-  font-family: 'Segoe UI', 'Montserrat', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Fira Sans', 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   font-weight: 300;
   margin-top: 0;
   margin-bottom: 2.2em; /* Increased space below the subtext */
   font-size: 1.2em;
 }
 
-.browse-products-btn,
-.contact-us-btn {
-  display: inline-block;
-  margin: 0 0.7em 0.7em 0;
-  padding: 0.75em 2.2em;
-  font-size: 1.1em;
-  font-weight: 700;
-  border: none;
-  border-radius: 24px;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s, transform 0.15s, box-shadow 0.2s;
-  cursor: pointer;
-  outline: none;
-  box-shadow: 0 4px 16px rgba(31,99,235,0.10);
-  letter-spacing: 0.03em;
-  position: relative;
-}
-
-.browse-products-btn {
-  background: linear-gradient(90deg, #2563eb 0%, #1fa2ff 100%);
+.browse-products-btn{
+  background: #FB8100;
   color: #fff;
+  border-radius: 5px;
+  padding: 0.5rem 1.1rem;
+  letter-spacing: 0.04em; 
+  font-weight: 500;
+  border: 3px solid #FB8100;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.07);
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  text-decoration: none;
 }
 
 .browse-products-btn:hover,
 .browse-products-btn:focus {
-  background: linear-gradient(90deg, #1fa2ff 0%, #2563eb 100%);
-  color: #fff;
+  background: #fff;
+  color: #FB8100;
   transform: translateY(-2px) scale(1.04);
   box-shadow: 0 6px 20px rgba(31,99,235,0.18);
 }
 
 .contact-us-btn {
-  background: linear-gradient(90deg, #FB8100 0%, #fbbf24 100%);
-  color: #222;
+  background: #fff; 
+  color: #FB8100;
+  border-radius: 5px;
+  padding: 0.5rem 1.1rem;
+  letter-spacing: 0.04em; 
+  font-weight: 500;
+  border: 3px solid #FB8100;
+  box-shadow: 0 2px 8px rgba(251,129,0,0.07);
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  text-decoration: none;
 }
 
 .contact-us-btn:hover,
 .contact-us-btn:focus {
-  background: linear-gradient(90deg, #fbbf24 0%, #f59e42 100%);
-  color: #111;
+  background: #FB8100;
+  color: #fff;
   transform: translateY(-2px) scale(1.04);
   box-shadow: 0 6px 20px rgba(251,191,36,0.18);
 }
@@ -499,14 +496,43 @@
   }
 }
 @media (max-width: 700px) {
-  .main-section-bottom .bottom-text {
-    margin-bottom: 0;
+  .browse-products-btn,
+  .contact-us-btn {
+    font-size: 0.8em;
+    padding: 0.4em 1em;
+    margin: 0 0.3em 0.5em 0;
+    min-width: 120px;
+    max-width: 90vw;
   }
 }
 
 @media (max-width: 600px) {
   .about-us {
     min-height: 600px;
+  }
+  .main-section-bottom .bottom-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7em;
+    width: 100%;
+  }
+  .browse-products-btn,
+  .contact-us-btn {
+    margin: 0 !important;
+    width: 90%;
+    max-width: 320px;
+    min-width: 120px;
+    box-sizing: border-box;
+    display: block;
+    text-align: center;
+  }
+  .browse-products-btn:last-child,
+  .contact-us-btn:last-child {
+    margin-right: 0;
+  }
+  .main-section-bottom .bottom-text p {
+    margin-bottom: 1.5em;
   }
 }
 
@@ -526,6 +552,7 @@
     font-size: 0.7em;
     padding: 0.3em 1em;
     margin: 0 0.3em 0.5em 0;
+    margin: 0 !important;
   }
 }
 @media (max-width: 400px) {
@@ -541,5 +568,37 @@
   .about-btn {
     font-size: 0.75em;
     padding: 0.35em 1em;
+  }
+}
+
+.browse-products-btn,
+.contact-us-btn {
+  margin-right: 1em; /* Increase space between buttons */
+}
+
+.browse-products-btn:last-child,
+.contact-us-btn:last-child {
+  margin-right: 0;
+}
+
+/* For smaller screens, keep the spacing proportional */
+@media (max-width: 1000px) {
+  .browse-products-btn,
+  .contact-us-btn {
+    margin-right: 0.8em;
+  }
+  .browse-products-btn:last-child,
+  .contact-us-btn:last-child {
+    margin-right: 0;
+  }
+}
+@media (max-width: 475px) {
+  .browse-products-btn,
+  .contact-us-btn {
+    margin-right: 0.5em;
+  }
+  .browse-products-btn:last-child,
+  .contact-us-btn:last-child {
+    margin-right: 0;
   }
 }
