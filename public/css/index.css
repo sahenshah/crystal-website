@@ -360,7 +360,6 @@
 .featured-product-track {
   display: flex;
   align-items: center;
-  overflow: hidden;
   height: 140px; /* Adjust as needed for your design */
 }
 
