@@ -293,5 +293,42 @@ app.post('/api/contact', async (req, res) => {
   res.json({ success: true });
 });
 
+// Featured products endpoint: returns array of first image URLs from all products
+app.get('/api/featured-products', async (req, res) => {
+  if (dbType === 'pg') {
+    try {
+      const result = await pool.query('SELECT images FROM products');
+      const urls = result.rows
+        .map(row => {
+          try {
+            const arr = JSON.parse(row.images);
+            return Array.isArray(arr) && arr[0] ? arr[0] : null;
+          } catch {
+            return null;
+          }
+        })
+        .filter(Boolean);
+      res.json(urls);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  } else {
+    db.all('SELECT images FROM products', [], (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      const urls = rows
+        .map(row => {
+          try {
+            const arr = JSON.parse(row.images);
+            return Array.isArray(arr) && arr[0] ? arr[0] : null;
+          } catch {
+            return null;
+          }
+        })
+        .filter(Boolean);
+      res.json(urls);
+    });
+  }
+});
+
 // Serve the frontend
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
