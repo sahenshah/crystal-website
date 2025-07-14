@@ -293,39 +293,43 @@ app.post('/api/contact', async (req, res) => {
   res.json({ success: true });
 });
 
-// Featured products endpoint: returns array of first image URLs from all products
+// Featured products endpoint: returns array of objects { id, imageUrl } from all products
 app.get('/api/featured-products', async (req, res) => {
   if (dbType === 'pg') {
     try {
-      const result = await pool.query('SELECT images FROM products');
-      const urls = result.rows
+      const result = await pool.query('SELECT id, images FROM products');
+      const products = result.rows
         .map(row => {
           try {
             const arr = JSON.parse(row.images);
-            return Array.isArray(arr) && arr[0] ? arr[0] : null;
+            return (Array.isArray(arr) && arr[0])
+              ? { id: row.id, imageUrl: arr[0] }
+              : null;
           } catch {
             return null;
           }
         })
         .filter(Boolean);
-      res.json(urls);
+      res.json(products);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   } else {
-    db.all('SELECT images FROM products', [], (err, rows) => {
+    db.all('SELECT id, images FROM products', [], (err, rows) => {
       if (err) return res.status(500).json({ error: err.message });
-      const urls = rows
+      const products = rows
         .map(row => {
           try {
             const arr = JSON.parse(row.images);
-            return Array.isArray(arr) && arr[0] ? arr[0] : null;
+            return (Array.isArray(arr) && arr[0])
+              ? { id: row.id, imageUrl: arr[0] }
+              : null;
           } catch {
             return null;
           }
         })
         .filter(Boolean);
-      res.json(urls);
+      res.json(products);
     });
   }
 });

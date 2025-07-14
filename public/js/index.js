@@ -74,10 +74,14 @@ document.addEventListener('DOMContentLoaded', function() {
   if (productCarouselTrack) {
     fetch('/api/featured-products')
       .then(res => res.json())
-      .then(featuredProductImages => {
-        if (featuredProductImages && featuredProductImages.length) {
-          const imagesHtml = featuredProductImages.concat(featuredProductImages).concat(featuredProductImages).map(src =>
-            `<img src="${src}" alt="Featured Product" class="featured-product">`
+      .then(featuredProducts => {
+        if (featuredProducts && featuredProducts.length) {
+          // Duplicate for seamless scroll
+          const doubled = featuredProducts.concat(featuredProducts);
+          const imagesHtml = doubled.map(product =>
+            `<a href="product.html?id=${encodeURIComponent(product.id)}">
+               <img src="${product.imageUrl}" alt="Featured Product" class="featured-product">
+             </a>`
           ).join('');
           productCarouselTrack.innerHTML = imagesHtml;
         }
