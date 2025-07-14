@@ -1,367 +1,360 @@
-/* Reset and base styles */
-main,
-main section {
-  padding: 0 !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-}
-
-main {
-  display: flex;
-  flex-direction: column;
-}
-
-.main-flex {
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
-  box-sizing: border-box;
-  gap: 0;
-}
-
-/* About Us Section */
 .about-section {
   width: 100vw;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  background: #D2D3D5;
-  position: relative;
-  flex-shrink: 0;
-  margin: 0 !important;
-  padding: 0 !important;
+  align-items: center;
   box-sizing: border-box;
 }
 
-.about-content {
+.about-section-top {
+  min-height: calc(100vh - 80px);
+  background: #f7f7fa;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.about-section-middle {
+  min-height: 100vh;
+  background: #eaf3fa;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.about-section-bottom {
+  min-height: calc(100vh - 140px);
+  background: #f7f7fa;
   width: 100%;
-  max-width: 1400px;
-  text-align: center;
-  position: relative;
-}
-
-.about-content h2 {
-  text-align: left;
-  margin-left: 0;
-  font-size: 3.5rem;
-  font-weight: 400;
-  position: absolute;
-  left: 0;
-  letter-spacing: 0.02em;
+  margin-left: 50%;
+  transform: translateX(-50%);
   box-sizing: border-box;
-  padding-left: 3vw;
-  padding-top: 0.3vw;
+  padding: 0;
 }
 
-.about-paragraph {
-  text-align: center;
-  margin-top: 95px;
+.about-section-top-half,
+.about-section-top-bottom,
+.about-section-middle-half,
+.about-section-middle-bottom {
+  width: 100%;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.about-paragraph p {
-  font-size: 1.25rem;
-  line-height: 1.7;
-  color: #222;
-  font-weight: 300;
-  letter-spacing: 0.01em;
-  padding-left: 8em;
-  padding-right: 5em;
-  padding-top: 1em;
-  padding-bottom: 2em;
+.about-section-top-half {
+  width: 100%;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;   /* Center content vertically */
+  padding-top: 0;            /* Remove extra top padding */
+  padding-left: 2em;
+  padding-right: 2em;
+  box-sizing: border-box;
 }
 
-/* Visit/Image Row */
-.visit-image-row {
+.about-section-top-half h1 {
+  font-size: 3em;                   /* Increase heading size */
+  margin-top: 0;
+  margin-bottom: 0.7em;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+/* .about-section-top-half p {
+  font-size: 1.2em;
+  line-height: 1.6;
+  margin-bottom: 1.5em;
+  color: #333;    
+} */
+.about-section-middle-bottom,
+.about-section-top-bottom {
+  background-color: #1F2937;
+  color: #fff;
+  width: 100%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
+  position: relative;
   box-sizing: border-box;
-  gap: 2.5rem;
-  margin-top: 2vh; /* 5% of viewport height gap from About Us */
-  margin-bottom: 2vh; /* 5% of viewport height gap from About Us */
+  min-height: 0;
+}
+.about-section-middle-half h2,
+.about-section-middle-bottom h2,
+.about-section-top-bottom h2 {
+  font-size: 2em;                   /* Increase heading size */
+  margin-top: 0;
+  margin-bottom: 0.7em;
+  font-weight: 900;
+  line-height: 1.1;
+}
+.about-section-middle-half {
+  background-color: #fff;
+  color: #1F2937;
   width: 100%;
-  padding: 0 2vw;
-}
-
-/* Card Styles: Visit, About Img Text, About Image */
-.visit-section,
-.about-img-text-section,
-.about-image-section {
-  flex: 1 1 30vw;
-  min-width: 260px;
-  max-width: 400px;
-  margin-top: 2rem;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  position: relative;
   box-sizing: border-box;
+  min-height: 0;
 }
 
-/* Visit Us Card */
-.visit-section {
-  background: #fff;
-  border-radius: 1.2rem;
-  padding: 4rem 2.5rem;
+.about-history-text,
+.panel-text {
+  width: 60%;
+  padding: 2em 2em 2em 2em;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   justify-content: center;
-  overflow-x: auto;
-}
-
-.visit-content {
-  width: 100%;
   box-sizing: border-box;
-  padding-left: 1rem;
-  padding-right: 0.5rem;
 }
-
-.visit-content h3 {
-  font-family: inherit;
-  font-size: 2rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  margin-left: 0;
-  color: #1F2433;
-  width: 100%;
-  text-align: left;
+.panel-2-text {
+  width: 60%;
+  padding: 2em 2em 2em 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   box-sizing: border-box;
 }
 
-.visit-content iframe {
+
+.panel-image {
+  width: 40%;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+}
+
+.panel-image img {
   width: 100%;
-  height: 300px;
-  min-width: 100px;
-  box-sizing: border-box;
-  border-radius: 0.7rem;
+  height: 100%;
+  object-fit: contain; /* or 'cover' if you want cropping */
   display: block;
+}
+
+.container {
+  max-width: none;
+  width: 100vw;
   margin: 0;
-}
-
-.visit-map-link {
-  color: #FB8100;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 1.05rem;
-  transition: color 0.2s;
-}
-.visit-map-link:hover,
-.visit-map-link:focus {
-  color: #ff9900;
-  text-decoration: underline;
-}
-
-/* About Image Text Card */
-.about-img-text-section {
-  background: #fff;
-  border-radius: 1.2rem;
-  padding: 4rem 2.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  padding: 0;
   box-sizing: border-box;
-  overflow-x: auto;
-  font-style: italic;
-  height: 100%;
 }
 
-.about-img-text-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+.about-section-bottom h1 {
   text-align: center;
+  background-color: #1F2937;
+  color: white;
+  padding: 1rem;
+  margin: 0 0 2rem;
+  font-size: 2rem;
+  border: 3px solid #ffffff;    /* Add orange border */
 }
 
-/* About Image Card */
-.about-image-section {
-  background: #ffffff;
-  border-radius: 1.2rem;
+.value {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-  box-sizing: border-box;
-  height: fit-content;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
-.about-image-container {
-  width: 100%;
+.value > .icon-title:first-child {
+  justify-content: flex-end;
+  text-align: right;
+  /* Push the icon-title towards the center when it comes first */
+  padding-right: 2rem;
+  width: 40%;
   display: flex;
+  align-items: center;
 }
 
-.about-image {
-  max-width: 100vw;
-  width: 100%;
-  margin: 0 auto;
+.value > .description:last-child {
+  width: 55%;
+}
+
+.icon-title {
+  display: flex;
+  align-items: center;
+  flex: 1 1 40%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  gap: 1rem;
+}
+
+.description {
+  flex: 1 1 55%;
+  font-family: 'Inter', 'Helvetica Neue', 'Segoe UI', Roboto, Arial, sans-serif; 
+  background-color: #1F2937;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 3rem;
+  font-size: 1.1rem;
+}
+
+/* For icon-title on the left, round only right corners of description */
+.value > .icon-title:first-child + .description {
+  border-radius: 3rem 0 0 3rem;
+}
+
+/* For icon-title on the right, round only left corners of description */
+.value > .icon-title:last-child {
+  order: 2;
+}
+.value > .description:first-child {
+  border-radius: 0 3rem 3rem 0;
+}
+
+/* Remove default border-radius */
+.description {
+  border-radius: 0;
+}
+
+.icon {
+  font-size: 1.5rem;
+}
+
+/* Increase font size for Our Vision and Our Mission panels */
+.about-history-text h2,
+.panel-text h2 {
+  font-size: 2.2em;
+  font-weight: 900;
+  margin-bottom: 0.5em;
+}
+
+.panel-text p {
+  font-size: 1.25em;
+  line-height: 1.6;
+}
+
+.about-history-text p {
+  font-size: 1em;
+  line-height: 1.5;
 }
 
 /* Responsive styles */
-@media (max-width: 1200px) {
-  .main-flex {
+@media (max-width: 1050px) {
+  .about-section-top-bottom {
     flex-direction: column;
-    gap: 0;
+    align-items: stretch;
+    min-height: unset;
+    height: auto;
+    padding: 1em 0.5em;
   }
-  .about-section,
-  .visit-section {
-    max-width: 100vw;
-    margin-left: 0;
-    margin-right: 0;
-  }
-  .visit-content h3 {
-    font-size: 1.3rem;
-  }
-  
-  .about-paragraph p {
-    padding-left: 3em;
-    padding-right: 3em;
-    padding-top: 1em;
-    padding-bottom: 2em;
-  }
-}
-
-@media (max-width: 900px) {
-  .visit-image-row {
-    flex-direction: column;
-    gap: 0;
-  }
-  .visit-section,
-  .about-img-text-section,
-  .about-image-section {
+  .about-history-text,
+  .panel-text{
     width: 100%;
-    max-width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    box-sizing: border-box;
+    padding: 1em 0.5em;
   }
-  .visit-section {
-    margin: 0;
-    padding: 1.5rem 1rem;
-  }
-  .visit-content h3 {
-    font-size: 1.3rem;
-    padding-left: 0.7rem;
-    padding-right: 0.5rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    display: block;
-    color: #1F2433;
-    text-align: left;
-    background: none;
-    position: static;
-    visibility: visible;
-  }
-  .about-img-text-section {
-    padding: 1rem 0.5rem;
-  }
-  .about-image-container {
+  .panel-image {
     width: 100%;
-    margin: 1rem 0;
-  }
-  .about-image {
-    max-width: 100vw;
-    width: 100%;
-    margin: 0 auto;
-  }
-  .visit-content iframe {
-    height: 180px;
-  }
-}
-
-@media (max-width: 650px) {
-  .about-content h2 {
-    font-size: 3rem;
-  }
-  .about-paragraph p {
-    font-size: 0.98rem;
-    padding-top: 0em;
-  }
-  .visit-section {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 1rem 0.5rem;
-    box-sizing: border-box;
-  }
-  .visit-content h3 {
-    font-size: 1.2rem;
-    padding-left: 0.7rem;
-    padding-right: 0.5rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-  }
-  .about-image-container {
-    width: 100%;
-    margin: 0;
-  }
-  .about-image {
-    max-width: 100vw;
-    width: 100%;
-    margin: 0 auto;
-  }
-  .visit-content iframe {
-    height: 120px;
-  }
-}
-
-@media (max-width: 615px) {
-  .visit-image-row {
-    flex-direction: column;
-    gap: 1.2rem;           /* Consistent gap between cards */
-    margin-top: 0.5rem;    /* Space above the first card */
-    padding: 0 0.5rem;            /* Remove side padding */
-    width: 100%;
-  }
-  .visit-section,
-  .about-img-text-section,
-  .about-image-section {
-    min-width: 0;          /* Allow cards to shrink fully */
-    width: 100%;
-    max-width: 100%;
-    margin: 0 !important;  /* Remove any extra margins */
-    box-sizing: border-box;
-    padding: 1rem 0.7rem;  /* Consistent side padding inside cards */
-  }
-  .about-image-container {
-    width: 100%;
-    margin: 0.7rem 0 0.7rem 0; /* Space above and below image */
     padding: 0;
   }
-  .about-img-text-section,
-  .about-image-section,
-  .visit-section {
-    margin-bottom: 0 !important; /* Prevent double spacing */
+}
+@media (max-width: 900px) {
+  .about-section-top {
+    min-height: unset;
   }
-  .visit-content iframe {
-    height: 70px;
+  .about-section-top-half {
+    padding-left: 1em;
+    padding-right: 1em;
   }
-  .about-img-text-content {
-    font-size: 0.8rem; /* Reduce font size for about img text */
+  .about-section-top-half h1 {
+    font-size: 2.1em;
+  }
+  .about-section-top-half p {
+    font-size: 1em;
+  }
+  .about-section-top-bottom {
+    flex-direction: column;
+    padding: 1em 0.5em;
+  }
+  .about-section-top-bottom {
+    flex-direction: column;
+  }
+  .about-history-text,
+  .about-history-image {
+    width: 100%;
+    min-height: 200px;
+  }
+  .about-history-image {
+    height: auto;
+    min-height: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+  }
+  .about-history-image img {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: contain; /* Show the whole image, no cropping */
+    display: block;
+  }
+  .value > .icon-title,
+  .value > .description {
+    border-radius: 3rem;
+    width: 100%;
+    padding-right: 0;
+    text-align: center;
+    justify-content: center;
+  }
+  .about-section-bottom h1 {
+    font-size: 1.3rem;
+    padding: 0.7rem;
+  }
+  .icon-title {
+    font-size: 1.1rem;
+  }
+  .description {
+    font-size: 0.95rem;
+    padding: 0.8rem 1rem;
+  }
+  .about-history-text h2 {
+    font-size: 1.6em;
+  }
+  .about-history-text p {
+    font-size: 0.95em;
   }
 }
 
-@media (max-width: 400px) {
-  .about-img-text-content {
-    font-size: 0.6rem; /* Reduce font size for about img text */
+@media (max-width: 600px) {
+  .about-section-top-half {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
   }
-  .visit-content iframe {
-    height: 40px;
+  .about-section-top-half h1 {
+    font-size: 1.3em;
   }
-}
-
-/* Add this at the end of your CSS file or after your responsive styles */
-/* Remove extra margin from cards if present */
-.visit-section,
-.about-img-text-section,
-.about-image-section {
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-/* If your main-flex or main has extra space, remove it */
-.main-flex,
-main {
-  padding-bottom: 0 !important;
-  margin-bottom: 0 !important;
+  .about-section-top-half p {
+    font-size: 0.9em;
+  }
+  .panel-text,
+  .panel-2-text,
+  .panel-image {
+    padding: 0.5em 0.2em;
+  }
+  .panel-image img,
+  .about-history-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain; /* Show the whole image, no cropping */
+    display: block;
+  }
+  .description {
+    font-size: -1.75rem;
+  }
+  .panel-text p {
+    font-size: 0.9em;
+  }
 }
