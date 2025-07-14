@@ -47,7 +47,6 @@ if (isProduction) {
 
   // Ensure products table exists
   async function ensureProductsTable() {
-    await client.query('SET search_path TO public');
     await pool.query(`
       CREATE TABLE IF NOT EXISTS products (
         id SERIAL PRIMARY KEY,
