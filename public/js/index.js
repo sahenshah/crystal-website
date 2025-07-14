@@ -89,8 +89,14 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(res => res.json())
       .then(featuredProducts => {
         if (featuredProducts && featuredProducts.length) {
+          // Calculate how many images are needed to fill the carousel at least twice
+          const minImages = 10; // Adjust based on your carousel width and image size
+          let imagesToShow = [];
+          while (imagesToShow.length < minImages) {
+            imagesToShow = imagesToShow.concat(featuredProducts);
+          }
           // Duplicate for seamless scroll
-          const doubled = featuredProducts.concat(featuredProducts);
+          const doubled = imagesToShow.concat(imagesToShow);
           const imagesHtml = doubled.map(product =>
             `<a href="product.html?id=${encodeURIComponent(product.id)}">
                <img src="${product.imageUrl}" alt="Featured Product" class="featured-product">
