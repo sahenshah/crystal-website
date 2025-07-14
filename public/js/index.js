@@ -37,10 +37,23 @@ document.addEventListener('DOMContentLoaded', function() {
   // Set up the cross-fade effect using CSS variable for both sections
   const style = document.createElement('style');
   style.innerHTML = `
+    .main-section-top::after,
+    .main-section-bottom::after {
+      background-image: var(--next-bg);
+      opacity: 0;
+      transition: opacity 2s cubic-bezier(.4,0,.2,1);
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      pointer-events: none;
+      z-index: 1;
+    }
     .main-section-top.fade-bg::after,
     .main-section-bottom.fade-bg::after {
-      background-image: var(--next-bg);
-      opacity: 0.432;
+      opacity: 1;
     }
   `;
   document.head.appendChild(style);
