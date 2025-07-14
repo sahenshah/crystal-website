@@ -272,13 +272,18 @@
   content: "";
   position: absolute;
   inset: 0;
+  background-image: var(--next-bg);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0;
-  transition: opacity 2s ease;
+  transition: opacity 2s cubic-bezier(.4,0,.2,1);
   pointer-events: none;
   z-index: 1;
+}
+
+.main-section-bottom.fade-bg::after {
+  opacity: 1;
 }
 
 /* Add a spacer to push text 2/3 down if you have a text container */
@@ -306,7 +311,7 @@
 .main-section-bottom .bottom-text p {
   font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-family: 'Fira Sans', 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   margin-top: 0;
   margin-bottom: 2.2em; /* Increased space below the subtext */
   font-size: 1.2em;
