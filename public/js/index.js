@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(res => res.json())
       .then(featuredProductImages => {
         if (featuredProductImages && featuredProductImages.length) {
-          const imagesHtml = featuredProductImages.concat(featuredProductImages).map(src =>
+          const imagesHtml = featuredProductImages.concat(featuredProductImages).concat(featuredProductImages).map(src =>
             `<img src="${src}" alt="Featured Product" class="featured-product">`
           ).join('');
           productCarouselTrack.innerHTML = imagesHtml;
