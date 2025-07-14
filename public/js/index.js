@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Top section cross-fade
     topSection.style.setProperty('--next-bg', `url('${stockImages[idxTop]}')`);
     topSection.classList.add('fade-bg');
-    // Middle section cross-fade
+    // bottom section cross-fade
     bottomSection.style.setProperty('--next-bg', `url('${stockImages[idxBottom]}')`);
     bottomSection.classList.add('fade-bg');
     setTimeout(() => {
@@ -38,9 +38,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const style = document.createElement('style');
   style.innerHTML = `
     .main-section-top.fade-bg::after,
-    .main-section-middle.fade-bg::after {
+    .main-section-bottom.fade-bg::after {
       background-image: var(--next-bg);
-      opacity: 1;
+      opacity: 0.432;
     }
   `;
   document.head.appendChild(style);
