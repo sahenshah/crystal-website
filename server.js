@@ -251,8 +251,8 @@ app.patch('/api/products/:id', upload.array('images', 8), async (req, res) => {
   if (dbType === 'pg') {
     try {
       const result = await pool.query(
-        'UPDATE products SET name = $1, featured = $2, brand = $3, finish = $4, description = $5, images = $6, sizes = $7 WHERE id = $8',
-        [name, featured, brand, finish, description, JSON.stringify(finalImages), sizesToStore || [], id]
+        'UPDATE products SET name = $1, brand = $2, finish = $3, description = $4, images = $5, sizes = $6, featured = $7 WHERE id = $8',
+        [name, brand, finish, description, JSON.stringify(finalImages), sizesToStore || [], featured, id]
       );
       if (result.rowCount === 0) return res.status(404).json({ error: 'Product not found' });
       res.json({ success: true });
