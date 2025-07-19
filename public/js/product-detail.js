@@ -79,7 +79,7 @@ function renderProduct(product) {
       </div>
       <div class="product-detail-info">
         <div style="display:flex; align-items:center; gap:0.5em;">
-          ${(product.Featured == 1 || product.Featured === true || product.Featured === "1" || product.Featured === "true") ? `
+          ${product.featured ? `
             <span class="featured-star" title="Featured Product">
               <svg class="star-icon" viewBox="0 0 24 24" width="28" height="28" fill="#FBCC00" stroke="#FBCC00" stroke-width="1.5">
                 <polygon points="12,2 15,9 22,9.5 17,14.2 18.5,21 12,17.5 5.5,21 7,14.2 2,9.5 9,9"/>
@@ -146,7 +146,7 @@ function openEditProductModal(product) {
   modal.classList.add('active');
   // --- Name, Brand, Finish 
   document.getElementById('edit-product-name').value = product.name || '';
-  document.getElementById('edit-product-featured').checked = !!product.Featured;
+  document.getElementById('edit-product-featured').checked = !!product.featured;
   document.getElementById('edit-product-brand').value = product.brand || '';
   document.getElementById('edit-product-finish').value = product.finish || '';
   
