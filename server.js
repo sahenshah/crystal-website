@@ -297,7 +297,7 @@ app.post('/api/contact', async (req, res) => {
 app.get('/api/featured-products', async (req, res) => {
   if (dbType === 'pg') {
     try {
-      const result = await pool.query('SELECT id, images FROM products WHERE featured = 1 OR featured = true');
+      const result = await pool.query('SELECT id, images FROM products WHERE featured = TRUE');
       const products = result.rows
         .map(row => {
           try {
