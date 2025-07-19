@@ -88,11 +88,12 @@ app.get('/api/products', async (req, res) => {
   if (dbType === 'pg') {
     try {
       // Only select id, name, and images
-      const result = await pool.query('SELECT id, name, images FROM products');
+      const result = await pool.query('SELECT id, name, featured, images FROM products');
       // Only send the first image as thumbnail
       const products = result.rows.map(row => ({
         id: row.id,
         name: row.name,
+        featured: row.featured,
         thumbnail: (row.images ? JSON.parse(row.images)[0] : null) || null
       }));
       res.json(products);
@@ -100,11 +101,12 @@ app.get('/api/products', async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   } else {
-    db.all('SELECT id, name, images FROM products', [], (err, rows) => {
+    db.all('SELECT id, name, featured, images FROM products', [], (err, rows) => {
       if (err) return res.status(500).json({ error: err.message });
       const products = rows.map(row => ({
         id: row.id,
         name: row.name,
+        featured: row.featured,
         thumbnail: (row.images ? JSON.parse(row.images)[0] : null) || null
       }));
       res.json(products);

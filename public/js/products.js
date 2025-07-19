@@ -60,6 +60,14 @@ function renderProducts() {
             productsList.innerHTML = filtered.map(p => {
               // Use the first image from the images array, or a fallback if not present
               let imgSrc = p.thumbnail || 'images/crystal-logo.png';
+              // Show star if featured
+              const isFeatured = p.featured == 1 || p.featured === true || p.featured === "1" || p.featured === "true";
+              console.log(`Product ${p.id} is featured: ${isFeatured}`);
+              const featuredStar = isFeatured
+                ? `<svg class="star-icon" viewBox="0 0 24 24" width="18" height="18" fill="#FBCC00" stroke="#FBCC00" stroke-width="1.2" style="vertical-align:middle;margin-right:0.3em;">
+                    <polygon points="12,2 15,9 22,9.5 17,14.2 18.5,21 12,17.5 5.5,21 7,14.2 2,9.5 9,9"/>
+                  </svg>`
+                : '';
               return `
                 <div class="product-card">
                   <div class="product-card-img-container">
@@ -69,7 +77,7 @@ function renderProducts() {
                   </div>
                   <div class="product-card-content">
                     <a class="product-card-link" href="product.html?id=${p.id}">
-                      <h3>${toTitleCase(p.name)}</h3>
+                      <h3>${featuredStar}${toTitleCase(p.name)}</h3>
                     </a>
                     <button class="delete-product-btn admin-only" data-id="${p.id}" type="button">Delete</button>
                   </div>
