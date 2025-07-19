@@ -617,6 +617,58 @@ button[disabled] {
   margin-bottom: 0.7rem;
 }
 
+.featured-star {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+.star-icon {
+  width: 28px;
+  height: 28px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  cursor: pointer;
+  user-select: none;
+}
+.toggle-switch input[type="checkbox"] {
+  display: none;
+}
+.toggle-switch .slider {
+  width: 36px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 12px;
+  position: relative;
+  transition: background 0.2s;
+  display: inline-block;
+}
+.toggle-switch input[type="checkbox"]:checked + .slider {
+  background: #FB8100;
+}
+.toggle-switch .slider::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+.toggle-switch input[type="checkbox"]:checked + .slider::before {
+  transform: translateX(16px);
+}
+.toggle-label {
+  font-size: 1em;
+  color: #333;
+}
 /* Responsive Styles */
 @media (max-width: 1400px) {
   .carousel-image-wrapper {

@@ -78,7 +78,16 @@ function renderProduct(product) {
         </div>
       </div>
       <div class="product-detail-info">
-        <h2>${product.name}</h2>
+        <div style="display:flex; align-items:center; gap:0.5em;">
+          ${product.Featured ? `
+            <span class="featured-star" title="Featured Product">
+              <svg class="star-icon" viewBox="0 0 24 24" width="28" height="28" fill="#FBCC00" stroke="#FBCC00" stroke-width="1.5">
+                <polygon points="12,2 15,9 22,9.5 17,14.2 18.5,21 12,17.5 5.5,21 7,14.2 2,9.5 9,9"/>
+              </svg>
+            </span>
+          ` : ''}
+          <h2 style="margin:0;">${product.name}</h2>
+        </div>
         <div class="brand-finish">
           <span><b>Brand:</b> ${product.brand}</span> &nbsp; | &nbsp;
           <span><b>Finish:</b> ${product.finish}</span>
@@ -137,6 +146,7 @@ function openEditProductModal(product) {
   modal.classList.add('active');
   // --- Name, Brand, Finish 
   document.getElementById('edit-product-name').value = product.name || '';
+  document.getElementById('edit-product-featured').checked = !!product.Featured;
   document.getElementById('edit-product-brand').value = product.brand || '';
   document.getElementById('edit-product-finish').value = product.finish || '';
   
@@ -442,6 +452,7 @@ function openEditProductModal(product) {
     // Prepare FormData
     const formData = new FormData();
     formData.set('name', document.getElementById('edit-product-name').value);
+    formData.set('featured', document.getElementById('edit-product-featured').checked ? 1 : 0);
     formData.set('brand', document.getElementById('edit-product-brand').value);
     formData.set('finish', document.getElementById('edit-product-finish').value);
     formData.set('description', document.getElementById('edit-product-description').value);
