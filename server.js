@@ -212,7 +212,7 @@ app.delete('/api/products/:id', async (req, res) => {
 
 // Update a product by ID
 app.patch('/api/products/:id', upload.array('images', 8), async (req, res) => {
-  const { name, brand, finish, description, sizes } = req.body;
+  const { name, featured, brand, finish, description, sizes } = req.body;
   const id = req.params.id;
   let sizesToStore = sizes;
   if (typeof sizesToStore !== 'string') {
@@ -261,8 +261,8 @@ app.patch('/api/products/:id', upload.array('images', 8), async (req, res) => {
     }
   } else {
     db.run(
-      'UPDATE products SET name = ?, brand = ?, finish = ?, description = ?, images = ?, sizes = ? WHERE id = ?',
-      [name, brand, finish, description, JSON.stringify(finalImages), sizesToStore || [], id],
+      'UPDATE products SET name = ?, featured = ?, brand = ?, finish = ?, description = ?, images = ?, sizes = ? WHERE id = ?',
+      [name, featured, brand, finish, description, JSON.stringify(finalImages), sizesToStore || [], id],
       function (err) {
         if (err) return res.status(500).json({ error: err.message });
         if (this.changes === 0) return res.status(404).json({ error: 'Product not found' });
@@ -315,7 +315,7 @@ app.get('/api/featured-products', async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   } else {
-    db.all('SELECT id, images FROM products', [], (err, rows) => {
+    db.all('SELECT id, images FROM products WHERE featured = 1', [], (err, rows) => {
       if (err) return res.status(500).json({ error: err.message });
       const products = rows
         .map(row => {
