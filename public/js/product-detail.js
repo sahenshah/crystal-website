@@ -92,10 +92,19 @@ function renderProduct(product) {
           <span><b>Brand:</b> ${product.brand}</span> &nbsp; | &nbsp;
           <span><b>Finish:</b> ${product.finish}</span>
         </div>
-        <p>${product.description}</p>
-        <div>
-          <b></b>
-          ${sizesTable}
+        <!-- Accordion for Description -->
+        <div class="accordion">
+          <button class="accordion-toggle" type="button">Description</button>
+          <div class="accordion-content">
+            <p>${product.description}</p>
+          </div>
+        </div>
+        <!-- Accordion for Sizes Table -->
+        <div class="accordion">
+          <button class="accordion-toggle" type="button">Sizes</button>
+          <div class="accordion-content">
+            ${sizesTable}
+          </div>
         </div>
       </div>
     </div>
@@ -126,6 +135,20 @@ function renderProduct(product) {
   // Thumbnail click handler
   container.querySelectorAll('.thumbnail-img').forEach((thumb, i) => {
     thumb.onclick = () => showImage(i);
+  });
+
+  // Add accordion toggle functionality
+  container.querySelectorAll('.accordion-toggle').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const content = this.nextElementSibling;
+      const isOpen = content.classList.toggle('open');
+      this.classList.toggle('active', isOpen);
+      if (isOpen) {
+        content.style.maxHeight = content.scrollHeight + "px";
+      } else {
+        content.style.maxHeight = null;
+      }
+    });
   });
 }
 
