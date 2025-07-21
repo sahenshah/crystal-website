@@ -94,8 +94,8 @@ function renderProduct(product) {
         </div>
         <!-- Accordion for Description -->
         <div class="accordion">
-          <button class="accordion-toggle" type="button">Description</button>
-          <div class="accordion-content">
+          <button class="accordion-toggle active" type="button">Description</button>
+          <div class="accordion-content open">
             <p>${product.description}</p>
           </div>
         </div>
