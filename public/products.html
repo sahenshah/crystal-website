@@ -74,6 +74,11 @@
               <b>Name:</b>
               <input type="text" id="product-name" required>
             </label><br>
+            <label class="toggle-switch">
+              <b>Featured:</b>
+              <input type="checkbox" id="add-product-featured">
+              <span class="slider"></span>
+            </label>
             <label>
               <b>Brand:</b>
               <select id="product-brand" required>
@@ -125,6 +130,21 @@
               <div id="sizes-list"></div>
             </div>
             <br>
+            <label>
+              <b>Key Features:</b>
+              <input type="text" id="add-product-key-feature-input" placeholder="Enter a key feature" />
+            </label>
+            <div style="display: flex; align-items: center; gap: 0.5em;">
+              <button type="button" id="add-product-key-feature-btn" aria-label="Add Key Feature" style="padding:0.3em 0.7em;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#FB8100" stroke-width="3" stroke-linecap="round"
+                  stroke-linejoin="round" style="width:1.2em;height:1.2em;">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </button>
+            </div>
+            <ul id="add-product-key-features-list" style="margin:0 0 1em 1.2em; padding:0; list-style:disc;"></ul>
+            <input type="hidden" id="add-product-key_features" name="key_features" />
             <button type="submit">Create Product</button>
           </form>
         </div>

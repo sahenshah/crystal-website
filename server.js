@@ -56,7 +56,9 @@ if (isProduction) {
         finish TEXT,
         description TEXT,
         images TEXT,
-        sizes TEXT
+        sizes TEXT,
+        featured BOOLEAN DEFAULT 0,
+        key_features TEXT[]
       )
     `);
   }
@@ -77,7 +79,9 @@ if (isProduction) {
         finish TEXT,
         description TEXT,
         images TEXT,
-        sizes TEXT
+        sizes TEXT,
+        featured BOOLEAN DEFAULT 0,
+        key_features TEXT
       )
     `);
   });
@@ -152,7 +156,7 @@ app.get('/api/products/:id', async (req, res) => {
 
 // Product creation endpoint
 app.post('/api/products', upload.array('images', 8), async (req, res) => {
-  const { name, brand, finish, description, sizes } = req.body;
+  const { name, brand, finish, description, sizes, featured, key_features } = req.body;
   const imageUrls = [];
 
   // Upload each file to Firebase Storage
@@ -171,12 +175,26 @@ app.post('/api/products', upload.array('images', 8), async (req, res) => {
     sizesToStore = JSON.stringify(sizesToStore);
   }
 
-  // Save product with imageUrls in DB as before
+  // Handle key_features for both DBs
+  let keyFeaturesToStore = key_features;
+  if (typeof keyFeaturesToStore !== 'string') {
+    keyFeaturesToStore = JSON.stringify(keyFeaturesToStore);
+  }
+
   if (dbType === 'pg') {
     try {
       const result = await pool.query(
-        'INSERT INTO products (name, brand, finish, description, images, sizes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
-        [name, brand, finish, description, JSON.stringify(imageUrls), sizesToStore]
+        'INSERT INTO products (name, brand, finish, description, images, sizes, featured, key_features) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
+        [
+          name,
+          brand,
+          finish,
+          description,
+          JSON.stringify(imageUrls),
+          sizesToStore,
+          featured || false,
+          keyFeaturesToStore ? JSON.parse(keyFeaturesToStore) : []
+        ]
       );
       res.json({ id: result.rows[0].id });
     } catch (err) {
@@ -184,8 +202,17 @@ app.post('/api/products', upload.array('images', 8), async (req, res) => {
     }
   } else {
     db.run(
-      'INSERT INTO products (name, brand, finish, description, images, sizes) VALUES (?, ?, ?, ?, ?, ?)',
-      [name, brand, finish, description, JSON.stringify(imageUrls), sizesToStore],
+      'INSERT INTO products (name, brand, finish, description, images, sizes, featured, key_features) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [
+        name,
+        brand,
+        finish,
+        description,
+        JSON.stringify(imageUrls),
+        sizesToStore,
+        featured || 0,
+        keyFeaturesToStore
+      ],
       function (err) {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ id: this.lastID });
@@ -214,12 +241,17 @@ app.delete('/api/products/:id', async (req, res) => {
 
 // Update a product by ID
 app.patch('/api/products/:id', upload.array('images', 8), async (req, res) => {
-  const { name, featured, brand, finish, description, sizes } = req.body;
+  const { name, featured, brand, finish, description, sizes, key_features } = req.body;
   const id = req.params.id;
   let sizesToStore = sizes;
   if (typeof sizesToStore !== 'string') {
     sizesToStore = JSON.stringify(sizesToStore);
   }
+  let keyFeaturesToStore = key_features;
+  if (typeof keyFeaturesToStore !== 'string') {
+    keyFeaturesToStore = JSON.stringify(keyFeaturesToStore);
+  }
+
   // 1. Get kept images from request body
   let keptImages = [];
   if (req.body.images) {
@@ -253,8 +285,18 @@ app.patch('/api/products/:id', upload.array('images', 8), async (req, res) => {
   if (dbType === 'pg') {
     try {
       const result = await pool.query(
-        'UPDATE products SET name = $1, brand = $2, finish = $3, description = $4, images = $5, sizes = $6, featured = $7 WHERE id = $8',
-        [name, brand, finish, description, JSON.stringify(finalImages), sizesToStore || [], featured, id]
+        'UPDATE products SET name = $1, brand = $2, finish = $3, description = $4, images = $5, sizes = $6, featured = $7, key_features = $8 WHERE id = $9',
+        [
+          name,
+          brand,
+          finish,
+          description,
+          JSON.stringify(finalImages),
+          sizesToStore || [],
+          featured,
+          keyFeaturesToStore ? JSON.parse(keyFeaturesToStore) : [],
+          id
+        ]
       );
       if (result.rowCount === 0) return res.status(404).json({ error: 'Product not found' });
       res.json({ success: true });
@@ -263,8 +305,18 @@ app.patch('/api/products/:id', upload.array('images', 8), async (req, res) => {
     }
   } else {
     db.run(
-      'UPDATE products SET name = ?, featured = ?, brand = ?, finish = ?, description = ?, images = ?, sizes = ? WHERE id = ?',
-      [name, featured, brand, finish, description, JSON.stringify(finalImages), sizesToStore || [], id],
+      'UPDATE products SET name = ?, featured = ?, brand = ?, finish = ?, description = ?, images = ?, sizes = ?, key_features = ? WHERE id = ?',
+      [
+        name,
+        featured,
+        brand,
+        finish,
+        description,
+        JSON.stringify(finalImages),
+        sizesToStore || [],
+        keyFeaturesToStore,
+        id
+      ],
       function (err) {
         if (err) return res.status(500).json({ error: err.message });
         if (this.changes === 0) return res.status(404).json({ error: 'Product not found' });

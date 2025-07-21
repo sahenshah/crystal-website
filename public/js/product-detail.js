@@ -55,6 +55,20 @@ function renderProduct(product) {
       </table>`
     : '<p>No sizes available.</p>';
 
+  let features = [];
+  if (Array.isArray(product.key_features)) {
+    features = product.key_features;
+  } else if (typeof product.key_features === "string" && product.key_features.trim()) {
+    try {
+      features = JSON.parse(product.key_features);
+    } catch {
+      features = [];
+    }
+  }
+  const featuresHtml = features.length
+    ? `<ul>${features.map(f => `<li>${f}</li>`).join('')}</ul>`
+    : '<p>No key features listed.</p>';
+
   const images = Array.isArray(product.images) && product.images.length > 0
     ? product.images
     : [product.image || 'images/crystal-logo.png'];
@@ -106,6 +120,12 @@ function renderProduct(product) {
             ${sizesTable}
           </div>
         </div>
+        <div class="accordion">
+          <button class="accordion-toggle" type="button">Key Features</button>
+          <div class="accordion-content">
+            ${featuresHtml}
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -149,6 +169,26 @@ function renderProduct(product) {
         content.style.maxHeight = null;
       }
     });
+  });
+}
+
+let keyFeaturesArr = [];
+
+function renderKeyFeaturesList() {
+  const ul = document.getElementById('edit-key-features-list');
+  ul.innerHTML = keyFeaturesArr.map((f, i) =>
+    `<li style="margin-bottom:0.2em;">
+      ${f}
+      <button type="button" data-index="${i}" class="remove-key-feature-btn" style="margin-left:0.5em;color:#FB8100;background:none;border:none;cursor:pointer;">&times;</button>
+    </li>`
+  ).join('');
+  document.getElementById('edit-product-key_features').value = JSON.stringify(keyFeaturesArr);
+  // Remove handler
+  ul.querySelectorAll('.remove-key-feature-btn').forEach(btn => {
+    btn.onclick = function() {
+      keyFeaturesArr.splice(Number(btn.dataset.index), 1);
+      renderKeyFeaturesList();
+    };
   });
 }
 
@@ -444,6 +484,26 @@ function openEditProductModal(product) {
     renderPackingDots(this.value);
   });
 
+  // Key Features
+  keyFeaturesArr = [];
+  if (Array.isArray(product.key_features)) {
+    keyFeaturesArr = [...product.key_features];
+  } else if (typeof product.key_features === "string" && product.key_features.trim()) {
+    try {
+      keyFeaturesArr = JSON.parse(product.key_features);
+    } catch { keyFeaturesArr = []; }
+  }
+  renderKeyFeaturesList();
+
+  document.getElementById('edit-add-key-feature-btn').onclick = function() {
+    const input = document.getElementById('edit-product-key-feature-input');
+    const val = input.value.trim();
+    if (val) {
+      keyFeaturesArr.push(val);
+      input.value = '';
+      renderKeyFeaturesList();
+    }
+  };
 
   document.getElementById('close-edit-modal-btn').onclick = function() {
     modal.classList.remove('active');
@@ -491,6 +551,9 @@ function openEditProductModal(product) {
         formData.append('images', file);
       });
     }
+
+    // Add key features
+    formData.set('key_features', JSON.stringify(keyFeaturesArr));
 
     fetch(`/api/products/${product.id}`, {
       method: 'PATCH',

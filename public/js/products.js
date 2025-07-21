@@ -12,6 +12,7 @@ const finishFilter = document.getElementById('finish-filter');
 const imageInput = document.getElementById('product-image');
 const imageFileName = document.getElementById('image-file-name');
 const imagePreviewContainer = document.getElementById('product-image-preview-container');
+let keyFeaturesArr = [];
 
 // Dynamically set API base URL for local and production
 const API_BASE_URL =
@@ -62,7 +63,6 @@ function renderProducts() {
               let imgSrc = p.thumbnail || 'images/crystal-logo.png';
               // Show star if featured
               const isFeatured = p.featured == 1 || p.featured === true || p.featured === "1" || p.featured === "true";
-              console.log(`Product ${p.id} is featured: ${isFeatured}`);
               const featuredStar = isFeatured
                 ? `<svg class="star-icon" viewBox="0 0 24 24" width="18" height="18" fill="#FBCC00" stroke="#FBCC00" stroke-width="1.2" style="vertical-align:middle;margin-right:0.3em;">
                     <polygon points="12,2 15,9 22,9.5 17,14.2 18.5,21 12,17.5 5.5,21 7,14.2 2,9.5 9,9"/>
@@ -114,6 +114,34 @@ function renderProducts() {
         });
 }
 
+function renderKeyFeaturesList() {
+  const ul = document.getElementById('add-product-key-features-list');
+  ul.innerHTML = keyFeaturesArr.map((f, i) =>
+    `<li style="margin-bottom:0.2em;">
+      ${f}
+      <button type="button" data-index="${i}" class="remove-key-feature-btn" style="margin-left:0.5em;color:#FB8100;background:none;border:none;cursor:pointer;">&times;</button>
+    </li>`
+  ).join('');
+  // Remove handler
+  ul.querySelectorAll('.remove-key-feature-btn').forEach(btn => {
+    btn.onclick = function() {
+      keyFeaturesArr.splice(Number(btn.dataset.index), 1);
+      renderKeyFeaturesList();
+    };
+  });
+}
+
+// Add feature on "+" button click
+document.getElementById('add-product-key-feature-btn').onclick = function() {
+  const input = document.getElementById('add-product-key-feature-input');
+  const val = input.value.trim();
+  if (val) {
+    keyFeaturesArr.push(val);
+    input.value = '';
+    renderKeyFeaturesList();
+  }
+};
+
 // Listen for filter changes and re-render products
 brandFilter.addEventListener('change', renderProducts);
 finishFilter.addEventListener('change', renderProducts);
@@ -129,6 +157,7 @@ form.onsubmit = function (e) {
     setButtonLoadingState(submitBtn, true);
 
     const name = document.getElementById('product-name').value.trim();
+    const featured = document.getElementById('add-product-featured').checked ? 1 : 0;
     const brand = document.getElementById('product-brand').value.trim();
     const finish = document.getElementById('product-finish').value.trim();
     const description = document.getElementById('product-description').value.trim();
@@ -154,10 +183,12 @@ form.onsubmit = function (e) {
     // Use FormData to send all fields and files
     const formData = new FormData();
     formData.append('name', name);
+    formData.append('featured', featured);
     formData.append('brand', brand);
     formData.append('finish', finish);
     formData.append('description', description);
     formData.append('sizes', JSON.stringify(sizes));
+    formData.append('key_features', JSON.stringify(keyFeaturesArr));
     // Append all selected images
     if (imageInput.files && imageInput.files.length > 0) {
         Array.from(imageInput.files).forEach(file => {
