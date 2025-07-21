@@ -669,6 +669,56 @@ button[disabled] {
   font-size: 1em;
   color: #333;
 }
+
+/* Accordion styling */
+.accordion {
+  margin-bottom: 1em;
+}
+.accordion-toggle {
+  width: 100%;
+  text-align: left;
+  background: #f7f7fa;
+  border: none;
+  outline: none;
+  padding: 0.7em 1em;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 0.5em;
+  transition: background 0.2s;
+  position: relative;
+}
+
+.accordion-toggle::after {
+  content: "+";
+  position: absolute;
+  right: 1.2em;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.3em;
+  color: #FB8100;
+  transition: content 0.2s;
+  pointer-events: none;
+}
+
+.accordion-toggle.active::after {
+  content: "-";
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+  background: #f7f7fa;
+  padding: 0 1em;
+  border-radius: 0 0 0.5em 0.5em;
+}
+
+.accordion-content.open {
+  padding: 0em 1em; /* Reduced top/bottom padding */
+  max-height: 500px; /* Adjust as needed */
+  transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
+}
 /* Responsive Styles */
 @media (max-width: 1400px) {
   .carousel-image-wrapper {
