@@ -695,6 +695,7 @@ button[disabled] {
 /* Accordion styling */
 .accordion {
   margin-bottom: 1em;
+  width: 100%;
 }
 .accordion-toggle {
   width: 100%;

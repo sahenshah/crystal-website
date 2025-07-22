@@ -135,7 +135,6 @@
   flex-direction: row;
   gap: 2vw;
   width: 100%;
-  justify-content: center;
   align-items: stretch;
 }
 
@@ -163,6 +162,7 @@
 .about-us {
   padding-left: 2em;
   padding-right: 2em;
+  text-align: center;
 }
 
 .about-us h2 {
@@ -190,6 +190,12 @@
   min-width: 220px;
   padding: 0.5em;
   max-height: 450px;
+  align-items: center; 
+}
+
+.visit-us iframe {
+  align-self: center; /* Align the iframe itself to the right within .visit-us */
+  width: 100%;
 }
 
 .facebook-page {
@@ -202,10 +208,11 @@
 /* Banner pictures: auto width, center image */
 .banner-pictures {
   flex: 0 0 500px;
+  flex-direction: column;
   max-width: 500px;
   min-width: 300px;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   padding: 0.5em;
 }
 

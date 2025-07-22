@@ -107,23 +107,25 @@ function renderProduct(product) {
           <span><b>Finish:</b> ${product.finish}</span>
         </div>
         <!-- Accordion for Description -->
-        <div class="accordion">
-          <button class="accordion-toggle active" type="button">Description</button>
-          <div class="accordion-content open">
-            <p>${product.description}</p>
+        <div class="accordions-container">
+          <div class="accordion">
+            <button class="accordion-toggle active" type="button">Description</button>
+            <div class="accordion-content open">
+              <p>${product.description}</p>
+            </div>
           </div>
-        </div>
-        <!-- Accordion for Sizes Table -->
-        <div class="accordion">
-          <button class="accordion-toggle" type="button">Sizes</button>
-          <div class="accordion-content">
-            ${sizesTable}
+          <!-- Accordion for Sizes Table -->
+          <div class="accordion">
+            <button class="accordion-toggle" type="button">Sizes</button>
+            <div class="accordion-content">
+              ${sizesTable}
+            </div>
           </div>
-        </div>
-        <div class="accordion">
-          <button class="accordion-toggle" type="button">Key Features</button>
-          <div class="accordion-content">
-            ${featuresHtml}
+          <div class="accordion">
+            <button class="accordion-toggle" type="button">Key Features</button>
+            <div class="accordion-content">
+              ${featuresHtml}
+            </div>
           </div>
         </div>
       </div>
