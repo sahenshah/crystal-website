@@ -242,6 +242,9 @@
 
 /* Responsive styles */
 @media (max-width: 1050px) {
+  .about-section-top-half h1 {
+    padding-top: 0.75em;
+  }
   .about-section-top-bottom {
     flex-direction: column;
     align-items: stretch;
