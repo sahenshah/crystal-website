@@ -387,6 +387,17 @@ app.get('/api/featured-products', async (req, res) => {
     });
   }
 });
-
+app.get("/api/catalogue", async (req, res) => {
+  const file = bucket.file("catalogue.pdf");
+  try {
+    const [exists] = await file.exists();
+    if (!exists) return res.status(404).send("File not found.");
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename="catalogue.pdf"');
+    file.createReadStream().pipe(res);
+  } catch (err) {
+    res.status(500).send("Error fetching file.");
+  }
+});
 // Serve the frontend
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
