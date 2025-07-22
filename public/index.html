@@ -136,6 +136,14 @@
   </footer>
 
   <script src="js/index.js"></script>
+  <script>
+    const hamburger = document.querySelector('.hamburger');
+    const nav = document.querySelector('.main-nav');
+    hamburger.addEventListener('click', function () {
+      nav.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', nav.classList.contains('open'));
+    });
+  </script>
 </body>
 
 </html>
