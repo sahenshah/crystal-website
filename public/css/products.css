@@ -14,7 +14,7 @@ input, select, textarea, button {
 
 h2 {
   text-align: left;
-  margin-left: 0;
+  margin-left: 0.5em;
   font-size: 3rem;
   font-weight: 400;
   left: 0;
@@ -785,7 +785,10 @@ h1, .main-heading {
 }
 
 @media (max-width: 800px) {
-  
+ 
+  .products-section-header h2{
+    margin-left: 0;
+  }
   .products-section-header {
     flex-direction: column;
     align-items: center;
