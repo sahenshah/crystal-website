@@ -15,18 +15,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Firebase Admin setup
 const env = process.env.NODE_ENV || 'development';
 
-let serviceAccount;
-if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-  // Load from environment variable (for production/deployment)
-  serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
-} else {
-  // Fallback to local file (for development)
-  serviceAccount = require(
-    env === 'production'
-      ? './firebase-service-account.prod.json'
-      : './firebase-service-account.dev.json'
-  );
+if (!process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+  throw new Error('FIREBASE_SERVICE_ACCOUNT_JSON environment variable is not set.');
 }
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
