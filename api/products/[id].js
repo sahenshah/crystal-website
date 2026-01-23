@@ -199,8 +199,15 @@ export default async function handler(req, res) {
         fs.unlinkSync(file.filepath); // Remove temp file
       }
 
-      // 3. Merge kept images and new image URLs
-      const finalImages = [...keptImages, ...newImageUrls];
+      // 3. Merge kept images and new image URLs, only keep valid URLs
+      const isValidUrl = (url) =>
+        typeof url === "string" &&
+        (url.startsWith("http://") || url.startsWith("https://"));
+
+      const finalImages = [
+        ...keptImages.filter(isValidUrl),
+        ...newImageUrls.filter(isValidUrl),
+      ];
       let finalImagesToStore = JSON.stringify(finalImages);
       if (
         finalImagesToStore.trim().startsWith('["[') &&
