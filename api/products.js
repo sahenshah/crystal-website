@@ -109,11 +109,9 @@ export default async function handler(req, res) {
 
       // Correct handling for sizesToStore
       let sizesToStore = sizes;
-      // if (typeof sizesToStore !== "string") {
+      // if (typeof sizesToStore !== 'string') {
       //   sizesToStore = JSON.stringify(sizesToStore);
       // }
-      // Remove all backslashes
-      sizesToStore = sizesToStore.replace(/\\/g, "");
 
       let keyFeaturesToStore = key_features;
       if (typeof keyFeaturesToStore !== "string") {
