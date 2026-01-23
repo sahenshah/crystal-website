@@ -97,11 +97,13 @@ export default async function handler(req, res) {
       // Convert featured to boolean
       let featuredBool = false;
       if (typeof featured === "string") {
-        featuredBool = featured === "true" || featured === "1";
+        featuredBool = featured.trim() === "true" || featured.trim() === "1";
       } else if (typeof featured === "number") {
         featuredBool = featured === 1;
+      } else if (typeof featured === "boolean") {
+        featuredBool = featured;
       } else {
-        featuredBool = !!featured;
+        featuredBool = false;
       }
 
       // Ensure all text fields are plain strings
