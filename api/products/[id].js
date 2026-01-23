@@ -42,10 +42,22 @@ export default async function handler(req, res) {
         const result = await pool.query("SELECT * FROM products WHERE id = $1", [id]);
         const row = result.rows[0];
         if (!row) return res.status(404).json({ error: "Product not found" });
+        let sizesParsed = [];
+        let imagesParsed = [];
+        try {
+          sizesParsed = row.sizes ? JSON.parse(row.sizes) : [];
+        } catch {
+          sizesParsed = [];
+        }
+        try {
+          imagesParsed = row.images ? JSON.parse(row.images) : [];
+        } catch {
+          imagesParsed = [];
+        }
         res.status(200).json({
           ...row,
-          sizes: row.sizes ? JSON.parse(row.sizes) : [],
-          images: row.images ? JSON.parse(row.images) : [],
+          sizes: sizesParsed,
+          images: imagesParsed,
         });
       } catch (err) {
         console.error(err);
