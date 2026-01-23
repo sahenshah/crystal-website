@@ -118,6 +118,13 @@ export default async function handler(req, res) {
         keyFeaturesToStore = JSON.parse(keyFeaturesToStore);
       }
 
+      if (
+        sizesToStore.trim().startsWith('{"[') &&
+        sizesToStore.trim().endsWith(']}"')
+      ) {
+        sizesToStore = sizesToStore.trim().slice(2, -2);
+      }
+
       let keyFeaturesParsed = [];
       if (
         typeof keyFeaturesToStore === "string" &&
