@@ -147,9 +147,10 @@ export default async function handler(req, res) {
               finish,
               description,
               JSON.stringify(finalImages),
-              typeof sizesToStore === "string" ? sizesToStore : JSON.stringify(sizesToStore),
+              // Parse if string, else use as is
+              typeof sizesToStore === "string" ? JSON.parse(sizesToStore) : sizesToStore,
               featuredBool,
-              typeof keyFeaturesToStore === "string" ? keyFeaturesToStore : JSON.stringify(keyFeaturesToStore),
+              typeof keyFeaturesToStore === "string" ? JSON.parse(keyFeaturesToStore) : keyFeaturesToStore,
               id,
             ]
           );
