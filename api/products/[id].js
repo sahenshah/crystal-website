@@ -156,9 +156,24 @@ export default async function handler(req, res) {
       let keptImages = [];
       if (fields.images) {
         try {
-          keptImages = Array.isArray(fields.images)
-            ? fields.images
-            : JSON.parse(fields.images);
+          if (Array.isArray(fields.images)) {
+            // If it's an array, check if any element is a stringified array
+            keptImages = fields.images.flatMap(img => {
+              if (typeof img === "string" && img.trim().startsWith("[")) {
+                try {
+                  return JSON.parse(img);
+                } catch {
+                  return [];
+                }
+              }
+              return [img];
+            });
+          } else if (typeof fields.images === "string" && fields.images.trim().startsWith("[")) {
+            // If it's a stringified array
+            keptImages = JSON.parse(fields.images);
+          } else if (typeof fields.images === "string") {
+            keptImages = [fields.images];
+          }
         } catch {
           keptImages = [];
         }
