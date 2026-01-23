@@ -113,7 +113,7 @@ export default async function handler(req, res) {
         // Already a JSON array string, use as is
         // Optionally, you could parse and re-stringify for safety:
         try {
-          sizesToStore = JSON.parse(sizesToStore);
+          sizesToStore = JSON.parse(JSON.stringify(sizesToStore));
         } catch {
           // If parsing fails, fallback to empty array
           sizesToStore = "[]";
