@@ -48,11 +48,15 @@ export default async function handler(req, res) {
           images: row.images ? JSON.parse(row.images) : [],
         });
       } catch (err) {
+        console.error(err);
         res.status(500).json({ error: err.message });
       }
     } else {
       db.get("SELECT * FROM products WHERE id = ?", [id], (err, row) => {
-        if (err) return res.status(500).json({ error: err.message });
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: err.message });
+        }
         if (!row) return res.status(404).json({ error: "Product not found" });
         let product = {
           ...row,
@@ -73,8 +77,8 @@ export default async function handler(req, res) {
     const form = formidable({ multiples: true, maxFileSize: 15 * 1024 * 1024 });
     form.parse(req, async (err, fields, files) => {
       if (err) {
-        res.status(400).json({ error: "Error parsing form data" });
-        return;
+        console.error(err);
+        return res.status(500).json({ error: "Error parsing form data" });
       }
       const { name, featured, brand, finish, description, sizes, key_features } = fields;
 
@@ -143,6 +147,7 @@ export default async function handler(req, res) {
             return res.status(404).json({ error: "Product not found" });
           res.status(200).json({ success: true });
         } catch (err) {
+          console.error(err);
           res.status(500).json({ error: err.message });
         }
       } else {
@@ -160,7 +165,10 @@ export default async function handler(req, res) {
             id,
           ],
           function (err) {
-            if (err) return res.status(500).json({ error: err.message });
+            if (err) {
+              console.error(err);
+              return res.status(500).json({ error: err.message });
+            }
             if (this.changes === 0)
               return res.status(404).json({ error: "Product not found" });
             res.status(200).json({ success: true });
@@ -175,11 +183,15 @@ export default async function handler(req, res) {
         await pool.query("DELETE FROM products WHERE id = $1", [id]);
         res.status(200).json({ success: true });
       } catch (err) {
+        console.error(err);
         res.status(500).json({ error: err.message });
       }
     } else {
       db.run("DELETE FROM products WHERE id = ?", [id], function (err) {
-        if (err) return res.status(500).json({ error: err.message });
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: err.message });
+        }
         res.status(200).json({ success: true });
       });
     }
