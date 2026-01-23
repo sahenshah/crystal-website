@@ -125,6 +125,9 @@ export default async function handler(req, res) {
         sizesToStore = sizesToStore.trim().slice(2, -2);
       }
 
+      // Remove all backslashes
+      sizesToStore = sizesToStore.replace(/\\/g, "");
+
       let keyFeaturesParsed = [];
       if (
         typeof keyFeaturesToStore === "string" &&
