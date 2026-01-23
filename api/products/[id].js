@@ -160,6 +160,11 @@ export default async function handler(req, res) {
             keptImages = fields.images;
           } else if (
             typeof fields.images === "string" &&
+            fields.images.trim() === "[]"
+          ) {
+            keptImages = [];
+          } else if (
+            typeof fields.images === "string" &&
             fields.images.trim().startsWith("[")
           ) {
             keptImages = JSON.parse(fields.images);
