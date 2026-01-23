@@ -112,6 +112,7 @@ export default async function handler(req, res) {
       if (typeof sizesToStore === "string" && sizesToStore.trim().startsWith("[")) {
         // Already a JSON array string, use as is (optionally validate)
         // Dont do anything as its already an array 
+        sizesToStore = JSON.parse(sizesToStore);
       } else if (Array.isArray(sizesToStore) || typeof sizesToStore === "object") {
         sizesToStore = JSON.stringify(sizesToStore);
       } else {
