@@ -109,14 +109,9 @@ export default async function handler(req, res) {
 
       // Correct handling for sizesToStore
       let sizesToStore = sizes;
-      // if (typeof sizesToStore === "string" && sizesToStore.trim().startsWith("[")) {
-      //   // Already a JSON array string, use as is (optionally validate)
-      //   // Dont do anything as its already an array 
-      // } else if (Array.isArray(sizesToStore) || typeof sizesToStore === "object") {
-      //   sizesToStore = JSON.stringify(sizesToStore);
-      // } else {
-      //   sizesToStore = "[]";
-      // }
+      if (typeof sizesToStore !== 'string') {
+        sizesToStore = JSON.stringify(sizesToStore);
+      }
 
       let keyFeaturesToStore = key_features;
       if (typeof keyFeaturesToStore !== "string") {
