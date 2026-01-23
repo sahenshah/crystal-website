@@ -82,6 +82,16 @@ export default async function handler(req, res) {
       }
       const { name, featured, brand, finish, description, sizes, key_features } = fields;
 
+      // Convert featured to boolean
+      let featuredBool = false;
+      if (typeof featured === "string") {
+        featuredBool = featured === "true" || featured === "1";
+      } else if (typeof featured === "number") {
+        featuredBool = featured === 1;
+      } else {
+        featuredBool = !!featured;
+      }
+
       let sizesToStore = sizes;
       if (typeof sizesToStore !== "string") {
         sizesToStore = JSON.stringify(sizesToStore);
@@ -138,7 +148,7 @@ export default async function handler(req, res) {
               description,
               JSON.stringify(finalImages),
               sizesToStore || [],
-              featured,
+              featuredBool,
               keyFeaturesToStore ? JSON.parse(keyFeaturesToStore) : [],
               id,
             ]
@@ -155,7 +165,7 @@ export default async function handler(req, res) {
           "UPDATE products SET name = ?, featured = ?, brand = ?, finish = ?, description = ?, images = ?, sizes = ?, key_features = ? WHERE id = ?",
           [
             name,
-            featured,
+            featuredBool,
             brand,
             finish,
             description,
