@@ -156,12 +156,22 @@ export default async function handler(req, res) {
       let keptImages = [];
       if (fields.images) {
         try {
-          keptImages = Array.isArray(fields.images)
-            ? fields.images
-            : JSON.parse(fields.images);
+          if (Array.isArray(fields.images)) {
+            keptImages = fields.images;
+          } else if (
+            typeof fields.images === "string" &&
+            fields.images.trim().startsWith("[")
+          ) {
+            keptImages = JSON.parse(fields.images);
+          } else {
+            keptImages = [];
+          }
         } catch {
           keptImages = [];
         }
+      }
+      if (!Array.isArray(keptImages)) {
+        keptImages = [];
       }
 
       // 2. Upload new images to Firebase Storage
