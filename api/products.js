@@ -110,12 +110,12 @@ export default async function handler(req, res) {
       // Sizes and key_features: only stringify if not string
       let sizesToStore = sizes;
       if (typeof sizesToStore !== "string") {
-        sizesToStore = JSON.stringify(sizesToStore);
+        sizesToStore = JSON.parse(sizesToStore);
       }
 
       let keyFeaturesToStore = key_features;
       if (typeof keyFeaturesToStore !== "string") {
-        keyFeaturesToStore = JSON.stringify(keyFeaturesToStore);
+        keyFeaturesToStore = JSON.parse(keyFeaturesToStore);
       }
 
       let keyFeaturesParsed = [];
