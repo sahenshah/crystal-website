@@ -101,6 +101,13 @@ export default async function handler(req, res) {
         fs.unlinkSync(file.filepath); // Remove temp file
       }
 
+      // Ensure all text fields are plain strings
+      const nameToStore = typeof name === "string" ? name : String(name);
+      const brandToStore = typeof brand === "string" ? brand : String(brand);
+      const finishToStore = typeof finish === "string" ? finish : String(finish);
+      const descriptionToStore = typeof description === "string" ? description : String(description);
+
+      // Sizes and key_features: only stringify if not string
       let sizesToStore = sizes;
       if (typeof sizesToStore !== "string") {
         sizesToStore = JSON.stringify(sizesToStore);
@@ -134,10 +141,10 @@ export default async function handler(req, res) {
           const result = await pool.query(
             "INSERT INTO products (name, brand, finish, description, images, sizes, featured, key_features) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id",
             [
-              name,
-              brand,
-              finish,
-              description,
+              nameToStore,
+              brandToStore,
+              finishToStore,
+              descriptionToStore,
               JSON.stringify(imageUrls),
               sizesToStore,
               featuredBool,
@@ -146,17 +153,17 @@ export default async function handler(req, res) {
           );
           res.json({ id: result.rows[0].id });
         } catch (err) {
-          console.error("DB Error:", err); // Add this for debugging
+          console.error("DB Error:", err);
           res.status(500).json({ error: err.message });
         }
       } else {
         db.run(
           "INSERT INTO products (name, brand, finish, description, images, sizes, featured, key_features) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
           [
-            name,
-            brand,
-            finish,
-            description,
+            nameToStore,
+            brandToStore,
+            finishToStore,
+            descriptionToStore,
             JSON.stringify(imageUrls),
             sizesToStore,
             featured || 0,
@@ -164,7 +171,7 @@ export default async function handler(req, res) {
           ],
           function (err) {
             if (err) {
-              console.error("DB Error:", err); // Add this for debugging
+              console.error("DB Error:", err);
               return res.status(500).json({ error: err.message });
             }
             res.json({ id: this.lastID });
