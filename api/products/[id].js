@@ -184,6 +184,13 @@ export default async function handler(req, res) {
 
       // 3. Merge kept images and new image URLs
       const finalImages = [...keptImages, ...newImageUrls];
+      let finalImagesToStore = JSON.stringify(finalImages);
+      if (
+        finalImagesToStore.trim().startsWith('["[') &&
+        finalImagesToStore.trim().endsWith(']"]')
+      ) {
+        finalImagesToStore = finalImagesToStore.trim().slice(2, -2);
+      }
 
       // 4. Update the product in the DB
       if (dbType === "pg") {
