@@ -147,9 +147,9 @@ export default async function handler(req, res) {
               finish,
               description,
               JSON.stringify(finalImages),
-              sizesToStore || [],
+              typeof sizesToStore === "string" ? sizesToStore : JSON.stringify(sizesToStore),
               featuredBool,
-              keyFeaturesToStore ? JSON.parse(keyFeaturesToStore) : [],
+              typeof keyFeaturesToStore === "string" ? keyFeaturesToStore : JSON.stringify(keyFeaturesToStore),
               id,
             ]
           );
@@ -170,8 +170,8 @@ export default async function handler(req, res) {
             finish,
             description,
             JSON.stringify(finalImages),
-            sizesToStore || [],
-            keyFeaturesToStore,
+            typeof sizesToStore === "string" ? sizesToStore : JSON.stringify(sizesToStore),
+            typeof keyFeaturesToStore === "string" ? keyFeaturesToStore : JSON.stringify(keyFeaturesToStore),
             id,
           ],
           function (err) {
