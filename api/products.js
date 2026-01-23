@@ -109,21 +109,25 @@ export default async function handler(req, res) {
 
       // Correct handling for sizesToStore
       let sizesToStore = sizes;
-      if (typeof sizesToStore !== 'string') {
+      if (typeof sizesToStore === "string") {
+        // Remove leading '{"' and trailing '"}' if present
         if (
           sizesToStore.trim().startsWith('{"[') &&
           sizesToStore.trim().endsWith(']}"')
         ) {
           sizesToStore = sizesToStore.trim().slice(2, -2);
         }
+        // Now, sizesToStore should be a JSON array string
+        try {
+          // Validate and re-stringify to ensure valid JSON
+          sizesToStore = JSON.stringify(JSON.parse(sizesToStore));
+        } catch {
+          sizesToStore = "[]";
+        }
+      } else if (Array.isArray(sizesToStore) || typeof sizesToStore === "object") {
         sizesToStore = JSON.stringify(sizesToStore);
       } else {
-        if (
-          sizesToStore.trim().startsWith('{"[') &&
-          sizesToStore.trim().endsWith(']}"')
-        ) {
-          sizesToStore = sizesToStore.trim().slice(2, -2);
-        }
+        sizesToStore = "[]";
       }
 
       let keyFeaturesToStore = key_features;
