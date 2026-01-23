@@ -111,6 +111,18 @@ export default async function handler(req, res) {
         keyFeaturesToStore = JSON.stringify(keyFeaturesToStore);
       }
 
+      let keyFeaturesParsed = [];
+      if (
+        typeof keyFeaturesToStore === "string" &&
+        keyFeaturesToStore.trim().startsWith("[")
+      ) {
+        try {
+          keyFeaturesParsed = JSON.parse(keyFeaturesToStore);
+        } catch (e) {
+          keyFeaturesParsed = [];
+        }
+      }
+
       if (dbType === "pg") {
         try {
           const result = await pool.query(
@@ -123,11 +135,12 @@ export default async function handler(req, res) {
               JSON.stringify(imageUrls),
               sizesToStore,
               featured || false,
-              keyFeaturesToStore ? JSON.parse(keyFeaturesToStore) : [],
+              keyFeaturesParsed
             ]
           );
           res.json({ id: result.rows[0].id });
         } catch (err) {
+          console.error("DB Error:", err); // Add this for debugging
           res.status(500).json({ error: err.message });
         }
       } else {
@@ -141,10 +154,13 @@ export default async function handler(req, res) {
             JSON.stringify(imageUrls),
             sizesToStore,
             featured || 0,
-            keyFeaturesToStore,
+            keyFeaturesToStore
           ],
           function (err) {
-            if (err) return res.status(500).json({ error: err.message });
+            if (err) {
+              console.error("DB Error:", err); // Add this for debugging
+              return res.status(500).json({ error: err.message });
+            }
             res.json({ id: this.lastID });
           }
         );
