@@ -104,13 +104,50 @@ export default async function handler(req, res) {
         featuredBool = !!featured;
       }
 
+      // Ensure all text fields are plain strings
+      const nameToStore = typeof name === "string" ? name : String(name);
+      const brandToStore = typeof brand === "string" ? brand : String(brand);
+      const finishToStore = typeof finish === "string" ? finish : String(finish);
+      const descriptionToStore = typeof description === "string" ? description : String(description);
+
+      // Correct handling for sizesToStore
       let sizesToStore = sizes;
-      if (typeof sizesToStore !== "string") {
+      if (typeof sizesToStore !== 'string') {
         sizesToStore = JSON.stringify(sizesToStore);
       }
-      let keyFeaturesToStore = key_features;
+      if (
+        sizesToStore.trim().startsWith('["[') &&
+        sizesToStore.trim().endsWith(']"]')
+      ) {
+        sizesToStore = sizesToStore.trim().slice(2, -2);
+      }
+
+      // Remove all backslashes
+      sizesToStore = sizesToStore.replace(/\\/g, "");
+      
+            let keyFeaturesToStore = key_features;
       if (typeof keyFeaturesToStore !== "string") {
         keyFeaturesToStore = JSON.stringify(keyFeaturesToStore);
+      }
+      if (typeof keyFeaturesToStore !== 'string') {
+        keyFeaturesToStore = JSON.stringify(keyFeaturesToStore);
+      }
+      if (
+        keyFeaturesToStore.trim().startsWith('["[') &&
+        keyFeaturesToStore.trim().endsWith(']"]')
+      ) {
+        keyFeaturesToStore = keyFeaturesToStore.trim().slice(2, -2);
+      }
+      let keyFeaturesParsed = [];
+      if (
+        typeof keyFeaturesToStore === "string" &&
+        keyFeaturesToStore.trim().startsWith("[")
+      ) {
+        try {
+          keyFeaturesParsed = JSON.parse(keyFeaturesToStore);
+        } catch (e) {
+          keyFeaturesParsed = [];
+        }
       }
 
       // 1. Get kept images from request body
@@ -154,14 +191,14 @@ export default async function handler(req, res) {
           const result = await pool.query(
             "UPDATE products SET name = $1, brand = $2, finish = $3, description = $4, images = $5, sizes = $6, featured = $7, key_features = $8 WHERE id = $9",
             [
-              name,
-              brand,
-              finish,
-              description,
+              nameToStore,
+              brandToStore,
+              finishToStore,
+              descriptionToStore,
               JSON.stringify(finalImages),
               sizesToStore || [], 
               featuredBool,
-              keyFeaturesToStore ? JSON.parse(keyFeaturesToStore) : [],
+              keyFeaturesParsed,
               id,
             ]
           );
@@ -176,14 +213,14 @@ export default async function handler(req, res) {
         db.run(
           "UPDATE products SET name = ?, featured = ?, brand = ?, finish = ?, description = ?, images = ?, sizes = ?, key_features = ? WHERE id = ?",
           [
-            name,
+            nameToStore,
             featuredBool,
-            brand,
-            finish,
-            description,
+            brandToStore,
+            finishToStore,
+            descriptionToStore,
             JSON.stringify(finalImages),
             sizesToStore || [],
-            keyFeaturesToStore ? JSON.parse(keyFeaturesToStore) : [],
+            keyFeaturesParsed,
             id,
           ],
           function (err) {

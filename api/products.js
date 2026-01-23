@@ -113,11 +113,6 @@ export default async function handler(req, res) {
         sizesToStore = JSON.stringify(sizesToStore);
       }
 
-      let keyFeaturesToStore = key_features;
-      if (typeof keyFeaturesToStore !== "string") {
-        keyFeaturesToStore = JSON.stringify(keyFeaturesToStore);
-      }
-
       if (
         sizesToStore.trim().startsWith('["[') &&
         sizesToStore.trim().endsWith(']"]')
@@ -128,6 +123,20 @@ export default async function handler(req, res) {
       // Remove all backslashes
       sizesToStore = sizesToStore.replace(/\\/g, "");
 
+
+      let keyFeaturesToStore = key_features;
+      if (typeof keyFeaturesToStore !== "string") {
+        keyFeaturesToStore = JSON.stringify(keyFeaturesToStore);
+      }
+      if (typeof keyFeaturesToStore !== 'string') {
+        keyFeaturesToStore = JSON.stringify(keyFeaturesToStore);
+      }
+      if (
+        keyFeaturesToStore.trim().startsWith('["[') &&
+        keyFeaturesToStore.trim().endsWith(']"]')
+      ) {
+        keyFeaturesToStore = keyFeaturesToStore.trim().slice(2, -2);
+      }
       let keyFeaturesParsed = [];
       if (
         typeof keyFeaturesToStore === "string" &&
