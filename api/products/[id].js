@@ -156,21 +156,9 @@ export default async function handler(req, res) {
       let keptImages = [];
       if (fields.images) {
         try {
-          if (Array.isArray(fields.images)) {
-            keptImages = fields.images;
-          } else if (
-            typeof fields.images === "string" &&
-            fields.images.trim() === "[]"
-          ) {
-            keptImages = [];
-          } else if (
-            typeof fields.images === "string" &&
-            fields.images.trim().startsWith("[")
-          ) {
-            keptImages = JSON.parse(fields.images);
-          } else {
-            keptImages = [];
-          }
+          keptImages = Array.isArray(fields.images)
+            ? fields.images
+            : JSON.parse(fields.images);
         } catch {
           keptImages = [];
         }
@@ -209,13 +197,6 @@ export default async function handler(req, res) {
         ...newImageUrls.filter(isValidUrl),
       ];
       let finalImagesToStore = JSON.stringify(finalImages);
-      if (
-        finalImagesToStore.trim().startsWith('["[') &&
-        finalImagesToStore.trim().endsWith(']"]')
-      ) {
-        finalImagesToStore = finalImagesToStore.trim().slice(2, -2);
-      }
-      finalImagesToStore = finalImagesToStore.replace(/\\/g, "");
 
       // 4. Update the product in the DB
       if (dbType === "pg") {
