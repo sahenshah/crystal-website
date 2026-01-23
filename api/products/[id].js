@@ -193,6 +193,7 @@ export default async function handler(req, res) {
       ) {
         finalImagesToStore = finalImagesToStore.trim().slice(2, -2);
       }
+      finalImagesToStore = finalImagesToStore.replace(/\\/g, "");
 
       // 4. Update the product in the DB
       if (dbType === "pg") {
