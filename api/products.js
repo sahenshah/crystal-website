@@ -126,7 +126,7 @@ export default async function handler(req, res) {
               keyFeaturesToStore ? JSON.parse(keyFeaturesToStore) : [],
             ]
           );
-          res.status(200).json({ id: result.rows[0].id });
+          res.json({ id: result.rows[0].id });
         } catch (err) {
           res.status(500).json({ error: err.message });
         }
@@ -145,7 +145,7 @@ export default async function handler(req, res) {
           ],
           function (err) {
             if (err) return res.status(500).json({ error: err.message });
-            res.status(200).json({ id: this.lastID });
+            res.json({ id: this.lastID });
           }
         );
       }
