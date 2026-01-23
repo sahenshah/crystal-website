@@ -72,7 +72,7 @@ export default async function handler(req, res) {
     }
   } else if (req.method === "POST") {
     // Product creation endpoint (with file upload)
-    const form = new formidable.IncomingForm({ multiples: true, maxFileSize: 15 * 1024 * 1024 });
+    const form = formidable({ multiples: true, maxFileSize: 15 * 1024 * 1024 });
     form.parse(req, async (err, fields, files) => {
       if (err) {
         res.status(400).json({ error: "Error parsing form data" });
