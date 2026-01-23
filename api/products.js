@@ -123,6 +123,12 @@ export default async function handler(req, res) {
         }
       }
 
+      const featuredBool =
+        featured === "true" ||
+        featured === "1" ||
+        featured === 1 ||
+        featured === true;
+
       if (dbType === "pg") {
         try {
           const result = await pool.query(
@@ -134,7 +140,7 @@ export default async function handler(req, res) {
               description,
               JSON.stringify(imageUrls),
               sizesToStore,
-              featured || false,
+              featuredBool,
               keyFeaturesParsed
             ]
           );
