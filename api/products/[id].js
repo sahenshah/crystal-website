@@ -142,21 +142,21 @@ export default async function handler(req, res) {
       }
       
       let keyFeaturesParsed = [];
-      if (
-        typeof keyFeaturesToStore === "string" &&
-        keyFeaturesToStore.trim().startsWith("[")
-      ) {
-        try {
-          keyFeaturesParsed = JSON.parse(keyFeaturesToStore);
-        } catch (e) {
-          keyFeaturesParsed = [];
+      if (Array.isArray(key_features)) {
+        keyFeaturesParsed = key_features.map(f => String(f).trim()).filter(f => f);
+      } else if (typeof key_features === "string") {
+        const trimmed = key_features.trim();
+        if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+          try {
+            keyFeaturesParsed = JSON.parse(trimmed).map(f => String(f).trim()).filter(f => f);
+          } catch {
+            keyFeaturesParsed = [];
+          }
+        } else if (trimmed.includes(",")) {
+          keyFeaturesParsed = trimmed.split(",").map(f => f.trim()).filter(f => f);
+        } else if (trimmed.length > 0) {
+          keyFeaturesParsed = [trimmed];
         }
-      }
-
-      if (!Array.isArray(keyFeaturesParsed)) {
-        keyFeaturesParsed = [];
-      } else {
-        keyFeaturesParsed = keyFeaturesParsed.map(f => String(f));
       }
 
       console.log("keyFeaturesParsed to DB:", keyFeaturesParsed);
