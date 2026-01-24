@@ -140,6 +140,7 @@ export default async function handler(req, res) {
       ) {
         keyFeaturesToStore = keyFeaturesToStore.trim().slice(2, -2);
       }
+      
       let keyFeaturesParsed = [];
       if (
         typeof keyFeaturesToStore === "string" &&
@@ -157,6 +158,8 @@ export default async function handler(req, res) {
       } else {
         keyFeaturesParsed = keyFeaturesParsed.map(f => String(f));
       }
+
+      console.log("keyFeaturesParsed to DB:", keyFeaturesParsed);
 
       // 1. Get kept images from request body
       let keptImages = [];
@@ -187,7 +190,6 @@ export default async function handler(req, res) {
       if (!Array.isArray(keptImages)) {
         keptImages = [];
       }
-      console.log("keptImages:", keptImages);
 
       // 2. Upload new images to Firebase Storage
       const newImageUrls = [];
@@ -208,7 +210,6 @@ export default async function handler(req, res) {
         newImageUrls.push(firebaseFile.publicUrl());
         fs.unlinkSync(file.filepath); // Remove temp file
       }
-      console.log("newImageUrls:", newImageUrls);
 
       // 3. Merge kept images and new image URLs, only keep valid URLs
       const isValidUrl = (url) =>
@@ -219,7 +220,6 @@ export default async function handler(req, res) {
         ...keptImages.filter(isValidUrl),
         ...newImageUrls.filter(isValidUrl),
       ];
-      console.log("finalImages:", finalImages);
 
       let finalImagesToStore = JSON.stringify(finalImages);
 
