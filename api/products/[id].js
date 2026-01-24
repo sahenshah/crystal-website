@@ -152,6 +152,12 @@ export default async function handler(req, res) {
         }
       }
 
+      if (!Array.isArray(keyFeaturesParsed)) {
+        keyFeaturesParsed = [];
+      } else {
+        keyFeaturesParsed = keyFeaturesParsed.map(f => String(f));
+      }
+
       // 1. Get kept images from request body
       let keptImages = [];
       if (fields.images) {
@@ -230,7 +236,7 @@ export default async function handler(req, res) {
               finalImagesToStore, 
               sizesToStore || [], 
               featuredBool,
-              keyFeaturesParsed, // <-- pass array directly
+              keyFeaturesParsed, 
               id,
             ]
           );
