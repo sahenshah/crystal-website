@@ -143,7 +143,17 @@ export default async function handler(req, res) {
       
       let keyFeaturesParsed = [];
       if (Array.isArray(key_features)) {
-        keyFeaturesParsed = key_features.map(f => String(f).trim()).filter(f => f);
+        // Flatten any stringified arrays inside the array
+        keyFeaturesParsed = key_features.flatMap(f => {
+          if (typeof f === "string" && f.trim().startsWith("[") && f.trim().endsWith("]")) {
+            try {
+              return JSON.parse(f).map(x => String(x).trim()).filter(x => x);
+            } catch {
+              return [f.trim()];
+            }
+          }
+          return [String(f).trim()];
+        }).filter(f => f);
       } else if (typeof key_features === "string") {
         const trimmed = key_features.trim();
         if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
