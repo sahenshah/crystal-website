@@ -230,7 +230,7 @@ export default async function handler(req, res) {
               finalImagesToStore, 
               sizesToStore || [], 
               featuredBool,
-              JSON.stringify(keyFeaturesParsed),
+              keyFeaturesParsed, // <-- pass array directly
               id,
             ]
           );
