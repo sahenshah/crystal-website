@@ -124,28 +124,31 @@ export default async function handler(req, res) {
       sizesToStore = sizesToStore.replace(/\\/g, "");
 
 
-      let keyFeaturesToStore = key_features;
-      if (typeof keyFeaturesToStore !== "string") {
-        keyFeaturesToStore = JSON.stringify(keyFeaturesToStore);
-      }
-      if (typeof keyFeaturesToStore !== 'string') {
-        keyFeaturesToStore = JSON.stringify(keyFeaturesToStore);
-      }
-      if (
-        keyFeaturesToStore.trim().startsWith('["[') &&
-        keyFeaturesToStore.trim().endsWith(']"]')
-      ) {
-        keyFeaturesToStore = keyFeaturesToStore.trim().slice(2, -2);
-      }
+      // --- Robust key_features parsing ---
       let keyFeaturesParsed = [];
-      if (
-        typeof keyFeaturesToStore === "string" &&
-        keyFeaturesToStore.trim().startsWith("[")
-      ) {
-        try {
-          keyFeaturesParsed = JSON.parse(keyFeaturesToStore);
-        } catch (e) {
-          keyFeaturesParsed = [];
+      if (Array.isArray(key_features)) {
+        keyFeaturesParsed = key_features.flatMap(f => {
+          if (typeof f === "string" && f.trim().startsWith("[") && f.trim().endsWith("]")) {
+            try {
+              return JSON.parse(f).map(x => String(x).trim()).filter(x => x);
+            } catch {
+              return [f.trim()];
+            }
+          }
+          return [String(f).trim()];
+        }).filter(f => f);
+      } else if (typeof key_features === "string") {
+        const trimmed = key_features.trim();
+        if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+          try {
+            keyFeaturesParsed = JSON.parse(trimmed).map(f => String(f).trim()).filter(f => f);
+          } catch {
+            keyFeaturesParsed = [];
+          }
+        } else if (trimmed.includes(",")) {
+          keyFeaturesParsed = trimmed.split(",").map(f => f.trim()).filter(f => f);
+        } else if (trimmed.length > 0) {
+          keyFeaturesParsed = [trimmed];
         }
       }
 
@@ -167,7 +170,7 @@ export default async function handler(req, res) {
               JSON.stringify(imageUrls),
               sizesToStore,
               featuredBool,
-              keyFeaturesParsed
+              keyFeaturesParsed // <-- use parsed array here
             ]
           );
           res.json({ id: result.rows[0].id });
@@ -186,7 +189,7 @@ export default async function handler(req, res) {
             JSON.stringify(imageUrls),
             sizesToStore,
             featured || 0,
-            keyFeaturesToStore
+            JSON.stringify(keyFeaturesParsed) // <-- store as JSON string for SQLite
           ],
           function (err) {
             if (err) {
